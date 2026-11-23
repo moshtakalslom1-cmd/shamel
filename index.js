@@ -241,7 +241,7 @@ app.post('/api/forgot-password', (req, res) => {
     if (this.changes === 0) return res.status(404).json({ error: 'البريد الإلكتروني غير موجود' });
 
     transporter.sendMail({
-      from: 'moshtaksloomm@gmail.com',
+      from: 'process.env.EMAIL_USER.com',
       to: cleanEmail,
       subject: 'رمز استعادة كلمة المرور - سوق الشامل',
       text: `رمز التحقق لتعيين كلمة مرور جديدة هو: ${resetCode}`

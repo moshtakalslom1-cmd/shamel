@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>سوق الشامل - منصة الإعلانات</title>
+  <style>
+    :root {
+      --primary: #15803d;
+      --primary-hover: #166534;
+      --accent: #ea580c;
+      --accent-hover: #c2410c;
+      --secondary: #0f172a;
+      --bg-green: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 50%, #ecfdf5 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg-green);
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid #86efac;
+      padding: 14px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .brand-area {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .syria-flag {
+      width: 58px;
+      height: 38px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid #cbd5e1;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+
+    .flag-stripe-green { background: #007a3d; height: 33.33%; }
+    .flag-stripe-white {
+      background: #ffffff;
+      height: 33.34%;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      color: #ce1126;
+      font-size: 10px;
+    }
+    .flag-stripe-black { background: #000000; height: 33.33%; }
+
+    .brand { font-size: 24px; font-weight: 800; color: var(--secondary); }
+    .brand span { color: var(--primary); }
+
+    .nav-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.25s ease;
+    }
+
+    .btn-primary { background: var(--primary); color: #fff; box-shadow: 0 4px 10px rgba(21, 128, 61, 0.22); }
+    .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+    .btn-accent { background: var(--accent); color: #fff; }
+    .btn-accent:hover { background: var(--accent-hover); }
+    .btn-secondary { background: #e2e8f0; color: var(--secondary); }
+    .btn-secondary:hover { background: #cbd5e1; }
+    .btn-danger { background: #fee2e2; color: #b91c1c; padding: 8px 14px; font-size: 13px; }
+    .btn-danger:hover { background: #fecaca; }
+    .btn-link { background: transparent; color: var(--primary); padding: 4px 8px; font-size: 13px; }
+    .btn-link:hover { text-decoration: underline; }
+
+    .container { max-width: 1200px; margin: 28px auto; padding: 0 20px; flex: 1; width: 100%; }
+
+    .hero {
+      background: linear-gradient(135deg, #14532d 0%, #166534 100%);
+      color: #ffffff;
+      border-radius: 20px;
+      padding: 34px 28px;
+      text-align: center;
+      box-shadow: 0 12px 28px rgba(20, 83, 45, 0.2);
+      margin-bottom: 24px;
+    }
+    .hero h1 { margin: 0 0 10px 0; font-size: 30px; }
+    .hero p { color: #dcfce7; font-size: 16px; max-width: 620px; margin: 0 auto 20px auto; }
+
+    .user-bar {
+      background: #ffffff;
+      border: 1px solid #86efac;
+      color: #14532d;
+      padding: 14px 20px;
+      border-radius: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+      gap: 10px;
+      flex-wrap: wrap;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .filter-search-box {
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid #86efac;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 26px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+    }
+
+    .search-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      flex: 2;
+      min-width: 220px;
+      padding: 11px 14px;
+      border: 1px solid #86efac;
+      border-radius: 10px;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    .price-filter-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .price-input {
+      flex: 1;
+      min-width: 140px;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    .categories-title { font-size: 16px; font-weight: 700; color: #14532d; margin: 0 0 12px 0; }
+    .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+
+    .cat-btn {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      padding: 11px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+    }
+    .cat-btn:hover, .cat-btn.active { background: var(--primary); color: #ffffff; border-color: var(--primary); }
+
+    .subcat-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed #bbf7d0;
+    }
+
+    .subcat-pill {
+      background: #ffffff;
+      border: 1px solid #86efac;
+      color: #15803d;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .subcat-pill.active, .subcat-pill:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .section-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .section-title { font-size: 21px; font-weight: 700; color: #14532d; margin: 0; display: flex; align-items: center; gap: 10px; }
+    .section-title::before { content: ''; display: inline-block; width: 6px; height: 24px; background: var(--primary); border-radius: 3px; }
+
+    .ads-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 22px; }
+
+    .ad-card {
+      background: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #bbf7d0;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .ad-card:hover { transform: translateY(-6px); box-shadow: 0 12px 24px rgba(21, 128, 61, 0.15); }
+    .ad-img-wrap { position: relative; }
+    .ad-img-preview { width: 100%; height: 185px; object-fit: cover; background: #f0fdf4; display: block; }
+    .img-count-badge {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      background: rgba(15, 23, 42, 0.75);
+      color: #fff;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+    .fav-badge-btn {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(255, 255, 255, 0.92);
+      color: #0f172a;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    }
+    .ad-body { padding: 16px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; gap: 8px; }
+    .ad-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+    .ad-category { font-size: 12px; font-weight: 700; color: var(--primary); background: #dcfce7; padding: 4px 10px; border-radius: 6px; display: inline-block; }
+    .ad-subcat { font-size: 11px; font-weight: 700; color: #0f172a; background: #e2e8f0; padding: 4px 8px; border-radius: 6px; display: inline-block; }
+
+    .ad-card-line { display: flex; justify-content: space-between; align-items: center; font-size: 14px; padding: 6px 0; border-bottom: 1px dashed #e2e8f0; }
+    .ad-card-line:last-child { border-bottom: none; }
+    .ad-card-label { color: #64748b; font-weight: 600; }
+    .ad-card-value { color: #0f172a; font-weight: 700; }
+    .ad-card-price { color: var(--accent); font-size: 16px; font-weight: 800; }
+
+    .empty-state { background: rgba(255, 255, 255, 0.92); border: 1px dashed #4ade80; border-radius: 16px; padding: 40px 20px; text-align: center; color: #166534; grid-column: 1 / -1; }
+
+    .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); justify-content: center; align-items: center; padding: 18px; z-index: 1000; }
+    .modal-backdrop.active { display: flex; }
+    .modal { background: #ffffff; width: 100%; max-width: 580px; border-radius: 20px; padding: 26px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); max-height: 95vh; overflow-y: auto; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+    .modal-header h3 { margin: 0; font-size: 21px; color: var(--secondary); }
+    .close-btn { background: #f1f5f9; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #64748b; padding: 0; }
+
+    .carousel-container { position: relative; width: 100%; border-radius: 12px; overflow: hidden; background: #0f172a; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; min-height: 240px; }
+    .carousel-slide { width: 100%; height: 290px; object-fit: contain; }
+    .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.65); color: white; border: none; width: 38px; height: 38px; border-radius: 50%; font-size: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; }
+    .carousel-btn:hover { background: rgba(0,0,0,0.9); }
+    .carousel-prev { right: 10px; }
+    .carousel-next { left: 10px; }
+    .image-counter { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+
+    .thumbs-row { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 16px; padding-bottom: 4px; }
+    .thumb-item { width: 62px; height: 62px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid transparent; opacity: 0.7; }
+    .thumb-item.active { border-color: var(--primary); opacity: 1; }
+
+    .detail-section { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
+    .detail-line { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid #e2e8f0; gap: 10px; }
+    .detail-line:last-child { border-bottom: none; }
+    .detail-label { color: #64748b; font-weight: 600; font-size: 14px; }
+    .detail-val { color: #0f172a; font-weight: 700; font-size: 15px; }
+    .detail-price { color: var(--accent); font-size: 20px; }
+
+    .profile-ad-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .profile-ad-item:last-child { border-bottom: none; }
+    .profile-ad-trigger {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      cursor: pointer;
+      text-align: right;
+    }
+    .profile-ad-trigger:hover strong { color: var(--primary); }
+    .profile-thumb {
+      width: 54px;
+      height: 54px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      background: #f0fdf4;
+      flex-shrink: 0;
+    }
+
+    .desc-box { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
+    .desc-title { font-weight: 700; color: #475569; margin-bottom: 8px; font-size: 14px; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; }
+    .desc-text { color: #1e293b; line-height: 1.6; font-size: 14px; white-space: pre-line; }
+
+    .action-row { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid #e2e8f0; gap: 10px; flex-wrap: wrap; }
+
+    .chat-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 12px;
+      height: 260px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .msg-bubble {
+      max-width: 80%;
+      padding: 9px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .msg-mine {
+      align-self: flex-start;
+      background: #dcfce7;
+      color: #14532d;
+      border: 1px solid #86efac;
+    }
+    .msg-other {
+      align-self: flex-end;
+      background: #ffffff;
+      color: #0f172a;
+      border: 1px solid #e2e8f0;
+    }
+    .msg-sender { font-size: 11px; font-weight: 700; margin-bottom: 3px; opacity: 0.75; }
+
+    .profile-card {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+
+    .tabs-row { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+    .tab-btn { background: #f1f5f9; color: #334155; padding: 8px 14px; font-size: 13px; }
+    .tab-btn.active { background: var(--primary); color: #fff; }
+
+    .form-group { margin-bottom: 14px; }
+    label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: #334155; }
+    input, select, textarea { width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 14px; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
+    .form-actions { display: flex; gap: 10px; margin-top: 18px; }
+    .form-actions button { flex: 1; padding: 12px; font-size: 15px; }
+
+    .modal-footer-links { margin-top: 16px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; flex-wrap: wrap; gap: 8px; }
+    .alert { padding: 11px 14px; border-radius: 10px; margin-bottom: 16px; font-size: 13px; display: none; font-weight: 600; }
+    .alert.error { display: block; background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+    .alert.success { display: block; background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand-area">
+      <div class="syria-flag" title="العلم السوري الحر">
+        <div class="flag-stripe-green"></div>
+        <div class="flag-stripe-white"><span>★</span><span>★</span><span>★</span></div>
+        <div class="flag-stripe-black"></div>
+      </div>
+      <div class="brand">سوق <span>الشامل</span></div>
+    </div>
+
+    <div class="nav-actions" id="guestNav">
+      <button type="button" class="btn-secondary" onclick="openModal('registerModal')">إنشاء حساب</button>
+      <button type="button" class="btn-primary" onclick="openModal('loginModal')">تسجيل الدخول</button>
+    </div>
+
+    <div class="nav-actions hidden" id="userNav">
+      <span id="navUserText" style="font-weight: 700; color: #14532d;"></span>
+      <button type="button" class="btn-primary" onclick="openProfileModal()">الملف الشخصي</button>
+      <button type="button" class="btn-secondary" onclick="openInboxModal()">الرسائل</button>
+      <button type="button" class="btn-accent" onclick="openModal('addAdModal')">+ إضافة إعلان</button>
+      <button type="button" class="btn-secondary" onclick="logout()">خروج</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="hero">
+      <h1>سوق الشامل للإعلانات المبوبة</h1>
+      <p>تصفح أحدث الإعلانات، تواصل مع البائعين، واحفظ إعلاناتك ومتابعاتك بسهولة.</p>
+      <div id="guestBanner"><button type="button" class="btn-accent" onclick="openModal('registerModal')">انضم إلينا وأضف إعلانك</button></div>
+    </div>
+
+    <div class="user-bar hidden" id="welcomeBanner">
+      <div>مرحباً بك، <strong id="currentUserName"></strong></div>
+      <div style="font-size: 13px; font-weight: 700;">الحساب مفعل وجاهز للنشر والدردشة</div>
+    </div>
+
+    <!-- البحث والأقسام الرئيسية والفرعية ونطاق السعر والمدينة والترتيب -->
+    <div class="filter-search-box">
+      <div class="search-row">
+        <input type="text" id="searchInput" class="search-input" placeholder="ابحث عن منتج، ماركة (سامسونج، آيفون، شاومي، شاحنات...) أو وصف..." oninput="applyFilters()" />
+        <select id="searchCategorySelect" class="price-input" onchange="onSearchCategoryChange()">
+          <option value="الكل">كل الأقسام</option>
+          <option value="سيارات ومركبات">سيارات ومركبات</option>
+          <option value="إلكترونيات وهواتف">إلكترونيات وهواتف</option>
+          <option value="عقارات">عقارات</option>
+          <option value="أثاث ومفروشات">أثاث ومفروشات</option>
+          <option value="وظائف وخدمات">وظائف وخدمات</option>
+        </select>
+        <select id="searchSubCategorySelect" class="price-input" onchange="onSearchSubCategoryChange()">
+          <option value="الكل">كل الأقسام الفرعية</option>
+        </select>
+      </div>
+
+      <div class="price-filter-row">
+        <span style="font-size: 13px; font-weight: 700; color: #14532d;">الميزانية / السعر:</span>
+        <input type="number" id="minPriceInput" class="price-input" placeholder="من سعر..." min="0" oninput="applyFilters()" />
+        <input type="number" id="maxPriceInput" class="price-input" placeholder="إلى سعر..." min="0" oninput="applyFilters()" />
+        <input type="text" id="cityFilterInput" class="price-input" placeholder="المدينة (دمشق، حلب، حمص...)" oninput="applyFilters()" />
+        <select id="sortSelect" class="price-input" onchange="applyFilters()">
+          <option value="newest">الترتيب: الأحدث</option>
+          <option value="price_asc">السعر: من الأقل إلى الأعلى</option>
+          <option value="price_desc">السعر: من الأعلى إلى الأقل</option>
+        </select>
+        <button type="button" class="btn-secondary" onclick="resetFilters()">إعادة ضبط</button>
+      </div>
+
+      <h2 class="categories-title">تصفح حسب القسم</h2>
+      <div class="categories-grid" id="categoriesGrid">
+        <button type="button" class="cat-btn active" onclick="filterCategory('الكل', this)">الكل</button>
+        <button type="button" class="cat-btn" onclick="filterCategory('سيارات ومركبات', this)">سيارات ومركبات</button>
+        <button type="button" class="cat-btn" onclick="filterCategory('إلكترونيات وهواتف', this)">إلكترونيات وهواتف</button>
+        <button type="button" class="cat-btn" onclick="filterCategory('عقارات', this)">عقارات</button>
+        <button type="button" class="cat-btn" onclick="filterCategory('أثاث ومفروشات', this)">أثاث ومفروشات</button>
+        <button type="button" class="cat-btn" onclick="filterCategory('وظائف وخدمات', this)">وظائف وخدمات</button>
+      </div>
+
+      <div class="subcat-pills hidden" id="subcatPills"></div>
+    </div>
+    <div class="section-header-row">
+      <div class="section-title" id="adsSectionTitle">أحدث الإعلانات</div>
+      <div style="display: flex; gap: 8px;">
+        <button type="button" id="showAllAdsBtn" class="btn-primary" onclick="toggleFavOnly(false)">كل الإعلانات</button>
+        <button type="button" id="showFavAdsBtn" class="btn-secondary" onclick="toggleFavOnly(true)">⭐ المفضلة (<span id="favCountSpan">0</span>)</button>
+      </div>
+    </div>
+
+    <div class="ads-grid" id="adsContainer"></div>
+  </div>
+
+  <!-- نافذة تفاصيل الإعلان مع معرض الصور والدردشة -->
+  <div class="modal-backdrop" id="adDetailModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modalDetailTitle">تفاصيل الإعلان</h3>
+        <button type="button" class="close-btn" onclick="closeModal('adDetailModal')">&times;</button>
+      </div>
+      <div id="modalDetailContent"></div>
+    </div>
+  </div>
+
+  <!-- نافذة الملف الشخصي والإعدادات -->
+  <div class="modal-backdrop" id="profileModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>الملف الشخصي والإعدادات</h3>
+        <button type="button" class="close-btn" onclick="closeModal('profileModal')">&times;</button>
+      </div>
+      <div id="profileContent"></div>
+    </div>
+  </div>
+
+  <!-- نافذة صندوق المحادثات -->
+  <div class="modal-backdrop" id="inboxModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>صندوق الرسائل والمحادثات</h3>
+        <button type="button" class="close-btn" onclick="closeModal('inboxModal')">&times;</button>
+      </div>
+      <div id="inboxContent"></div>
+    </div>
+  </div>
+
+  <!-- نافذة الدردشة المباشرة -->
+  <div class="modal-backdrop" id="chatModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="chatTitle">الدردشة</h3>
+        <button type="button" class="close-btn" onclick="closeChatModal()">&times;</button>
+      </div>
+      <div id="chatAlert" class="alert"></div>
+      <div class="chat-box" id="chatMessagesBox"></div>
+      <form id="chatForm" style="display: flex; gap: 8px;">
+        <input type="text" id="chatInput" placeholder="اكتب رسالتك هنا..." required />
+        <button type="submit" class="btn-primary">إرسال</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- نافذة تسجيل الدخول -->
+  <div class="modal-backdrop" id="loginModal">
+    <div class="modal">
+      <div class="modal-header"><h3>تسجيل الدخول</h3><button type="button" class="close-btn" onclick="closeModal('loginModal')">&times;</button></div>
+      <div id="loginAlert" class="alert"></div>
+      <form id="loginForm">
+        <div class="form-group"><label>البريد الإلكتروني</label><input type="email" id="loginEmail" required /></div>
+        <div class="form-group"><label>كلمة المرور</label><input type="password" id="loginPassword" required /></div>
+        <div class="form-actions"><button type="submit" class="btn-primary">دخول</button></div>
+      </form>
+      <div class="modal-footer-links">
+        <button type="button" class="btn-link" onclick="switchModal('loginModal', 'forgotPasswordModal')">نسيت كلمة المرور؟</button>
+        <button type="button" class="btn-link" onclick="switchModal('loginModal', 'registerModal')">إنشاء حساب جديد</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة إنشاء حساب -->
+  <div class="modal-backdrop" id="registerModal">
+    <div class="modal">
+      <div class="modal-header"><h3>إنشاء حساب جديد</h3><button type="button" class="close-btn" onclick="closeModal('registerModal')">&times;</button></div>
+      <div id="registerAlert" class="alert"></div>
+      <form id="registerForm">
+        <div class="form-group"><label>اسم المستخدم</label><input type="text" id="regUsername" required /></div>
+        <div class="form-group"><label>البريد الإلكتروني</label><input type="email" id="regEmail" required /></div>
+        <div class="form-group"><label>رقم الهاتف</label><input type="text" id="regPhone" required /></div>
+        <div class="form-group"><label>المدينة</label><input type="text" id="regCity" required /></div>
+        <div class="form-group"><label>كلمة المرور</label><input type="password" id="regPassword" required /></div>
+        <div class="form-actions"><button type="submit" class="btn-primary">تسجيل وإرسال الرمز</button></div>
+      </form>
+      <div class="modal-footer-links">
+        <button type="button" class="btn-link" onclick="switchModal('registerModal', 'loginModal')">لدي حساب بالفعل</button>
+        <button type="button" class="btn-link" onclick="switchModal('registerModal', 'verifyModal')">لدي رمز تفعيل</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة تفعيل الحساب -->
+  <div class="modal-backdrop" id="verifyModal">
+    <div class="modal">
+      <div class="modal-header"><h3>تأكيد البريد الإلكتروني</h3><button type="button" class="close-btn" onclick="closeModal('verifyModal')">&times;</button></div>
+      <div id="verifyAlert" class="alert"></div>
+      <form id="verifyForm">
+        <div class="form-group"><label>البريد الإلكتروني</label><input type="email" id="verifyEmail" required /></div>
+        <div class="form-group"><label>رمز التحقق (6 أرقام)</label><input type="text" id="verifyCode" required maxlength="6" style="text-align: center; font-size: 22px;" /></div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">تفعيل الحساب</button>
+          <button type="button" class="btn-secondary" onclick="resendVerificationCode()">إعادة إرسال الرمز</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- نافذة نسيت كلمة المرور -->
+  <div class="modal-backdrop" id="forgotPasswordModal">
+    <div class="modal">
+      <div class="modal-header"><h3>استعادة كلمة المرور</h3><button type="button" class="close-btn" onclick="closeModal('forgotPasswordModal')">&times;</button></div>
+      <div id="forgotAlert" class="alert"></div>
+      <form id="forgotRequestForm">
+        <div class="form-group"><label>البريد الإلكتروني المسجل</label><input type="email" id="forgotEmail" required /></div>
+        <div class="form-actions"><button type="submit" class="btn-primary">إرسال رمز الاستعادة</button></div>
+      </form>
+      <form id="resetPasswordForm" class="hidden" style="margin-top: 12px;">
+        <div class="form-group"><label>رمز التحقق</label><input type="text" id="resetCode" required maxlength="6" /></div>
+        <div class="form-group"><label>كلمة المرور الجديدة</label><input type="password" id="newPassword" required /></div>
+        <div class="form-actions"><button type="submit" class="btn-primary">حفظ كلمة المرور الجديدة</button></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- نافذة إضافة إعلان -->
+  <div class="modal-backdrop" id="addAdModal">
+    <div class="modal">
+      <div class="modal-header"><h3>إضافة إعلان جديد</h3><button type="button" class="close-btn" onclick="closeModal('addAdModal')">&times;</button></div>
+      <div id="adAlert" class="alert"></div>
+      <form id="adForm">
+        <div class="form-group"><label>اسم المنتج / العنوان</label><input type="text" id="adTitle" required /></div>
+        <div class="form-group">
+          <label>القسم</label>
+          <select id="adCategory" required onchange="populateSubCategories()">
+            <option value="سيارات ومركبات">سيارات ومركبات</option>
+            <option value="إلكترونيات وهواتف">إلكترونيات وهواتف</option>
+            <option value="عقارات">عقارات</option>
+            <option value="أثاث ومفروشات">أثاث ومفروشات</option>
+            <option value="وظائف وخدمات">وظائف وخدمات</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>القسم الفرعي</label>
+          <select id="adSubCategory" required></select>
+        </div>
+        <div class="form-group"><label>السعر</label><input type="text" id="adPrice" required /></div>
+        <div class="form-group"><label>المدينة</label><input type="text" id="adCity" required /></div>
+        <div class="form-group"><label>رقم التواصل</label><input type="text" id="adPhone" required /></div>
+        <div class="form-group"><label>صور الإعلان (يمكنك تحديد عدة صور معاً)</label><input type="file" id="adImages" accept="image/*" multiple /></div>
+        <div class="form-group"><label>الوصف والتفاصيل</label><textarea id="adDescription" rows="4" required></textarea></div>
+        <div class="form-actions"><button type="submit" class="btn-primary">نشر الإعلان</button></div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const subCategoriesMap = {
+      'إلكترونيات وهواتف': ['سامسونج', 'آيفون', 'شاومي', 'لابتوبات', 'أجهزة منزلية'],
+      'سيارات ومركبات': ['سيارات', 'شاحنات', 'دراجات نارية', 'قطع غيار'],
+      'عقارات': ['شقق للبيع', 'شقق للإيجار', 'منازل وأراضي', 'محلات تجارية'],
+      'أثاث ومفروشات': ['غرف نوم', 'مجالس وكنب', 'مفروشات وسجاد'],
+      'وظائف وخدمات': ['فرص عمل', 'خدمات تقنية', 'صيانة ونقل']
+    };
+
+    let allAds = [];
+    let selectedCategory = 'الكل';
+    let selectedSubCategory = 'الكل';
+    let searchQuery = '';
+    let cityQuery = '';
+    let sortMode = 'newest';
+    let favOnly = false;
+    let minPrice = null;
+    let maxPrice = null;
+    let followingList = JSON.parse(localStorage.getItem('followingList') || '[]');
+    let favoritesList = JSON.parse(localStorage.getItem('favoritesList') || '[]');
+    let currentCarouselIndex = 0;
+    let activeAdImages = [];
+    let activeAdId = null;
+    let chatTarget = null;
+    let chatInterval = null;
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function parseNumericPrice(priceVal) {
+      const cleaned = String(priceVal || '').replace(/[^0-9.]/g, '');
+      if (!cleaned) return NaN;
+      return parseFloat(cleaned);
+    }
+
+    async function postJson(url, payload) {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const text = await res.text();
+      let data = {};
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch (e) {
+        throw new Error('استجابة غير متوقعة من السيرفر');
+      }
+      if (!res.ok) {
+        throw new Error(data.error || 'حدث خطأ في الطلب');
+      }
+      return data;
+    }
+
+    function showAlert(id, msg, type = 'error') {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = msg;
+      el.className = `alert ${type}`;
+    }
+
+    function clearAlert(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = '';
+      el.className = 'alert';
+    }
+
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+    function switchModal(from, to) { closeModal(from); openModal(to); }
+
+    function populateSubCategories() {
+      const cat = document.getElementById('adCategory').value;
+      const select = document.getElementById('adSubCategory');
+      const items = subCategoriesMap[cat] || ['عام'];
+      select.innerHTML = items.map(item => `<option value="${escapeHtml(item)}">${escapeHtml(item)}</option>`).join('');
+    }
+
+    function populateSearchSubCategories() {
+      const select = document.getElementById('searchSubCategorySelect');
+      const items = selectedCategory === 'الكل'
+        ? Array.from(new Set(Object.values(subCategoriesMap).flat()))
+        : (subCategoriesMap[selectedCategory] || ['عام']);
+      select.innerHTML = `<option value="الكل">كل الأقسام الفرعية</option>` +
+        items.map(item => `<option value="${escapeHtml(item)}" ${selectedSubCategory === item ? 'selected' : ''}>${escapeHtml(item)}</option>`).join('');
+    }
+
+    function updateFavCounter() {
+      const el = document.getElementById('favCountSpan');
+      if (el) el.textContent = String(favoritesList.length);
+    }
+
+    function toggleFavorite(event, adId) {
+      if (event) event.stopPropagation();
+      const idNum = Number(adId);
+      const idx = favoritesList.indexOf(idNum);
+      if (idx > -1) {
+        favoritesList.splice(idx, 1);
+      } else {
+        favoritesList.push(idNum);
+      }
+      localStorage.setItem('favoritesList', JSON.stringify(favoritesList));
+      updateFavCounter();
+      renderAds();
+      if (activeAdId && Number(activeAdId) === idNum && document.getElementById('adDetailModal').classList.contains('active')) {
+        viewAdDetails(idNum);
+      }
+    }
+
+    function toggleFavOnly(onlyFavs) {
+      favOnly = Boolean(onlyFavs);
+      document.getElementById('showAllAdsBtn').className = favOnly ? 'btn-secondary' : 'btn-primary';
+      document.getElementById('showFavAdsBtn').className = favOnly ? 'btn-primary' : 'btn-secondary';
+      renderAds();
+    }
+
+    function updateAuthUI() {
+      const userStr = localStorage.getItem('currentUser');
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        document.getElementById('guestNav').classList.add('hidden');
+        document.getElementById('guestBanner').classList.add('hidden');
+        document.getElementById('userNav').classList.remove('hidden');
+        document.getElementById('welcomeBanner').classList.remove('hidden');
+        document.getElementById('navUserText').textContent = `أهلاً ${user.username}`;
+        document.getElementById('currentUserName').textContent = user.username;
+        if (user.city) document.getElementById('adCity').value = user.city;
+        if (user.phone) document.getElementById('adPhone').value = user.phone;
+      } else {
+        document.getElementById('guestNav').classList.remove('hidden');
+        document.getElementById('guestBanner').classList.remove('hidden');
+        document.getElementById('userNav').classList.add('hidden');
+        document.getElementById('welcomeBanner').classList.add('hidden');
+      }
+      renderAds();
+    }
+
+    function logout() {
+      localStorage.removeItem('currentUser');
+      updateAuthUI();
+    }
+
+    function renderSubCategoryPills() {
+      const pillsBox = document.getElementById('subcatPills');
+      if (selectedCategory === 'الكل' || !subCategoriesMap[selectedCategory]) {
+        pillsBox.classList.add('hidden');
+        pillsBox.innerHTML = '';
+        return;
+      }
+      const list = ['الكل', ...subCategoriesMap[selectedCategory]];
+      pillsBox.classList.remove('hidden');
+      pillsBox.innerHTML = list.map(sub => `
+        <button type="button" class="subcat-pill ${selectedSubCategory === sub ? 'active' : ''}" onclick="filterSubCategory('${escapeHtml(sub)}')">
+          ${escapeHtml(sub)}
+        </button>
+      `).join('');
+    }
+
+    function filterCategory(category, btnEl) {
+      selectedCategory = category;
+      selectedSubCategory = 'الكل';
+      document.getElementById('searchCategorySelect').value = category;
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      if (btnEl) {
+        btnEl.classList.add('active');
+      } else {
+        document.querySelectorAll('.cat-btn').forEach(b => {
+          if (b.textContent.trim() === category) b.classList.add('active');
+        });
+      }
+      populateSearchSubCategories();
+      renderSubCategoryPills();
+      applyFilters();
+    }
+
+    function onSearchCategoryChange() {
+      const cat = document.getElementById('searchCategorySelect').value;
+      filterCategory(cat, null);
+    }
+
+    function filterSubCategory(subCat) {
+      selectedSubCategory = subCat;
+      document.getElementById('searchSubCategorySelect').value = subCat;
+      renderSubCategoryPills();
+      applyFilters();
+    }
+
+    function onSearchSubCategoryChange() {
+      const subCat = document.getElementById('searchSubCategorySelect').value;
+      filterSubCategory(subCat);
+    }
+
+    function resetFilters() {
+      selectedCategory = 'الكل';
+      selectedSubCategory = 'الكل';
+      searchQuery = '';
+      cityQuery = '';
+      sortMode = 'newest';
+      favOnly = false;
+      minPrice = null;
+      maxPrice = null;
+      document.getElementById('searchInput').value = '';
+      document.getElementById('searchCategorySelect').value = 'الكل';
+      document.getElementById('minPriceInput').value = '';
+      document.getElementById('maxPriceInput').value = '';
+      document.getElementById('cityFilterInput').value = '';
+      document.getElementById('sortSelect').value = 'newest';
+      document.getElementById('showAllAdsBtn').className = 'btn-primary';
+      document.getElementById('showFavAdsBtn').className = 'btn-secondary';
+      populateSearchSubCategories();
+      document.querySelectorAll('.cat-btn').forEach((b, idx) => b.classList.toggle('active', idx === 0));
+      renderSubCategoryPills();
+      applyFilters();
+    }
+
+    function applyFilters() {
+      searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+      cityQuery = document.getElementById('cityFilterInput').value.trim().toLowerCase();
+      sortMode = document.getElementById('sortSelect').value;
+      const minVal = parseFloat(document.getElementById('minPriceInput').value);
+      const maxVal = parseFloat(document.getElementById('maxPriceInput').value);
+      minPrice = Number.isNaN(minVal) ? null : minVal;
+      maxPrice = Number.isNaN(maxVal) ? null : maxVal;
+
+      let titleText = favOnly ? 'الإعلانات المفضلة' : (selectedCategory === 'الكل' ? 'أحدث الإعلانات' : `إعلانات قسم: ${selectedCategory}`);
+      if (selectedSubCategory !== 'الكل') {
+        titleText += ` (${selectedSubCategory})`;
+      }
+      if (minPrice !== null || maxPrice !== null) {
+        titleText += ` | السعر: ${minPrice !== null ? minPrice : 0} - ${maxPrice !== null ? maxPrice : '∞'}`;
+      }
+      document.getElementById('adsSectionTitle').textContent = titleText;
+      renderAds();
+    }
+
+    function getAdImages(ad) {
+      let images = [];
+      try {
+        images = ad.images ? JSON.parse(ad.images) : (ad.image ? [ad.image] : []);
+      } catch (e) {
+        images = ad.image ? [ad.image] : [];
+      }
+      return Array.isArray(images) ? images : [];
+    }
+
+    function renderAds() {
+      const container = document.getElementById('adsContainer');
+      let filtered = allAds.filter(ad => {
+        if (favOnly && !favoritesList.includes(Number(ad.id))) return false;
+        const matchCat = selectedCategory === 'الكل' || ad.category === selectedCategory;
+        const matchSub = selectedSubCategory === 'الكل' || (ad.sub_category || 'عام') === selectedSubCategory;
+        const matchCity = !cityQuery || String(ad.city || '').toLowerCase().includes(cityQuery);
+        const matchQuery = !searchQuery || [
+          ad.title,
+          ad.category,
+          ad.sub_category,
+          ad.city,
+          ad.username,
+          ad.description
+        ].some(val => String(val || '').toLowerCase().includes(searchQuery));
+
+        const numPrice = parseNumericPrice(ad.price);
+        const matchMin = minPrice === null || (!Number.isNaN(numPrice) && numPrice >= minPrice);
+        const matchMax = maxPrice === null || (!Number.isNaN(numPrice) && numPrice <= maxPrice);
+
+        return matchCat && matchSub && matchCity && matchQuery && matchMin && matchMax;
+      });
+
+      if (sortMode === 'price_asc') {
+        filtered.sort((a, b) => {
+          const pa = parseNumericPrice(a.price);
+          const pb = parseNumericPrice(b.price);
+          return (Number.isNaN(pa) ? Infinity : pa) - (Number.isNaN(pb) ? Infinity : pb);
+        });
+      } else if (sortMode === 'price_desc') {
+        filtered.sort((a, b) => {
+          const pa = parseNumericPrice(a.price);
+          const pb = parseNumericPrice(b.price);
+          return (Number.isNaN(pb) ? -Infinity : pb) - (Number.isNaN(pa) ? -Infinity : pa);
+        });
+      }
+
+      if (!filtered.length) {
+        container.innerHTML = `<div class="empty-state"><h3>لا توجد إعلانات مطابقة</h3><p>جرّب تغيير القسم أو المدينة أو نطاق السعر أو كلمة البحث.</p></div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(ad => {
+        const images = getAdImages(ad);
+        const isFav = favoritesList.includes(Number(ad.id));
+        const imgHtml = images.length > 0 ? `
+          <div class="ad-img-wrap">
+            <img src="${escapeHtml(images[0])}" class="ad-img-preview" />
+            <button type="button" class="fav-badge-btn" onclick="toggleFavorite(event, ${ad.id})">${isFav ? '⭐ محفوظ' : '☆ حفظ'}</button>
+            ${images.length > 1 ? `<span class="img-count-badge">📷 ${images.length} صور</span>` : ''}
+          </div>
+        ` : `
+          <div style="padding: 12px 16px 0 16px; display:flex; justify-content:flex-start;">
+            <button type="button" class="btn-secondary" style="padding: 5px 10px; font-size: 12px;" onclick="toggleFavorite(event, ${ad.id})">${isFav ? '⭐ محفوظ' : '☆ حفظ'}</button>
+          </div>
+        `;
+
+        return `
+          <div class="ad-card" onclick="viewAdDetails(${ad.id})">
+            ${imgHtml}
+            <div class="ad-body">
+              <div>
+                <div class="ad-badges">
+                  <span class="ad-category">${escapeHtml(ad.category || 'عام')}</span>
+                  <span class="ad-subcat">${escapeHtml(ad.sub_category || 'عام')}</span>
+                </div>
+                <div class="ad-card-line" style="margin-top: 8px;">
+                  <span class="ad-card-label">اسم المنتج:</span>
+                  <span class="ad-card-value">${escapeHtml(ad.title)}</span>
+                </div>
+                <div class="ad-card-line">
+                  <span class="ad-card-label">السعر:</span>
+                  <span class="ad-card-price">${escapeHtml(ad.price)}</span>
+                </div>
+              </div>
+              <div class="ad-card-line">
+                <span class="ad-card-label">المدينة:</span>
+                <span class="ad-card-value">📍 ${escapeHtml(ad.city || 'غير محدد')}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function viewAdDetails(adId) {
+      const ad = allAds.find(a => Number(a.id) === Number(adId));
+      if (!ad) return;
+
+      closeModal('profileModal');
+      closeModal('inboxModal');
+      activeAdId = ad.id;
+      activeAdImages = getAdImages(ad);
+      currentCarouselIndex = 0;
+
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+      const isFollowing = followingList.includes(Number(ad.user_id));
+      const isFav = favoritesList.includes(Number(ad.id));
+      const canDelete = currentUser && Number(currentUser.id) === Number(ad.user_id);
+      const isOtherUser = !currentUser || Number(currentUser.id) !== Number(ad.user_id);
+
+      let carouselHtml = '';
+      if (activeAdImages.length > 0) {
+        const controlsHtml = activeAdImages.length > 1 ? `
+          <button type="button" class="carousel-btn carousel-prev" onclick="changeSlide(-1)">❮</button>
+          <button type="button" class="carousel-btn carousel-next" onclick="changeSlide(1)">❯</button>
+          <div class="image-counter" id="carouselCounter">صورة 1 من ${activeAdImages.length}</div>
+        ` : '';
+
+        const thumbsHtml = activeAdImages.length > 1 ? `
+          <div class="thumbs-row">
+            ${activeAdImages.map((src, idx) => `
+              <img src="${escapeHtml(src)}" class="thumb-item ${idx === 0 ? 'active' : ''}" onclick="goToSlide(${idx})" />
+            `).join('')}
+          </div>
+        ` : '';
+
+        carouselHtml = `
+          <div class="carousel-container">
+            <img id="activeCarouselImg" src="${escapeHtml(activeAdImages[0])}" class="carousel-slide" />
+            ${controlsHtml}
+          </div>
+          ${thumbsHtml}
+        `;
+      }
+
+      const followBtnText = isFollowing ? '✅ تتابع المعلن' : '🔔 متابعة المعلن';
+      const followBtnClass = isFollowing ? 'btn-secondary' : 'btn-primary';
+      const favBtnText = isFav ? '⭐ في المفضلة' : '☆ أضف للمفضلة';
+
+      const content = `
+        ${carouselHtml}
+        <div class="detail-section">
+          <div class="detail-line"><span class="detail-label">المنتج:</span><span class="detail-val">${escapeHtml(ad.title)}</span></div>
+          <div class="detail-line"><span class="detail-label">القسم:</span><span class="detail-val">${escapeHtml(ad.category)}</span></div>
+          <div class="detail-line"><span class="detail-label">القسم الفرعي:</span><span class="detail-val">${escapeHtml(ad.sub_category || 'عام')}</span></div>
+          <div class="detail-line"><span class="detail-label">السعر:</span><span class="detail-val detail-price">${escapeHtml(ad.price)}</span></div>
+          <div class="detail-line"><span class="detail-label">المدينة:</span><span class="detail-val">📍 ${escapeHtml(ad.city)}</span></div>
+          <div class="detail-line"><span class="detail-label">المعلن:</span><span class="detail-val">👤 ${escapeHtml(ad.username)}</span></div>
+          <div class="detail-line"><span class="detail-label">رقم التواصل:</span><span class="detail-val" dir="ltr">📞 ${escapeHtml(ad.phone)}</span></div>
+        </div>
+
+        <div class="desc-box">
+          <div class="desc-title">وصف المنتج وتفاصيله</div>
+          <div class="desc-text">${escapeHtml(ad.description || 'لا يوجد وصف')}</div>
+        </div>
+
+        <div class="action-row">
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button type="button" class="${followBtnClass}" onclick="toggleFollow(${Number(ad.user_id)})">${followBtnText}</button>
+            <button type="button" class="btn-secondary" onclick="toggleFavorite(null, ${Number(ad.id)})">${favBtnText}</button>
+            ${isOtherUser ? `<button type="button" class="btn-accent" onclick="openChatWith(${Number(ad.user_id)}, '${escapeHtml(ad.username)}', ${Number(ad.id)})">💬 دردشة مع المعلن</button>` : ''}
+          </div>
+          ${canDelete ? `<button type="button" class="btn-danger" onclick="deleteAdFromModal(${ad.id})">حذف الإعلان</button>` : ''}
+        </div>
+      `;
+
+      document.getElementById('modalDetailTitle').textContent = ad.title;
+      document.getElementById('modalDetailContent').innerHTML = content;
+      openModal('adDetailModal');
+    }
+
+    function updateCarouselUI() {
+      const imgEl = document.getElementById('activeCarouselImg');
+      if (imgEl) imgEl.src = activeAdImages[currentCarouselIndex];
+      const counterEl = document.getElementById('carouselCounter');
+      if (counterEl) counterEl.textContent = `صورة ${currentCarouselIndex + 1} من ${activeAdImages.length}`;
+      document.querySelectorAll('.thumb-item').forEach((el, idx) => {
+        el.classList.toggle('active', idx === currentCarouselIndex);
+      });
+    }
+
+    function changeSlide(direction) {
+      if (activeAdImages.length <= 1) return;
+      currentCarouselIndex = (currentCarouselIndex + direction + activeAdImages.length) % activeAdImages.length;
+      updateCarouselUI();
+    }
+
+    function goToSlide(index) {
+      currentCarouselIndex = index;
+      updateCarouselUI();
+    }
+
+    function toggleFollow(userId) {
+      const uid = Number(userId);
+      const index = followingList.indexOf(uid);
+      if (index > -1) {
+        followingList.splice(index, 1);
+      } else {
+        followingList.push(uid);
+      }
+      localStorage.setItem('followingList', JSON.stringify(followingList));
+      if (activeAdId) viewAdDetails(activeAdId);
+    }
+
+    async function openProfileModal() {
+      const user = JSON.parse(localStorage.getItem('currentUser') || 'null');
+      if (!user) {
+        openModal('loginModal');
+        return;
+      }
+
+      const myAds = allAds.filter(ad => Number(ad.user_id) === Number(user.id));
+      let convs = [];
+      try {
+        const res = await fetch(`/api/conversations/${user.id}`);
+        if (res.ok) convs = await res.json();
+      } catch (e) {}
+
+      const myAdsHtml = myAds.length
+        ? myAds.map(ad => {
+            const imgs = getAdImages(ad);
+            const thumbSrc = imgs.length > 0 ? imgs[0] : '';
+            const thumbHtml = thumbSrc
+              ? `<img src="${escapeHtml(thumbSrc)}" class="profile-thumb" alt="${escapeHtml(ad.title)}" />`
+              : `<div class="profile-thumb" style="display:flex;align-items:center;justify-content:center;font-size:18px;">📦</div>`;
+
+            return `
+              <div class="profile-ad-item">
+                <div class="profile-ad-trigger" onclick="viewAdDetails(${ad.id})">
+                  ${thumbHtml}
+                  <div>
+                    <strong>${escapeHtml(ad.title)}</strong>
+                    <div style="font-size: 12px; color: var(--accent); font-weight: 700;">${escapeHtml(ad.price)} • ${escapeHtml(ad.sub_category || 'عام')}</div>
+                  </div>
+                </div>
+                <button type="button" class="btn-danger" onclick="deleteAdFromProfile(${ad.id})">حذف</button>
+              </div>
+            `;
+          }).join('')
+        : '<div style="color: #64748b; font-size: 13px;">لم تنشر أي إعلانات بعد.</div>';
+
+      const convsHtml = convs.length
+        ? convs.map(c => `
+            <div class="detail-line">
+              <div>
+                <strong>${escapeHtml(c.otherUserName)}</strong>
+                <div style="font-size: 12px; color: #64748b;">${escapeHtml(c.lastMessage)}</div>
+              </div>
+              <button type="button" class="btn-primary" onclick="openChatWith(${c.otherUserId}, '${escapeHtml(c.otherUserName)}', null)">فتح الدردشة</button>
+            </div>
+          `).join('')
+        : '<div style="color: #64748b; font-size: 13px;">لا توجد رسائل بعد.</div>';
+
+      document.getElementById('profileContent').innerHTML = `
+        <div class="profile-card">
+          <div><strong>الاسم:</strong> ${escapeHtml(user.username)}</div>
+          <div><strong>البريد:</strong> ${escapeHtml(user.email)}</div>
+          <div><strong>المدينة:</strong> ${escapeHtml(user.city || 'غير محدد')}</div>
+          <div><strong>الهاتف:</strong> <span dir="ltr">${escapeHtml(user.phone || 'غير محدد')}</span></div>
+          <div><strong>عدد المتابَعين:</strong> ${followingList.length} • <strong>المفضلة:</strong> ${favoritesList.length}</div>
+        </div>
+
+        <h4 style="margin: 12px 0 8px 0;">إعدادات الحساب</h4>
+        <div id="profileSettingsAlert" class="alert"></div>
+        <form id="profileSettingsForm" class="detail-section">
+          <div class="form-group"><label>اسم المستخدم</label><input type="text" id="profUsername" value="${escapeHtml(user.username || '')}" required /></div>
+          <div class="form-group"><label>المدينة</label><input type="text" id="profCity" value="${escapeHtml(user.city || '')}" /></div>
+          <div class="form-group"><label>رقم الهاتف</label><input type="text" id="profPhone" value="${escapeHtml(user.phone || '')}" /></div>
+          <button type="submit" class="btn-primary" style="width:100%;">حفظ الإعدادات</button>
+        </form>
+
+        <h4 style="margin: 12px 0 8px 0;">إعلاناتي (${myAds.length}) — اضغط على الإعلان لفتح تفاصيله</h4>
+        <div class="detail-section">${myAdsHtml}</div>
+
+        <h4 style="margin: 12px 0 8px 0;">المحادثات (${convs.length})</h4>
+        <div class="detail-section">${convsHtml}</div>
+      `;
+
+      document.getElementById('profileSettingsForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearAlert('profileSettingsAlert');
+        try {
+          const res = await fetch(`/api/profile/${user.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              username: document.getElementById('profUsername').value.trim(),
+              city: document.getElementById('profCity').value.trim(),
+              phone: document.getElementById('profPhone').value.trim()
+            })
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'فشل التحديث');
+          localStorage.setItem('currentUser', JSON.stringify(data.user));
+          updateAuthUI();
+          await loadAds();
+          showAlert('profileSettingsAlert', 'تم حفظ إعدادات الحساب بنجاح', 'success');
+        } catch (err) {
+          showAlert('profileSettingsAlert', err.message);
+        }
+      });
+
+      openModal('profileModal');
+    }
+
+    async function openInboxModal() {
+      const user = JSON.parse(localStorage.getItem('currentUser') || 'null');
+      if (!user) {
+        openModal('loginModal');
+        return;
+      }
+
+      let convs = [];
+      try {
+        const res = await fetch(`/api/conversations/${user.id}`);
+        if (res.ok) convs = await res.json();
+      } catch (e) {}
+
+      const html = convs.length
+        ? `<div class="detail-section">` + convs.map(c => `
+            <div class="detail-line">
+              <div>
+                <strong>${escapeHtml(c.otherUserName)}</strong>
+                <div style="font-size: 12px; color: #64748b;">${escapeHtml(c.lastMessage)}</div>
+              </div>
+              <button type="button" class="btn-primary" onclick="openChatWith(${c.otherUserId}, '${escapeHtml(c.otherUserName)}', null)">دردشة</button>
+            </div>
+          `).join('') + `</div>`
+        : `<div class="empty-state"><h3>لا توجد محادثات بعد</h3><p>افتح أي إعلان واضغط "دردشة مع المعلن" لبدء محادثة.</p></div>`;
+
+      document.getElementById('inboxContent').innerHTML = html;
+      openModal('inboxModal');
+    }
+
+    async function deleteAdFromProfile(id) {
+      try {
+        const res = await fetch(`/api/ads/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          allAds = allAds.filter(item => Number(item.id) !== Number(id));
+          renderAds();
+          openProfileModal();
+        }
+      } catch (e) { alert('تعذر حذف الإعلان'); }
+    }
+
+    function openChatWith(otherUserId, otherUserName, adId = null) {
+      const user = JSON.parse(localStorage.getItem('currentUser') || 'null');
+      if (!user) {
+        closeModal('adDetailModal');
+        openModal('loginModal');
+        return;
+      }
+
+      chatTarget = {
+        id: Number(otherUserId),
+        name: otherUserName || `مستخدم #${otherUserId}`,
+        adId: adId
+      };
+
+      clearAlert('chatAlert');
+      document.getElementById('chatTitle').textContent = `دردشة مع ${chatTarget.name}`;
+      closeModal('adDetailModal');
+      closeModal('profileModal');
+      closeModal('inboxModal');
+      openModal('chatModal');
+
+      loadChatMessages();
+      if (chatInterval) clearInterval(chatInterval);
+      chatInterval = setInterval(loadChatMessages, 3000);
+    }
+
+    function closeChatModal() {
+      if (chatInterval) clearInterval(chatInterval);
+      closeModal('chatModal');
+    }
+
+    async function loadChatMessages() {
+      const user = JSON.parse(localStorage.getItem('currentUser') || 'null');
+      if (!user || !chatTarget) return;
+
+      try {
+        const res = await fetch(`/api/messages?user1=${user.id}&user2=${chatTarget.id}`);
+        if (!res.ok) return;
+        const msgs = await res.json();
+        const box = document.getElementById('chatMessagesBox');
+
+        if (!msgs.length) {
+          box.innerHTML = `<div style="text-align: center; color: #64748b; font-size: 13px; margin: auto;">ابدأ المحادثة الآن...</div>`;
+          return;
+        }
+
+        box.innerHTML = msgs.map(m => {
+          const isMine = Number(m.sender_id) === Number(user.id);
+          return `
+            <div class="msg-bubble ${isMine ? 'msg-mine' : 'msg-other'}">
+              <div class="msg-sender">${escapeHtml(m.sender_name || (isMine ? user.username : chatTarget.name))}</div>
+              <div>${escapeHtml(m.content)}</div>
+            </div>
+          `;
+        }).join('');
+        box.scrollTop = box.scrollHeight;
+      } catch (e) {}
+    }
+
+    document.getElementById('chatForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearAlert('chatAlert');
+      const user = JSON.parse(localStorage.getItem('currentUser') || 'null');
+      const input = document.getElementById('chatInput');
+      const content = input.value.trim();
+      if (!user || !chatTarget || !content) return;
+
+      try {
+        await postJson('/api/messages', {
+          sender_id: user.id,
+          sender_name: user.username,
+          receiver_id: chatTarget.id,
+          receiver_name: chatTarget.name,
+          ad_id: chatTarget.adId,
+          content
+        });
+        input.value = '';
+        await loadChatMessages();
+      } catch (err) {
+        showAlert('chatAlert', err.message);
+      }
+    });
+
+    async function loadAds() {
+      try {
+        const res = await fetch('/api/ads');
+        if (res.ok) allAds = await res.json();
+      } catch (e) { allAds = []; }
+      renderAds();
+    }
+
+    async function deleteAdFromModal(id) {
+      try {
+        const res = await fetch(`/api/ads/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          allAds = allAds.filter(item => Number(item.id) !== Number(id));
+          closeModal('adDetailModal');
+          renderAds();
+        }
+      } catch (e) { alert('تعذر حذف الإعلان'); }
+    }
+
+    document.getElementById('adForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearAlert('adAlert');
+      const user = JSON.parse(localStorage.getItem('currentUser') || 'null');
+      if (!user) { showAlert('adAlert', 'يرجى تسجيل الدخول أولاً'); return; }
+
+      const formData = new FormData();
+      formData.append('user_id', user.id);
+      formData.append('username', user.username);
+      formData.append('title', document.getElementById('adTitle').value.trim());
+      formData.append('category', document.getElementById('adCategory').value);
+      formData.append('sub_category', document.getElementById('adSubCategory').value);
+      formData.append('price', document.getElementById('adPrice').value.trim());
+      formData.append('city', document.getElementById('adCity').value.trim());
+      formData.append('phone', document.getElementById('adPhone').value.trim());
+      formData.append('description', document.getElementById('adDescription').value.trim());
+
+      const files = document.getElementById('adImages').files;
+      for (let i = 0; i < files.length; i++) {
+        formData.append('images', files[i]);
+      }
+
+      try {
+        const res = await fetch('/api/ads', { method: 'POST', body: formData });
+        const text = await res.text();
+        const data = text ? JSON.parse(text) : {};
+        if (!res.ok) throw new Error(data.error || 'فشل النشر');
+        document.getElementById('adForm').reset();
+        populateSubCategories();
+        closeModal('addAdModal');
+        await loadAds();
+      } catch (err) { showAlert('adAlert', err.message); }
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearAlert('loginAlert');
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      try {
+        const data = await postJson('/api/login', { email, password });
+        localStorage.setItem('currentUser', JSON.stringify(data.user));
+        updateAuthUI();
+        closeModal('loginModal');
+        document.getElementById('loginForm').reset();
+      } catch (err) { showAlert('loginAlert', err.message); }
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearAlert('registerAlert');
+      const username = document.getElementById('regUsername').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const phone = document.getElementById('regPhone').value.trim();
+      const city = document.getElementById('regCity').value.trim();
+      const password = document.getElementById('regPassword').value;
+      try {
+        await postJson('/api/register', { username, email, phone, city, password });
+        document.getElementById('verifyEmail').value = email;
+        switchModal('registerModal', 'verifyModal');
+      } catch (err) { showAlert('registerAlert', err.message); }
+    });
+
+    document.getElementById('verifyForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearAlert('verifyAlert');
+      const email = document.getElementById('verifyEmail').value.trim();
+      const code = document.getElementById('verifyCode').value.trim();
+      try {
+        await postJson('/api/verify', { email, code });
+        closeModal('verifyModal');
+        openModal('loginModal');
+        document.getElementById('loginEmail').value = email;
+      } catch (err) { showAlert('verifyAlert', err.message); }
+    });
+
+    async function resendVerificationCode() {
+      clearAlert('verifyAlert');
+      const email = document.getElementById('verifyEmail').value.trim();
+      if (!email) { showAlert('verifyAlert', 'الرجاء إدخال البريد الإلكتروني أولاً'); return; }
+      try {
+        await postJson('/api/resend-code', { email });
+        showAlert('verifyAlert', 'تمت إعادة إرسال الرمز بنجاح', 'success');
+      } catch (err) { showAlert('verifyAlert', err.message); }
+    }
+
+    document.getElementById('forgotRequestForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearAlert('forgotAlert');
+      const email = document.getElementById('forgotEmail').value.trim();
+      try {
+        await postJson('/api/forgot-password', { email });
+        document.getElementById('forgotRequestForm').classList.add('hidden');
+        document.getElementById('resetPasswordForm').classList.remove('hidden');
+        showAlert('forgotAlert', 'تم إرسال رمز الاستعادة إلى بريدك', 'success');
+      } catch (err) { showAlert('forgotAlert', err.message); }
+    });
+
+    document.getElementById('resetPasswordForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearAlert('forgotAlert');
+      const email = document.getElementById('forgotEmail').value.trim();
+      const code = document.getElementById('resetCode').value.trim();
+      const newPassword = document.getElementById('newPassword').value;
+      try {
+        await postJson('/api/reset-password', { email, code, newPassword });
+        closeModal('forgotPasswordModal');
+        openModal('loginModal');
+        document.getElementById('loginEmail').value = email;
+      } catch (err) { showAlert('forgotAlert', err.message); }
+    });
+
+    populateSubCategories();
+    populateSearchSubCategories();
+    updateFavCounter();
+    updateAuthUI();
+    loadAds();
+  </script>
+</body>
+</html>

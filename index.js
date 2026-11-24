@@ -8,13 +8,15 @@ const nodemailer = require('nodemailer');
 const app = express();
 const PORT = 3000;
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
+
+ const transporter = nodemailer.createTransport({
+  host: 'smtp-relay.brevo.com',
+  port: 587,
   auth: {
-    user: 'moshtaksloomm@gmail.com',
-    pass: 'flqy vxqk axtj jtzw'
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
   }
-});
+
 
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {

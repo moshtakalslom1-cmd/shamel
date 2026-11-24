@@ -16,8 +16,6 @@ const PORT = 3000;
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
   }
-
-
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });

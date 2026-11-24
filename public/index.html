@@ -268,9 +268,8 @@
         .comments-list { display: flex; flex-direction: column; gap: 8px; }
         .comment-card { background: #f8fafc; padding: 8px 12px; border-radius: 8px; border-right: 3px solid var(--teal); font-size: 0.88rem; }
 
-        /* تصميم المحادثة الحديثة والسلسة */
         .chat-header-info {
-            background: linear-gradient(135deg, #065f46, #0d9488);
+            background: linear-gradient(135deg, #065f46, #0f766e);
             color: white;
             padding: 10px 14px;
             border-radius: 10px;
@@ -477,8 +476,13 @@
                 <span><strong>المعلن:</strong> <span id="detUser" style="color:var(--emerald); font-weight:bold;"></span></span>
                 <div style="display:flex; gap:6px; flex-wrap:wrap;">
                     <button type="button" class="btn-submit" style="padding: 6px 10px; background:var(--emerald);" onclick="viewProfileOf(document.getElementById('detUser').innerText)">👤 الملف الشخصي</button>
-                    <button type="button" class="btn-submit" style="padding: 6px 10px; background:var(--teal);" onclick="openDirectChat(document.getElementById('detUser').innerText)">💬 مراسلة مباشرة</button>
+                    <button type="button" class="btn-submit" style="padding: 6px 10px; background:var(--teal);" onclick="openDirectChatFromDetails(document.getElementById('detUser').innerText)">💬 مراسلة مباشرة</button>
                 </div>
+            </div>
+            
+            <!-- زر الرسالة السريعة -->
+            <div style="margin-top: 10px;">
+                <button type="button" class="btn-submit" style="width: 100%; padding: 10px; background: linear-gradient(135deg, #f59e0b, #d97706); font-size: 0.95rem;" onclick="sendQuickMessage(document.getElementById('detUser').innerText, document.getElementById('detTitle').innerText)">⚡ إرسال رسالة سريعة: "هل هذا المنتج متاح؟"</button>
             </div>
         </div>
         <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 12px 0;">
@@ -577,7 +581,7 @@
                 stopChatPolling();
             }
         } else if (activeProfileUser) {
-            resetFilters(false);
+            resetFilters();
         }
     });
 
@@ -591,14 +595,20 @@
         }
     }
 
-    function hideModalSilently(id) {
-        const index = modalStack.indexOf(id);
-        if (index > -1) {
-            modalStack.splice(index, 1);
+    // استبدال النافذة الحالية بنافذة جديدة دون تراكم في السجل
+    function replaceCurrentModal(oldId, newId) {
+        const idx = modalStack.indexOf(oldId);
+        if (idx > -1) {
+            modalStack.splice(idx, 1);
+            const oldEl = document.getElementById(oldId);
+            if (oldEl) oldEl.style.display = 'none';
         }
-        const el = document.getElementById(id);
-        if (el) el.style.display = 'none';
-        if (id === 'directChatModal') stopChatPolling();
+        const newEl = document.getElementById(newId);
+        if (newEl && !modalStack.includes(newId)) {
+            newEl.style.display = 'flex';
+            modalStack.push(newId);
+            window.history.replaceState({ modal: newId }, '');
+        }
     }
 
     function browserBack() {
@@ -607,7 +617,6 @@
         }
     }
 
-    // إغلاق النافذة عند النقر على الخلفية المعتمة عبر زر الرجوع
     window.addEventListener('click', function(event) {
         if (event.target && event.target.classList && event.target.classList.contains('modal')) {
             browserBack();
@@ -974,16 +983,7 @@
         }
     }
 
-    function openDirectChat(targetUser) {
-        if (!currentUser) {
-            showToast('يرجى تسجيل الدخول للمراسلة', 'warning', '🔑');
-            openModal('loginModal');
-            return;
-        }
-        if (currentUser === targetUser) {
-            showToast('لا يمكنك مراسلة نفسك', 'warning', '⚠️');
-            return;
-        }
+    function startChatSession(targetUser) {
         currentChatTarget = targetUser;
         lastRenderedMsgCount = -1;
         document.getElementById('chatTargetUser').innerText = targetUser;
@@ -993,8 +993,27 @@
         chatPollInterval = setInterval(() => {
             loadDirectMessages(targetUser, true);
         }, 1200);
+    }
 
+    function openDirectChatFromDetails(targetUser) {
+        if (!currentUser) {
+            showToast('يرجى تسجيل الدخول للمراسلة', 'warning', '🔑');
+            openModal('loginModal');
+            return;
+        }
+        if (currentUser === targetUser) {
+            showToast('لا يمكنك مراسلة نفسك', 'warning', '⚠️');
+            return;
+        }
+        startChatSession(targetUser);
         openModal('directChatModal');
+    }
+
+    // الانتقال الفوري من قائمة المحادثات مع إغلاق القائمة تماماً
+    function openChatFromList(targetUser) {
+        if (!currentUser) return;
+        startChatSession(targetUser);
+        replaceCurrentModal('allConversationsModal', 'directChatModal');
     }
 
     async function loadDirectMessages(targetUser, isPolling = false) {
@@ -1038,7 +1057,6 @@
         input.value = '';
         input.focus();
 
-        // عرض فوري للرسالة في الواجهة قبل انتظار الرد لسرعة فائقة
         const list = document.getElementById('directMessagesList');
         if (list) {
             if (lastRenderedMsgCount <= 0) list.innerHTML = '';
@@ -1061,6 +1079,41 @@
         loadDirectMessages(currentChatTarget, false);
     }
 
+    async function sendQuickMessage(targetUser, adTitle) {
+        if (!currentUser) {
+            showToast('يرجى تسجيل الدخول للمراسلة', 'warning', '🔑');
+            openModal('loginModal');
+            return;
+        }
+        if (currentUser === targetUser) {
+            showToast('لا يمكنك مراسلة نفسك', 'warning', '⚠️');
+            return;
+        }
+        const text = `مرحباً، بخصوص إعلان "${adTitle}"، هل هذا المنتج متاح حالياً؟`;
+        
+        startChatSession(targetUser);
+        openModal('directChatModal');
+
+        const list = document.getElementById('directMessagesList');
+        if (list) {
+            const nowStr = new Date().toLocaleTimeString('ar', { hour: '2-digit', minute: '2-digit' });
+            list.innerHTML += `
+                <div class="direct-msg sent">
+                    <div>${text}</div>
+                    <div style="font-size: 0.68rem; opacity: 0.75; text-align: left; margin-top:3px;">${nowStr}</div>
+                </div>
+            `;
+            list.scrollTop = list.scrollHeight;
+        }
+
+        await fetch('/api/chat/messages', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sender: currentUser, receiver: targetUser, text })
+        });
+        loadDirectMessages(currentChatTarget, false);
+    }
+
     async function openAllConversationsModal() {
         if (!currentUser) return;
         const res = await fetch(`/api/chat/conversations?user=${encodeURIComponent(currentUser)}`);
@@ -1074,12 +1127,12 @@
             convos.forEach(c => {
                 const otherUser = c.participants.find(p => p !== currentUser);
                 list.innerHTML += `
-                    <div style="background:white; padding:10px; border-radius:8px; border-right:4px solid var(--teal); display:flex; justify-content:space-between; align-items:center; gap:8px; cursor:pointer;" onclick="openDirectChat('${otherUser}')">
+                    <div style="background:white; padding:10px; border-radius:8px; border-right:4px solid var(--teal); display:flex; justify-content:space-between; align-items:center; gap:8px; cursor:pointer;" onclick="openChatFromList('${otherUser}')">
                         <div>
                             <div style="font-weight:bold; font-size: 1rem; color:#065f46;">👤 ${otherUser}</div>
-                            <div style="font-size: 0.85rem; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width: 240px;">${c.lastMessage}</div>
+                            <div style="font-size: 0.85rem; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width: 200px;">${c.lastMessage}</div>
                         </div>
-                        <button type="button" class="btn-submit" style="background:var(--emerald); padding:6px 12px;">فتح</button>
+                        <button type="button" class="btn-submit" style="background:var(--emerald); padding:6px 12px; cursor:pointer;">فتح</button>
                     </div>
                 `;
             });

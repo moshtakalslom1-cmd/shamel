@@ -116,7 +116,6 @@
         }
         .search-buttons button.reset-btn { background: linear-gradient(135deg, #f59e0b, #e11d48); }
 
-        /* شريط الأقسام الأفقي المدمج */
         .categories-row {
             display: flex;
             align-items: center;
@@ -171,7 +170,6 @@
         .profile-banner { display: none; background: #ffffff; border-radius: 10px; padding: 12px; margin-bottom: 12px; border-right: 5px solid var(--emerald); box-shadow: 0 3px 12px rgba(15, 23, 42, 0.1); flex-direction: column; gap: 8px; }
         .profile-banner.visible { display: flex; }
 
-        /* شبكة الإعلانات: متراصة ومناسبة لظهور عدة بطاقات في الصف */
         .ads-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -206,7 +204,6 @@
         .ad-price { color: #e11d48; font-weight: bold; font-size: 0.84rem; margin: 3px 0; }
         .ad-city { font-size: 0.7rem; color: #334155; border-top: 1px solid #f1f5f9; padding-top: 3px; margin-top: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* نافذة التنبيه المخصصة داخل التطبيق (بديل alert) */
         .toast-container {
             position: fixed;
             bottom: 18px;
@@ -266,11 +263,18 @@
         .ad-details-images { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 4px; }
         .ad-details-images img { width: 88px; height: 88px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1; flex-shrink: 0; }
 
-        .chat-box { border-top: 2px solid #e2e8f0; margin-top: 12px; padding-top: 10px; }
-        .messages-list { max-height: 150px; overflow-y: auto; border: 1px solid #e2e8f0; padding: 8px; margin-bottom: 8px; background: #f8fafc; border-radius: 6px; }
-        .msg { margin-bottom: 6px; font-size: 0.86rem; }
-        .msg.sent { text-align: left; color: #0f766e; }
-        .msg.received { text-align: right; color: #1e293b; }
+        .comments-section { border-top: 2px solid #e2e8f0; margin-top: 14px; padding-top: 12px; }
+        .comment-input-box { display: flex; gap: 6px; margin-bottom: 12px; }
+        .comments-list { display: flex; flex-direction: column; gap: 8px; }
+        .comment-card { background: #f8fafc; padding: 8px 12px; border-radius: 8px; border-right: 3px solid var(--teal); font-size: 0.88rem; }
+
+        .direct-chat-container { display: flex; flex-direction: column; gap: 10px; height: 100%; }
+        .chat-header-info { background: #f1f5f9; padding: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .direct-messages-list { flex-grow: 1; max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding: 10px; background: #fafafa; border: 1px solid #e2e8f0; border-radius: 8px; }
+        .direct-msg { max-width: 80%; padding: 8px 12px; border-radius: 12px; font-size: 0.9rem; line-height: 1.4; }
+        .direct-msg.sent { align-self: flex-end; background: var(--emerald); color: white; border-bottom-left-radius: 2px; }
+        .direct-msg.received { align-self: flex-start; background: #e2e8f0; color: #0f172a; border-bottom-right-radius: 2px; }
+        .chat-input-row { display: flex; gap: 6px; margin-top: 6px; }
     </style>
 </head>
 <body>
@@ -313,23 +317,23 @@
     <div class="categories-row">
         <div class="categories">
             <div class="category-card" data-cat="إلكترونيات" onclick="selectMainCategory('إلكترونيات')">
-                <h3>📱 إلكترونيات</h3>
+                <h3>📱 الإلكترونيات</h3>
             </div>
             <div class="category-card" data-cat="سيارات" onclick="selectMainCategory('سيارات')">
-                <h3>🚗 سيارات</h3>
+                <h3>🚗 السيارات</h3>
             </div>
             <div class="category-card" data-cat="عقارات" onclick="selectMainCategory('عقارات')">
-                <h3>🏠 عقارات</h3>
+                <h3>🏠 العقارات</h3>
             </div>
             <div class="category-card" data-cat="حيوانات" onclick="selectMainCategory('حيوانات')">
-                <h3>🐾 حيوانات</h3>
+                <h3>🐾 الحيوانات</h3>
             </div>
         </div>
 
         <div class="actions-bar" style="margin-bottom:0;">
             <div style="display:flex; gap:6px; flex-wrap:wrap;">
                 <button type="button" class="btn-primary" onclick="viewMyProfile()" id="profileBtn" style="display:none; background: var(--emerald);">ملفي</button>
-                <button type="button" class="btn-primary" onclick="openMessagesModal()" id="msgBtn" style="display:none; background: var(--teal);">الرسائل</button>
+                <button type="button" class="btn-primary" onclick="openAllConversationsModal()" id="msgBtn" style="display:none; background: var(--teal);">الرسائل</button>
                 <button type="button" class="btn-primary" onclick="checkAuthAndOpenAdModal()">+ إعلان</button>
             </div>
         </div>
@@ -357,14 +361,13 @@
     <div class="ads-grid" id="adsGrid"></div>
 </div>
 
-<!-- حاوية التنبيهات المخصصة -->
 <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
-<!-- Modal تسجيل الدخول -->
+<!-- Modals -->
 <div id="loginModal" class="modal">
     <div class="modal-content">
         <h2>تسجيل الدخول</h2>
-        <form id="loginForm" onsubmit="handleLogin(event)">
+        <form onsubmit="handleLogin(event)">
             <div class="form-group"><label>اسم المستخدم</label><input type="text" id="loginUser" required></div>
             <div class="form-group"><label>كلمة المرور</label><input type="password" id="loginPass" required></div>
             <div class="modal-buttons">
@@ -375,14 +378,13 @@
     </div>
 </div>
 
-<!-- Modal إنشاء حساب -->
 <div id="signupModal" class="modal">
     <div class="modal-content">
         <h2>إنشاء حساب جديد</h2>
-        <form id="signupForm" onsubmit="handleSignup(event)">
+        <form onsubmit="handleSignup(event)">
             <div class="form-group"><label>اسم المستخدم</label><input type="text" id="signupUser" required></div>
             <div class="form-group"><label>كلمة المرور</label><input type="password" id="signupPass" required></div>
-            <div class="form-group"><label>نبذة تعريفية (اختياري)</label><input type="text" id="signupBio" placeholder="مثال: بائع هواتف"></div>
+            <div class="form-group"><label>نبذة تعريفية</label><input type="text" id="signupBio" placeholder="مثال: تاجر سيارات"></div>
             <div class="modal-buttons">
                 <button type="submit" class="btn-submit">تسجيل</button>
                 <button type="button" class="btn-cancel" onclick="closeModal('signupModal')">إلغاء</button>
@@ -391,7 +393,6 @@
     </div>
 </div>
 
-<!-- Modal إضافة إعلان -->
 <div id="adModal" class="modal">
     <div class="modal-content">
         <h2>نشر إعلان جديد</h2>
@@ -405,18 +406,12 @@
                     <option value="حيوانات">حيوانات</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label>القسم الفرعي</label>
-                <select id="adSubcategory"></select>
-            </div>
-            <div class="form-group"><label>اسم المنتج / العنوان</label><input type="text" id="adTitle" required></div>
-            <div class="form-group"><label>السعر</label><input type="text" id="adPrice" required></div>
-            <div class="form-group">
-                <label>المدينة</label>
-                <select id="adCity" required></select>
-            </div>
+            <div class="form-group"><label>القسم الفرعي</label><select id="adSubcategory"></select></div>
+            <div class="form-group"><label>العنوان</label><input type="text" id="adTitle" required></div>
+            <div class="form-group"><label>السعر (TL)</label><input type="text" id="adPrice" required></div>
+            <div class="form-group"><label>المدينة</label><select id="adCity" required></select></div>
             <div class="form-group"><label>رقم الهاتف</label><input type="text" id="adPhone" required></div>
-            <div class="form-group"><label>الصور (حتى 5 صور)</label><input type="file" id="adImages" accept="image/*" multiple></div>
+            <div class="form-group"><label>الصور</label><input type="file" id="adImages" accept="image/*" multiple></div>
             <div class="form-group"><label>الوصف</label><textarea id="adDescription" rows="3"></textarea></div>
             <div class="modal-buttons">
                 <button type="submit" class="btn-submit">نشر</button>
@@ -426,61 +421,72 @@
     </div>
 </div>
 
-<!-- Modal تفاصيل الإعلان -->
 <div id="detailsModal" class="modal">
-    <div class="modal-content" style="max-width: 600px;">
-        <h2 id="detTitle" style="font-size: 1.3rem; color: #065f46; margin-top:0;"></h2>
+    <div class="modal-content" style="max-width: 650px;">
+        <h2 id="detTitle" style="font-size: 1.35rem; color: #065f46; margin-top:0;"></h2>
         <div class="ad-details-images" id="detImages"></div>
         <div style="font-size: 0.92rem; line-height: 1.5;">
             <p><strong>القسم:</strong> <span id="detCategory"></span> - <span id="detSubcategory"></span></p>
             <p><strong>السعر:</strong> <span id="detPrice" style="color:#e11d48; font-weight:bold; font-size: 1.05rem;"></span></p>
             <p><strong>المدينة:</strong> <span id="detCity"></span></p>
             <p><strong>الهاتف:</strong> <span id="detPhone"></span></p>
-            <p style="background: #f1f5f9; padding: 8px 10px; border-radius: 6px; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+            <div style="background: #f1f5f9; padding: 10px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
                 <span><strong>المعلن:</strong> <span id="detUser" style="color:var(--emerald); font-weight:bold;"></span></span>
-                <button type="button" class="btn-submit" style="padding: 4px 10px; background:var(--teal); font-size: 0.82rem;" onclick="viewProfileOf(document.getElementById('detUser').innerText)">زيارة صفحته</button>
-            </p>
+                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                    <button type="button" class="btn-submit" style="background:var(--emerald);" onclick="viewProfileOf(document.getElementById('detUser').innerText)">👤 الملف الشخصي</button>
+                    <button type="button" class="btn-submit" style="background:var(--teal);" onclick="openDirectChat(document.getElementById('detUser').innerText)">💬 مراسلة مباشرة</button>
+                </div>
+            </div>
         </div>
-        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 10px 0;">
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 12px 0;">
         <div>
             <strong>الوصف:</strong>
             <p id="detDesc" style="white-space: pre-wrap; background: #fff5f5; padding: 10px; border-radius: 6px; border-right: 4px solid var(--coral); margin-top: 6px; font-size: 0.92rem;"></p>
         </div>
 
-        <div class="chat-box" id="chatBox">
-            <h3 style="font-size: 1.05rem; color: #0f766e; margin-top: 0;">مراسلة المعلن</h3>
-            <div class="messages-list" id="chatMessages"></div>
-            <div id="chatFormRow" style="display:flex; gap:6px;">
-                <input type="text" id="chatInput" placeholder="اكتب رسالتك..." style="flex-grow: 1; padding: 8px;">
-                <button type="button" class="btn-submit" style="padding: 8px 14px;" onclick="sendMessage()">إرسال</button>
+        <div class="comments-section">
+            <h3 style="font-size: 1.1rem; color: #065f46; margin-top:0;">التعليقات</h3>
+            <div class="comment-input-box">
+                <input type="text" id="commentInput" placeholder="اكتب تعليقاً عاماً على الإعلان..." style="flex-grow: 1; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                <button type="button" class="btn-submit" style="padding: 8px 16px;" onclick="addComment()">نشر</button>
             </div>
-            <p id="chatStatusNote" style="color:#64748b; font-size:0.82rem; margin:6px 0 0; text-align: center;"></p>
+            <div class="comments-list" id="commentsList"></div>
         </div>
 
-        <button type="button" class="btn-cancel" style="width:100%; margin-top:12px; padding: 9px; font-size: 0.92rem;" onclick="closeModal('detailsModal')">إغلاق</button>
+        <button type="button" class="btn-cancel" style="width:100%; margin-top:16px; padding: 10px;" onclick="closeModal('detailsModal')">إغلاق</button>
     </div>
 </div>
 
-<!-- Modal الرسائل العامة -->
-<div id="messagesModal" class="modal">
-    <div class="modal-content" style="max-width: 600px;">
-        <h2 style="margin-top:0; font-size: 1.25rem;">صندوق الرسائل</h2>
-        <div id="allMessagesList" style="max-height:280px; overflow-y:auto; padding:10px; background:#f1f5f9; border-radius:8px; margin-bottom:10px;"></div>
-        <div style="display:flex; gap:6px; flex-wrap:wrap;">
-            <input type="text" id="quickMsgUser" placeholder="اسم المستخدم..." style="flex:1; min-width:120px; padding:8px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.88rem;">
-            <input type="text" id="quickMsgText" placeholder="اكتب رسالتك..." style="flex:2; min-width:160px; padding:8px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.88rem;">
-            <button type="button" class="btn-submit" style="padding:8px 14px; font-size: 0.88rem;" onclick="sendDirectMessage()">إرسال</button>
+<div id="directChatModal" class="modal">
+    <div class="modal-content" style="max-width: 550px; height: 85vh; display: flex; flex-direction: column;">
+        <div class="chat-header-info">
+            <div>
+                <span style="font-size: 0.8rem; color: #64748b;">المحادثة مع</span>
+                <h3 id="chatTargetUser" style="margin:0; font-size: 1.2rem; color: #0f766e;"></h3>
+            </div>
+            <button type="button" class="btn-submit" style="background:var(--emerald); font-size: 0.85rem;" onclick="viewProfileOf(document.getElementById('chatTargetUser').innerText)">زيارة الملف</button>
         </div>
-        <button type="button" class="btn-cancel" style="width:100%; margin-top:10px; padding: 9px; font-size: 0.92rem;" onclick="closeModal('messagesModal')">إغلاق</button>
+
+        <div class="direct-messages-list" id="directMessagesList"></div>
+
+        <div class="chat-input-row">
+            <input type="text" id="directChatInput" placeholder="اكتب رسالتك هنا..." style="flex-grow: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
+            <button type="button" class="btn-submit" style="padding: 10px 20px;" onclick="sendDirectMessage()">إرسال</button>
+        </div>
+        <button type="button" class="btn-cancel" style="width:100%; margin-top:10px; padding: 8px;" onclick="closeModal('directChatModal')">إنهاء المحادثة</button>
+    </div>
+</div>
+
+<div id="allConversationsModal" class="modal">
+    <div class="modal-content" style="max-width: 600px;">
+        <h2 style="margin-top:0; font-size: 1.3rem;">رسائلي ومحادثاتي</h2>
+        <div id="conversationsList" style="max-height: 350px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding: 10px; background: #f8fafc; border-radius: 8px;"></div>
+        <button type="button" class="btn-cancel" style="width:100%; margin-top:12px; padding: 10px;" onclick="closeModal('allConversationsModal')">إغلاق</button>
     </div>
 </div>
 
 <script>
-    const SYRIAN_CITIES = [
-        'دمشق', 'ريف دمشق', 'حلب', 'حمص', 'حماة', 'اللاذقية', 'طرطوس',
-        'إدلب', 'الرقة', 'دير الزور', 'الحسكة', 'درعا', 'السويداء', 'القنيطرة'
-    ];
-
+    const SYRIAN_CITIES = ['دمشق', 'ريف دمشق', 'حلب', 'حمص', 'حماة', 'اللاذقية', 'طرطوس', 'إدلب', 'الرقة', 'دير الزور', 'الحسكة', 'درعا', 'السويداء', 'القنيطرة'];
     const SUBCATEGORIES = {
         'إلكترونيات': ['هواتف', 'حواسيب', 'شاشات', 'أجهزة منزلية', 'إكسسوارات'],
         'سيارات': ['سيارات الركوب', 'دراجات نارية', 'مركبات تجارية وشاحنات', 'قطع غيار'],
@@ -493,20 +499,16 @@
     let activeSubcategory = 'الكل';
     let activeCity = 'الكل';
     let activeProfileUser = '';
-    let currentAdForChat = null;
+    let currentAdIdForDetails = null;
+    let currentChatTarget = '';
 
     function showToast(message, type = 'success', icon = '✅') {
         const container = document.getElementById('toastContainer');
         if (!container) return;
-
         const item = document.createElement('div');
         item.className = `toast-item ${type}`;
-        item.innerHTML = `
-            <span class="toast-badge">${icon}</span>
-            <span>${message}</span>
-        `;
+        item.innerHTML = `<span class="toast-badge">${icon}</span><span>${message}</span>`;
         container.appendChild(item);
-
         setTimeout(() => {
             item.style.opacity = '0';
             item.style.transform = 'translateY(8px)';
@@ -518,26 +520,16 @@
     function populateCitiesDropdowns() {
         const searchCityEl = document.getElementById('searchCity');
         const adCityEl = document.getElementById('adCity');
-
         if (searchCityEl) searchCityEl.innerHTML = '<option value="الكل">جميع المدن</option>';
         if (adCityEl) adCityEl.innerHTML = '<option value="">اختر المدينة...</option>';
-
         SYRIAN_CITIES.forEach(city => {
             if (searchCityEl) searchCityEl.innerHTML += `<option value="${city}">${city}</option>`;
             if (adCityEl) adCityEl.innerHTML += `<option value="${city}">${city}</option>`;
         });
     }
 
-    function openModal(id) {
-        const el = document.getElementById(id);
-        if (el) el.style.display = 'flex';
-    }
-
-    function closeModal(id) {
-        const el = document.getElementById(id);
-        if (el) el.style.display = 'none';
-    }
-
+    function openModal(id) { const el = document.getElementById(id); if (el) el.style.display = 'flex'; }
+    function closeModal(id) { const el = document.getElementById(id); if (el) el.style.display = 'none'; }
     window.addEventListener('click', function(event) {
         if (event.target && event.target.classList && event.target.classList.contains('modal')) {
             event.target.style.display = 'none';
@@ -551,9 +543,7 @@
         const subSelect = document.getElementById('adSubcategory');
         if (!subSelect) return;
         subSelect.innerHTML = '';
-        (SUBCATEGORIES[cat] || ['عام']).forEach(sub => {
-            subSelect.innerHTML += `<option value="${sub}">${sub}</option>`;
-        });
+        (SUBCATEGORIES[cat] || ['عام']).forEach(sub => subSelect.innerHTML += `<option value="${sub}">${sub}</option>`);
     }
 
     function updateSearchSubcategories() {
@@ -564,9 +554,7 @@
         if (!subSelect) return;
         subSelect.innerHTML = '<option value="الكل">كل الأقسام الفرعية</option>';
         if (SUBCATEGORIES[cat]) {
-            SUBCATEGORIES[cat].forEach(sub => {
-                subSelect.innerHTML += `<option value="${sub}">${sub}</option>`;
-            });
+            SUBCATEGORIES[cat].forEach(sub => subSelect.innerHTML += `<option value="${sub}">${sub}</option>`);
         }
     }
 
@@ -582,7 +570,6 @@
         banner.classList.add('visible');
         document.getElementById('profileBannerTitle').innerText = `👤 الملف الشخصي لـ: ${username}`;
         document.getElementById('profileBannerSub').innerText = `إجمالي الإعلانات: ${count}`;
-
         const editBtn = document.getElementById('editBioBtn');
         if (editBtn) editBtn.style.display = (currentUser && currentUser === username) ? 'inline-block' : 'none';
 
@@ -625,21 +612,14 @@
     }
 
     function selectMainCategory(cat) {
-        activeCategory = cat;
-        activeSubcategory = 'الكل';
-        activeProfileUser = '';
+        activeCategory = cat; activeSubcategory = 'الكل'; activeProfileUser = '';
         updateProfileBanner('');
-
         const searchCat = document.getElementById('searchCategory');
         if (searchCat) searchCat.value = cat;
         updateSearchSubcategories();
         const searchSub = document.getElementById('searchSubcategory');
         if (searchSub) searchSub.value = 'الكل';
-
-        document.querySelectorAll('.category-card').forEach(card => {
-            card.classList.toggle('active', card.dataset.cat === cat);
-        });
-
+        document.querySelectorAll('.category-card').forEach(card => card.classList.toggle('active', card.dataset.cat === cat));
         applyTopFilter();
     }
 
@@ -653,38 +633,22 @@
         const searchCity = document.getElementById('searchCity');
         const city = searchCity ? searchCity.value : 'الكل';
 
-        activeCategory = cat;
-        activeSubcategory = sub;
-        activeCity = city;
-        activeProfileUser = '';
+        activeCategory = cat; activeSubcategory = sub; activeCity = city; activeProfileUser = '';
         updateProfileBanner('');
 
         let titleText = 'أحدث الإعلانات';
-        if (cat !== 'الكل' && sub !== 'الكل') {
-            titleText = `إعلانات ${cat} - ${sub}`;
-        } else if (cat !== 'الكل') {
-            titleText = `إعلانات قسم ${cat}`;
-        }
-        if (city !== 'الكل') {
-            titleText += ` في ${city}`;
-        }
+        if (cat !== 'الكل' && sub !== 'الكل') titleText = `إعلانات ${cat} - ${sub}`;
+        else if (cat !== 'الكل') titleText = `إعلانات قسم ${cat}`;
+        if (city !== 'الكل') titleText += ` في ${city}`;
         const gridTitle = document.getElementById('gridTitle');
         if (gridTitle) gridTitle.innerText = titleText;
-
-        document.querySelectorAll('.category-card').forEach(card => {
-            card.classList.toggle('active', card.dataset.cat === cat);
-        });
-
+        document.querySelectorAll('.category-card').forEach(card => card.classList.toggle('active', card.dataset.cat === cat));
         loadAds(activeCategory, activeSubcategory, q, '', activeCity);
     }
 
     function resetFilters() {
-        activeCategory = 'الكل';
-        activeSubcategory = 'الكل';
-        activeCity = 'الكل';
-        activeProfileUser = '';
+        activeCategory = 'الكل'; activeSubcategory = 'الكل'; activeCity = 'الكل'; activeProfileUser = '';
         updateProfileBanner('');
-
         const gridTitle = document.getElementById('gridTitle');
         if (gridTitle) gridTitle.innerText = 'أحدث الإعلانات';
         const searchInput = document.getElementById('searchInput');
@@ -694,7 +658,6 @@
         updateSearchSubcategories();
         const searchCity = document.getElementById('searchCity');
         if (searchCity) searchCity.value = 'الكل';
-
         document.querySelectorAll('.category-card').forEach(card => card.classList.remove('active'));
         loadAds('الكل', 'الكل', '', '', 'الكل');
     }
@@ -705,19 +668,16 @@
         const signupPass = document.getElementById('signupPass');
         const signupBio = document.getElementById('signupBio');
         if (!signupUser || !signupPass) return;
-        const username = signupUser.value;
-        const password = signupPass.value;
-        const bio = signupBio ? signupBio.value : '';
         const res = await fetch('/api/signup', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password, bio })
+            body: JSON.stringify({ username: signupUser.value, password: signupPass.value, bio: signupBio ? signupBio.value : '' })
         });
         const data = await res.json();
-        showToast(data.message || (res.ok ? 'تم إنشاء الحساب بنجاح' : 'تعذر إنشاء الحساب'), res.ok ? 'success' : 'error', res.ok ? '🎉' : '⚠️');
+        showToast(data.message || (res.ok ? 'تم إنشاء الحساب بنجاح' : 'تعذر الإنشاء'), res.ok ? 'success' : 'error', res.ok ? '🎉' : '⚠️');
         if (res.ok) {
             closeModal('signupModal');
-            currentUser = username;
+            currentUser = signupUser.value;
             updateUserUI();
         }
     }
@@ -727,18 +687,16 @@
         const loginUser = document.getElementById('loginUser');
         const loginPass = document.getElementById('loginPass');
         if (!loginUser || !loginPass) return;
-        const username = loginUser.value;
-        const password = loginPass.value;
         const res = await fetch('/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ username: loginUser.value, password: loginPass.value })
         });
         const data = await res.json();
-        showToast(data.message || (res.ok ? 'تم تسجيل الدخول بنجاح' : 'بيانات الدخول غير صحيحة'), res.ok ? 'success' : 'error', res.ok ? '🔐' : '⚠️');
+        showToast(data.message || (res.ok ? 'تم تسجيل الدخول' : 'بيانات غير صحيحة'), res.ok ? 'success' : 'error', res.ok ? '🔐' : '⚠️');
         if (res.ok) {
             closeModal('loginModal');
-            currentUser = username;
+            currentUser = loginUser.value;
             updateUserUI();
         }
     }
@@ -763,19 +721,17 @@
         currentUser = null;
         updateUserUI();
         closeModal('detailsModal');
-        closeModal('messagesModal');
+        closeModal('directChatModal');
+        closeModal('allConversationsModal');
         if (activeProfileUser) resetFilters();
         showToast('تم تسجيل الخروج', 'warning', '👋');
     }
 
-    function viewMyProfile() {
-        if (!currentUser) return;
-        viewProfileOf(currentUser);
-    }
+    function viewMyProfile() { if (currentUser) viewProfileOf(currentUser); }
 
     function checkAuthAndOpenAdModal() {
         if (!currentUser) {
-            showToast('يرجى تسجيل الدخول أولاً لنشر إعلان', 'warning', '🔑');
+            showToast('يرجى تسجيل الدخول أولاً', 'warning', '🔑');
             openModal('loginModal');
             return;
         }
@@ -795,7 +751,6 @@
         const adImages = document.getElementById('adImages');
 
         if (!adCategory || !adTitle || !adPrice || !adCity || !adPhone) return;
-
         const formData = new FormData();
         formData.append('category', adCategory.value);
         formData.append('subcategory', adSubcategory ? adSubcategory.value : 'عام');
@@ -805,20 +760,16 @@
         formData.append('phone', adPhone.value);
         formData.append('description', adDescription ? adDescription.value : '');
         formData.append('username', currentUser);
-
         if (adImages && adImages.files) {
-            for (let i = 0; i < adImages.files.length; i++) {
-                formData.append('images', adImages.files[i]);
-            }
+            for (let i = 0; i < adImages.files.length; i++) formData.append('images', adImages.files[i]);
         }
 
         const res = await fetch('/api/ads', { method: 'POST', body: formData });
         const data = await res.json();
-        showToast(data.message || (res.ok ? 'تم نشر الإعلان بنجاح' : 'حدث خطأ أثناء نشر الإعلان'), res.ok ? 'success' : 'error', res.ok ? '📢' : '⚠️');
+        showToast(data.message || (res.ok ? 'تم نشر الإعلان' : 'حدث خطأ'), res.ok ? 'success' : 'error', res.ok ? '📢' : '⚠️');
         if (res.ok) {
             closeModal('adModal');
-            const adForm = document.getElementById('adForm');
-            if (adForm) adForm.reset();
+            document.getElementById('adForm')?.reset();
             populateCitiesDropdowns();
             populateAdSubcategories();
             const searchInput = document.getElementById('searchInput');
@@ -828,21 +779,16 @@
 
     async function loadAds(category = 'الكل', subcategory = 'الكل', q = '', filterUser = '', city = 'الكل') {
         const url = `/api/ads?category=${encodeURIComponent(category)}&subcategory=${encodeURIComponent(subcategory)}&q=${encodeURIComponent(q)}&username=${encodeURIComponent(filterUser)}&city=${encodeURIComponent(city)}`;
-
         const res = await fetch(url);
         const ads = await res.json();
         const grid = document.getElementById('adsGrid');
         if (!grid) return;
         grid.innerHTML = '';
-
-        if (filterUser) {
-            await updateProfileBanner(filterUser, ads.length);
-        } else {
-            updateProfileBanner('');
-        }
+        if (filterUser) await updateProfileBanner(filterUser, ads.length);
+        else updateProfileBanner('');
 
         if (!ads.length) {
-            grid.innerHTML = '<p style="color:#475569; font-size: 0.9rem; text-align: center; grid-column: 1/-1; padding: 15px;">لا توجد إعلانات مطابقة حالياً.</p>';
+            grid.innerHTML = '<p style="color:#475569; font-size: 0.9rem; text-align: center; grid-column: 1/-1; padding: 15px;">لا توجد إعلانات مطابقة.</p>';
             return;
         }
 
@@ -866,7 +812,7 @@
         const res = await fetch(`/api/ads/${id}`);
         const ad = await res.json();
         if (res.ok) {
-            currentAdForChat = ad;
+            currentAdIdForDetails = ad.id;
             document.getElementById('detTitle').innerText = ad.title;
             document.getElementById('detCategory').innerText = ad.category;
             document.getElementById('detSubcategory').innerText = ad.subcategory || 'عام';
@@ -879,160 +825,154 @@
             const imgsDiv = document.getElementById('detImages');
             if (imgsDiv) {
                 imgsDiv.innerHTML = '';
-                (ad.images || []).forEach(img => {
-                    imgsDiv.innerHTML += `<img src="${img}">`;
-                });
+                (ad.images || []).forEach(img => imgsDiv.innerHTML += `<img src="${img}">`);
             }
-
-            const chatFormRow = document.getElementById('chatFormRow');
-            const statusNote = document.getElementById('chatStatusNote');
-            const chatMessages = document.getElementById('chatMessages');
-
-            if (currentUser && currentUser !== ad.username) {
-                if (chatFormRow) chatFormRow.style.display = 'flex';
-                if (statusNote) statusNote.innerText = '';
-                loadChatMessages(ad.username, ad.id);
-            } else if (currentUser === ad.username) {
-                if (chatFormRow) chatFormRow.style.display = 'none';
-                if (statusNote) statusNote.innerText = 'هذا إعلانك الخاص.';
-                if (chatMessages) chatMessages.innerHTML = '<p style="color:#666; text-align:center;">إعلان خاص بك.</p>';
-            } else {
-                if (chatFormRow) chatFormRow.style.display = 'none';
-                if (statusNote) statusNote.innerText = 'يرجى تسجيل الدخول للمراسلة.';
-                if (chatMessages) chatMessages.innerHTML = '<p style="color:#666; text-align:center;">يرجى تسجيل الدخول للمراسلة.</p>';
-            }
-
+            loadComments(ad.id);
             openModal('detailsModal');
         }
     }
 
-    async function loadChatMessages(adOwner, adId) {
-        if (!currentUser) return;
-        const res = await fetch(`/api/messages/${encodeURIComponent(currentUser)}`);
-        const msgs = await res.json();
-        const list = document.getElementById('chatMessages');
+    async function loadComments(adId) {
+        const res = await fetch(`/api/ads/${adId}/comments`);
+        const comments = await res.json();
+        const list = document.getElementById('commentsList');
         if (!list) return;
         list.innerHTML = '';
-
-        const filtered = msgs.filter(m =>
-            String(m.adId) === String(adId) &&
-            ((m.sender === currentUser && m.receiver === adOwner) || (m.sender === adOwner && m.receiver === currentUser))
-        );
-
-        if (!filtered.length) {
-            list.innerHTML = '<p style="color:#999; text-align:center; font-size:0.82rem;">لا توجد رسائل سابقة. ابدأ المحادثة الآن!</p>';
+        if (!comments.length) {
+            list.innerHTML = '<p style="color:#888; font-size: 0.85rem; text-align: center;">لا توجد تعليقات بعد. كن أول من يعلق!</p>';
             return;
         }
+        comments.forEach(c => {
+            list.innerHTML += `
+                <div class="comment-card">
+                    <div style="font-weight:bold; color:#0f766e; font-size: 0.85rem; margin-bottom:4px;">👤 ${c.user} <span style="font-weight:normal; font-size: 0.75rem; color:#888;">(${c.timestamp})</span></div>
+                    <div>${c.text}</div>
+                </div>
+            `;
+        });
+    }
 
-        filtered.forEach(m => {
+    async function addComment() {
+        if (!currentUser) {
+            showToast('يرجى تسجيل الدخول لإضافة تعليق', 'warning', '🔑');
+            openModal('loginModal');
+            return;
+        }
+        const input = document.getElementById('commentInput');
+        if (!input || !currentAdIdForDetails) return;
+        const text = input.value.trim();
+        if (!text) return;
+
+        const res = await fetch(`/api/ads/${currentAdIdForDetails}/comments`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user: currentUser, text })
+        });
+        if (res.ok) {
+            input.value = '';
+            showToast('تمت إضافة التعليق', 'success', '💬');
+            loadComments(currentAdIdForDetails);
+        }
+    }
+
+    function openDirectChat(targetUser) {
+        if (!currentUser) {
+            showToast('يرجى تسجيل الدخول للمراسلة', 'warning', '🔑');
+            openModal('loginModal');
+            return;
+        }
+        if (currentUser === targetUser) {
+            showToast('لا يمكنك مراسلة نفسك', 'warning', '⚠️');
+            return;
+        }
+        currentChatTarget = targetUser;
+        document.getElementById('chatTargetUser').innerText = targetUser;
+        closeModal('detailsModal');
+        closeModal('allConversationsModal');
+        loadDirectMessages(targetUser);
+        openModal('directChatModal');
+    }
+
+    async function loadDirectMessages(targetUser) {
+        const res = await fetch(`/api/chat/messages?user1=${encodeURIComponent(currentUser)}&user2=${encodeURIComponent(targetUser)}`);
+        const msgs = await res.json();
+        const list = document.getElementById('directMessagesList');
+        if (!list) return;
+        list.innerHTML = '';
+        if (!msgs.length) {
+            list.innerHTML = '<p style="color:#888; font-size: 0.85rem; text-align: center;">ابدأ المحادثة الآن!</p>';
+            return;
+        }
+        msgs.forEach(m => {
             const isMe = m.sender === currentUser;
             list.innerHTML += `
-                <div class="msg ${isMe ? 'sent' : 'received'}">
-                    <strong>${isMe ? 'أنا' : m.sender}:</strong> ${m.text} <span style="font-size:0.72rem; color:#888;">(${m.timestamp})</span>
+                <div class="direct-msg ${isMe ? 'sent' : 'received'}">
+                    <div>${m.text}</div>
+                    <div style="font-size: 0.68rem; opacity: 0.8; text-align: left; margin-top:4px;">${m.timestamp}</div>
                 </div>
             `;
         });
         list.scrollTop = list.scrollHeight;
     }
 
-    async function sendMessage() {
-        const input = document.getElementById('chatInput');
-        if (!input) return;
+    async function sendDirectMessage() {
+        const input = document.getElementById('directChatInput');
+        if (!input || !currentChatTarget || !currentUser) return;
         const text = input.value.trim();
-        if (!text || !currentAdForChat || !currentUser) return;
+        if (!text) return;
 
-        const res = await fetch('/api/messages', {
+        const res = await fetch('/api/chat/messages', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                sender: currentUser,
-                receiver: currentAdForChat.username,
-                adId: currentAdForChat.id,
-                adTitle: currentAdForChat.title,
-                text
-            })
+            body: JSON.stringify({ sender: currentUser, receiver: currentChatTarget, text })
         });
-
         if (res.ok) {
             input.value = '';
-            showToast('تم إرسال الرسالة', 'success', '✉️');
-            loadChatMessages(currentAdForChat.username, currentAdForChat.id);
+            loadDirectMessages(currentChatTarget);
         }
     }
 
-    async function sendDirectMessage() {
+    async function openAllConversationsModal() {
         if (!currentUser) return;
-        const receiverInput = document.getElementById('quickMsgUser');
-        const textInput = document.getElementById('quickMsgText');
-        if (!receiverInput || !textInput) return;
-        const receiver = receiverInput.value.trim();
-        const text = textInput.value.trim();
-        if (!receiver || !text) return;
-
-        const res = await fetch('/api/messages', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                sender: currentUser,
-                receiver,
-                text
-            })
-        });
-
-        if (res.ok) {
-            textInput.value = '';
-            showToast('تم إرسال الرسالة', 'success', '✉️');
-            openMessagesModal();
+        const res = await fetch(`/api/chat/conversations?user=${encodeURIComponent(currentUser)}`);
+        const convos = await res.json();
+        const list = document.getElementById('conversationsList');
+        if (!list) return;
+        list.innerHTML = '';
+        if (!convos.length) {
+            list.innerHTML = '<p style="color:#888; font-size: 0.9rem; text-align: center;">لا توجد محادثات نشطة.</p>';
+        } else {
+            convos.forEach(c => {
+                const otherUser = c.participants.find(p => p !== currentUser);
+                list.innerHTML += `
+                    <div style="background:white; padding:10px; border-radius:8px; border-right:4px solid var(--teal); display:flex; justify-content:space-between; align-items:center; gap:8px;" onclick="openDirectChat('${otherUser}')">
+                        <div>
+                            <div style="font-weight:bold; font-size: 1rem; color:#065f46;">👤 ${otherUser}</div>
+                            <div style="font-size: 0.85rem; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width: 250px;">آخر رسالة: ${c.lastMessage}</div>
+                        </div>
+                        <button type="button" class="btn-submit" style="background:var(--emerald);">فتح المحادثة</button>
+                    </div>
+                `;
+            });
         }
+        openModal('allConversationsModal');
     }
 
     async function viewProfileOf(username) {
         if (!username) return;
-        activeProfileUser = username;
-        activeCategory = 'الكل';
-        activeSubcategory = 'الكل';
-        activeCity = 'الكل';
+        activeProfileUser = username; activeCategory = 'الكل'; activeSubcategory = 'الكل'; activeCity = 'الكل';
         closeModal('detailsModal');
-        closeModal('messagesModal');
+        closeModal('directChatModal');
+        closeModal('allConversationsModal');
 
         document.querySelectorAll('.category-card').forEach(card => card.classList.remove('active'));
-        const searchCat = document.getElementById('searchCategory');
-        if (searchCat) searchCat.value = 'الكل';
-        const searchCity = document.getElementById('searchCity');
-        if (searchCity) searchCity.value = 'الكل';
+        const searchCat = document.getElementById('searchCategory'); if (searchCat) searchCat.value = 'الكل';
+        const searchCity = document.getElementById('searchCity'); if (searchCity) searchCity.value = 'الكل';
         updateSearchSubcategories();
 
         const gridTitle = document.getElementById('gridTitle');
         if (gridTitle) gridTitle.innerText = 'إعلانات ' + username;
         loadAds('الكل', 'الكل', '', username, 'الكل');
-    }
-
-    async function openMessagesModal() {
-        if (!currentUser) return;
-        const res = await fetch(`/api/messages/${encodeURIComponent(currentUser)}`);
-        const msgs = await res.json();
-        const list = document.getElementById('allMessagesList');
-        if (!list) return;
-        list.innerHTML = '<h3 style="margin-top:0; font-size: 1.05rem;">جميع محادثاتك</h3>';
-
-        if (!msgs.length) {
-            list.innerHTML += '<p style="color:#666; font-size: 0.88rem;">لا توجد رسائل.</p>';
-        } else {
-            msgs.forEach(m => {
-                const isMe = m.sender === currentUser;
-                const otherUser = isMe ? m.receiver : m.sender;
-                list.innerHTML += `
-                    <div style="background:white; padding:9px; margin-bottom:7px; border-radius:6px; border-right:4px solid var(--teal); display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
-                        <div>
-                            <div style="font-weight:bold; font-size: 0.9rem; margin-bottom:2px;">${isMe ? 'إلى: ' + m.receiver : 'من: ' + m.sender} ${m.adTitle ? `<span style="font-size:0.74rem; color:#059669;">(بخصوص: ${m.adTitle})</span>` : ''} <span style="font-size:0.72rem; color:#666; font-weight:normal;">(${m.timestamp})</span></div>
-                            <div style="font-size:0.86rem; color: #334155;">${m.text}</div>
-                        </div>
-                        <button type="button" class="btn-submit" style="padding: 4px 10px; background:var(--emerald); font-size: 0.8rem;" onclick="viewProfileOf('${otherUser}')">زيارة الملف</button>
-                    </div>
-                `;
-            });
-        }
-        openModal('messagesModal');
     }
 
     populateCitiesDropdowns();

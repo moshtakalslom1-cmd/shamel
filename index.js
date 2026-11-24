@@ -103,7 +103,7 @@ app.post('/api/register', (req, res) => {
     }
 
     const mailOptions = {
-      from: from: process.env.EMAIL_USER,
+      from: process.env.EMAIL_USER,
       to: email.trim().toLowerCase(),
       subject: 'رمز التحقق من حسابك - سوق الشامل',
       text: `رمز التحقق الخاص بك هو: ${verificationCode}`

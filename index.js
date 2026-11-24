@@ -103,7 +103,7 @@ app.post('/api/register', (req, res) => {
     }
 
     const mailOptions = {
-      from: 'moshtaksloomm@gmail.com',
+      from: from: process.env.EMAIL_USER,
       to: email.trim().toLowerCase(),
       subject: 'رمز التحقق من حسابك - سوق الشامل',
       text: `رمز التحقق الخاص بك هو: ${verificationCode}`
@@ -158,7 +158,7 @@ app.post('/api/resend-code', (req, res) => {
       if (updateErr) return res.status(500).json({ error: 'فشل تحديث رمز التحقق' });
 
       transporter.sendMail({
-        from: 'moshtaksloomm@gmail.com',
+        from: process.env.EMAIL_USER,
         to: cleanEmail,
         subject: 'إعادة إرسال رمز التحقق - سوق الشامل',
         text: `رمز التحقق الجديد الخاص بك هو: ${newCode}`

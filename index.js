@@ -1,405 +1,180 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
+const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const multer = require('multer');
-const uploadDir = path.join(__dirname, 'uploads');
-const nodemailer = require('nodemailer');
 
 const app = express();
 const PORT = 3000;
+const APP_NAME = 'رخيص';
 
-  const transporter = nodemailer.createTransport({
-  host: 'smtp-relay.brevo.com',
-  port: 587,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+}
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + Math.round(Math.random() * 1e6) + path.extname(file.originalname));
-  }
+    destination: (req, file, cb) => cb(null, 'uploads/'),
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + '-' + Math.round(Math.random() * 1e6) + path.extname(file.originalname));
+    }
 });
-
 const upload = multer({ storage: storage });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
 app.use('/uploads', express.static(uploadDir));
-app.use(express.static(path.join(__dirname, 'public')));
 
-const db = new sqlite3.Database('./database.sqlite', (err) => {
-  if (err) {
-    console.error('خطأ في الاتصال بقاعدة البيانات:', err.message);
-  } else {
-    console.log('تم الاتصال بقاعدة البيانات بنجاح.');
-  }
+const users = [];
+const ads = [];
+const messages = [];
+
+function normalizeText(str) {
+    return String(str || '').trim().replace(/\s+/g, ' ');
+}
+
+app.get('/api/meta', (req, res) => {
+    res.json({ appName: APP_NAME });
 });
 
-db.serialize(() => {
-  db.run(`CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT,
-    password TEXT,
-    phone TEXT,
-    email TEXT UNIQUE,
-    city TEXT,
-    verification_code TEXT,
-    is_verified INTEGER DEFAULT 0
-  )`);
-
-  db.run(`CREATE TABLE IF NOT EXISTS ads (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER,
-    username TEXT,
-    title TEXT,
-    category TEXT,
-    sub_category TEXT,
-    price TEXT,
-    city TEXT,
-    phone TEXT,
-    description TEXT,
-    image TEXT,
-    images TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  )`);
-
-  db.run(`CREATE TABLE IF NOT EXISTS messages (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    sender_id INTEGER,
-    sender_name TEXT,
-    receiver_id INTEGER,
-    receiver_name TEXT,
-    ad_id INTEGER,
-    content TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  )`);
-
-  db.run(`ALTER TABLE ads ADD COLUMN sub_category TEXT`, () => {});
-  db.run(`ALTER TABLE ads ADD COLUMN images TEXT`, () => {});
-});
-
-// 1. تسجيل مستخدم جديد
-app.post('/api/register', (req, res) => {
-  const { username, password, phone, email, city } = req.body;
-  if (!username || !password || !email) {
-    return res.status(400).json({ error: 'الرجاء تعبئة الحقول الإجبارية' });
-  }
-
-  const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-
-  const sql = `INSERT INTO users (username, password, phone, email, city, verification_code, is_verified) VALUES (?, ?, ?, ?, ?, ?, 0)`;
-  db.run(sql, [username.trim(), password, (phone || '').trim(), email.trim().toLowerCase(), (city || '').trim(), verificationCode], function (err) {
-    if (err) {
-      return res.status(400).json({ error: 'البريد الإلكتروني مسجل مسبقاً' });
+app.post('/api/signup', (req, res) => {
+    const { username, password, bio } = req.body;
+    if (!username || !password) {
+        return res.status(400).json({ message: 'يرجى إدخال اسم المستخدم وكلمة المرور' });
     }
+    if (users.find(u => u.username === username)) {
+        return res.status(400).json({ message: 'اسم المستخدم موجود مسبقاً' });
+    }
+    const newUser = {
+        username,
+        password,
+        bio: bio && bio.trim() ? bio.trim() : `عضو في منصة ${APP_NAME}`,
+        joinedAt: new Date().toLocaleDateString('ar-EG')
+    };
+    users.push(newUser);
+    res.json({ message: `تم إنشاء الحساب في ${APP_NAME} بنجاح`, user: { username, bio: newUser.bio, joinedAt: newUser.joinedAt } });
+});
 
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: email.trim().toLowerCase(),
-      subject: 'رمز التحقق من حسابك - سوق الشامل',
-      text: `رمز التحقق الخاص بك هو: ${verificationCode}`
+app.post('/api/login', (req, res) => {
+    const { username, password } = req.body;
+    const user = users.find(u => u.username === username && u.password === password);
+    if (!user) {
+        return res.status(400).json({ message: 'اسم المستخدم أو كلمة المرور غير صحيحة' });
+    }
+    res.json({ message: `أهلاً بك في ${APP_NAME}`, user: { username: user.username, bio: user.bio, joinedAt: user.joinedAt } });
+});
+
+app.get('/api/users/:username', (req, res) => {
+    const uname = req.params.username;
+    const found = users.find(u => u.username === uname);
+    const userAds = ads.filter(a => a.username === uname);
+    res.json({
+        username: uname,
+        bio: found ? found.bio : `معلن في منصة ${APP_NAME}`,
+        joinedAt: found ? found.joinedAt : 'عضو نشط',
+        adsCount: userAds.length
+    });
+});
+
+app.put('/api/users/:username/bio', (req, res) => {
+    const uname = req.params.username;
+    const { bio } = req.body;
+    const found = users.find(u => u.username === uname);
+    if (found) {
+        found.bio = (bio || '').trim() || `عضو في منصة ${APP_NAME}`;
+        return res.json({ message: 'تم تحديث الملف التعريفي بنجاح', bio: found.bio });
+    }
+    res.status(404).json({ message: 'المستخدم غير موجود' });
+});
+
+app.post('/api/ads', upload.array('images', 5), (req, res) => {
+    const { title, price, city, phone, category, subcategory, description, username } = req.body;
+    const images = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
+
+    const newAd = {
+        id: Date.now(),
+        title: normalizeText(title) || 'بدون عنوان',
+        price: normalizeText(price) || 'غير محدد',
+        city: normalizeText(city) || 'غير محدد',
+        phone: normalizeText(phone) || 'غير متوفر',
+        category: normalizeText(category) || 'إلكترونيات',
+        subcategory: normalizeText(subcategory) || 'عام',
+        description: description || '',
+        username: username || 'زائر',
+        images,
+        createdAt: new Date().toISOString()
     };
 
-    transporter.sendMail(mailOptions, (error) => {
-      if (error) {
-        console.error('خطأ في إرسال البريد:', error);
-        return res.status(500).json({ error: 'تم إنشاء الحساب ولكن تعذر إرسال رمز التحقق' });
-      }
-      return res.status(200).json({ message: 'تم التسجيل وإرسال رمز التحقق إلى بريدك الإلكتروني' });
-    });
-  });
+    ads.unshift(newAd);
+    res.json({ message: 'تم نشر الإعلان بنجاح', ad: newAd });
 });
 
-// 2. تفعيل الحساب
-app.post('/api/verify', (req, res) => {
-  const { email, code } = req.body;
-  if (!email || !code) {
-    return res.status(400).json({ error: 'الرجاء إدخال البريد الإلكتروني ورمز التحقق' });
-  }
-
-  const cleanEmail = email.trim().toLowerCase();
-  const cleanCode = code.trim();
-
-  const sql = `SELECT * FROM users WHERE email = ? AND verification_code = ?`;
-  db.get(sql, [cleanEmail, cleanCode], (err, user) => {
-    if (err) return res.status(500).json({ error: 'خطأ في قاعدة البيانات' });
-    if (!user) return res.status(400).json({ error: 'البريد الإلكتروني أو رمز التحقق غير صحيح' });
-
-    const updateSql = `UPDATE users SET is_verified = 1, verification_code = NULL WHERE email = ?`;
-    db.run(updateSql, [cleanEmail], function (updateErr) {
-      if (updateErr) return res.status(500).json({ error: 'فشل تحديث حالة الحساب' });
-      return res.status(200).json({ message: 'تم تفعيل الحساب بنجاح' });
-    });
-  });
-});
-
-// 3. إعادة إرسال رمز التحقق
-app.post('/api/resend-code', (req, res) => {
-  const { email } = req.body;
-  if (!email) return res.status(400).json({ error: 'الرجاء إدخال البريد الإلكتروني' });
-
-  const cleanEmail = email.trim().toLowerCase();
-  const newCode = Math.floor(100000 + Math.random() * 900000).toString();
-
-  db.get(`SELECT * FROM users WHERE email = ?`, [cleanEmail], (err, user) => {
-    if (err) return res.status(500).json({ error: 'خطأ في قاعدة البيانات' });
-    if (!user) return res.status(404).json({ error: 'البريد الإلكتروني غير مسجل' });
-
-    db.run(`UPDATE users SET verification_code = ? WHERE email = ?`, [newCode, cleanEmail], (updateErr) => {
-      if (updateErr) return res.status(500).json({ error: 'فشل تحديث رمز التحقق' });
-
-      transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: cleanEmail,
-        subject: 'إعادة إرسال رمز التحقق - سوق الشامل',
-        text: `رمز التحقق الجديد الخاص بك هو: ${newCode}`
-      }, (mailErr) => {
-        if (mailErr) return res.status(500).json({ error: 'تعذر إرسال رمز التحقق' });
-        return res.status(200).json({ message: 'تمت إعادة إرسال رمز التحقق بنجاح' });
-      });
-    });
-  });
-});
-
-// 4. تسجيل الدخول
-app.post('/api/login', (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    return res.status(400).json({ error: 'الرجاء إدخال البريد الإلكتروني وكلمة المرور' });
-  }
-
-  const cleanEmail = email.trim().toLowerCase();
-
-  db.get(`SELECT * FROM users WHERE email = ? AND password = ?`, [cleanEmail, password], (err, user) => {
-    if (err) return res.status(500).json({ error: 'خطأ في قاعدة البيانات' });
-    if (!user) return res.status(401).json({ error: 'البريد الإلكتروني أو كلمة المرور غير صحيحة' });
-    if (Number(user.is_verified) !== 1) {
-      return res.status(403).json({ error: 'الحساب غير مفعل. يرجى تأكيد البريد الإلكتروني أولاً' });
-    }
-
-    return res.status(200).json({
-      message: 'تم تسجيل الدخول بنجاح',
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        phone: user.phone,
-        city: user.city
-      }
-    });
-  });
-});
-
-// 5. تحديث إعدادات الملف الشخصي للمستخدم
-app.put('/api/profile/:userId', (req, res) => {
-  const userId = Number(req.params.userId);
-  const { username, phone, city } = req.body;
-
-  if (!userId || !username || !username.trim()) {
-    return res.status(400).json({ error: 'يرجى إدخال اسم مستخدم صحيح' });
-  }
-
-  const cleanName = username.trim();
-  const cleanPhone = (phone || '').trim();
-  const cleanCity = (city || '').trim();
-
-  db.run(
-    `UPDATE users SET username = ?, phone = ?, city = ? WHERE id = ?`,
-    [cleanName, cleanPhone, cleanCity, userId],
-    function (err) {
-      if (err) return res.status(500).json({ error: 'فشل تحديث بيانات الملف الشخصي' });
-      if (this.changes === 0) return res.status(404).json({ error: 'المستخدم غير موجود' });
-
-      db.run(`UPDATE ads SET username = ? WHERE user_id = ?`, [cleanName, userId], () => {});
-      db.get(`SELECT id, username, email, phone, city FROM users WHERE id = ?`, [userId], (getErr, updatedUser) => {
-        if (getErr || !updatedUser) return res.status(500).json({ error: 'تعذر جلب البيانات المحدثة' });
-        return res.status(200).json({ message: 'تم حفظ الإعدادات بنجاح', user: updatedUser });
-      });
-    }
-  );
-});
-
-// 6. طلب استعادة كلمة المرور
-app.post('/api/forgot-password', (req, res) => {
-  const { email } = req.body;
-  if (!email) return res.status(400).json({ error: 'الرجاء إدخال البريد الإلكتروني' });
-
-  const cleanEmail = email.trim().toLowerCase();
-  const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
-
-  db.run(`UPDATE users SET verification_code = ? WHERE email = ?`, [resetCode, cleanEmail], function (err) {
-    if (err) return res.status(500).json({ error: 'خطأ في قاعدة البيانات' });
-    if (this.changes === 0) return res.status(404).json({ error: 'البريد الإلكتروني غير موجود' });
-
-    transporter.sendMail({
-      from: 'process.env.EMAIL_USER.com',
-      to: cleanEmail,
-      subject: 'رمز استعادة كلمة المرور - سوق الشامل',
-      text: `رمز التحقق لتعيين كلمة مرور جديدة هو: ${resetCode}`
-    }, (error) => {
-      if (error) return res.status(500).json({ error: 'تعذر إرسال رمز التحقق' });
-      return res.status(200).json({ message: 'تم إرسال رمز التحقق إلى بريدك الإلكتروني' });
-    });
-  });
-});
-
-// 7. تعيين كلمة المرور الجديدة
-app.post('/api/reset-password', (req, res) => {
-  const { email, code, newPassword } = req.body;
-  if (!email || !code || !newPassword) {
-    return res.status(400).json({ error: 'الرجاء إدخال البريد الإلكتروني والرمز وكلمة المرور الجديدة' });
-  }
-
-  const cleanEmail = email.trim().toLowerCase();
-  const cleanCode = code.trim();
-
-  db.get(`SELECT * FROM users WHERE email = ? AND verification_code = ?`, [cleanEmail, cleanCode], (err, user) => {
-    if (err) return res.status(500).json({ error: 'خطأ في قاعدة البيانات' });
-    if (!user) return res.status(400).json({ error: 'البريد الإلكتروني أو رمز التحقق غير صحيح' });
-
-    db.run(`UPDATE users SET password = ?, verification_code = NULL, is_verified = 1 WHERE email = ?`, [newPassword, cleanEmail], function (updateErr) {
-      if (updateErr) return res.status(500).json({ error: 'فشل تحديث كلمة المرور' });
-      return res.status(200).json({ message: 'تم تغيير كلمة المرور بنجاح، يمكنك الآن تسجيل الدخول' });
-    });
-  });
-});
-
-// 8. جلب الإعلانات
 app.get('/api/ads', (req, res) => {
-  db.all(`SELECT * FROM ads ORDER BY created_at DESC, id DESC`, [], (err, rows) => {
-    if (err) return res.status(500).json({ error: 'فشل جلب الإعلانات' });
-    res.json(rows);
-  });
-});
+    const category = normalizeText(req.query.category);
+    const subcategory = normalizeText(req.query.subcategory);
+    const q = normalizeText(req.query.q).toLowerCase();
+    const username = normalizeText(req.query.username);
+    const city = normalizeText(req.query.city);
 
-// 9. إضافة إعلان جديد مع قسم فرعي وعدة صور
-app.post('/api/ads', upload.array('images', 10), (req, res) => {
-  const { user_id, username, title, category, sub_category, price, city, phone, description } = req.body;
-  if (!user_id || !title || !price || !category) {
-    return res.status(400).json({ error: 'يرجى تعبئة الحقول المطلوبة' });
-  }
+    let filtered = [...ads];
 
-  const imagePaths = req.files && req.files.length > 0
-    ? req.files.map(f => '/uploads/' + f.filename)
-    : [];
-  const mainImage = imagePaths.length > 0 ? imagePaths[0] : null;
-  const imagesJson = JSON.stringify(imagePaths);
-
-  const sql = `INSERT INTO ads (user_id, username, title, category, sub_category, price, city, phone, description, image, images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-  db.run(sql, [user_id, username, title.trim(), category, sub_category || 'عام', price.trim(), (city || '').trim(), (phone || '').trim(), (description || '').trim(), mainImage, imagesJson], function (err) {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'فشل حفظ الإعلان في قاعدة البيانات' });
+    if (username !== '') {
+        filtered = filtered.filter(ad => normalizeText(ad.username) === username);
     }
-    return res.status(201).json({ message: 'تم نشر الإعلان بنجاح', adId: this.lastID });
-  });
-});
-
-// 10. حذف إعلان مع جميع صوره
-app.delete('/api/ads/:id', (req, res) => {
-  const adId = req.params.id;
-  db.get(`SELECT image, images FROM ads WHERE id = ?`, [adId], (err, ad) => {
-    if (err) return res.status(500).json({ error: 'خطأ في الاستعلام' });
-    if (!ad) return res.status(404).json({ error: 'الإعلان غير موجود' });
-
-    let allImages = [];
-    try {
-      allImages = ad.images ? JSON.parse(ad.images) : (ad.image ? [ad.image] : []);
-    } catch (e) {
-      allImages = ad.image ? [ad.image] : [];
+    if (category !== '' && category !== 'الكل') {
+        filtered = filtered.filter(ad => normalizeText(ad.category) === category);
+    }
+    if (subcategory !== '' && subcategory !== 'الكل') {
+        filtered = filtered.filter(ad => normalizeText(ad.subcategory) === subcategory);
+    }
+    if (city !== '' && city !== 'الكل') {
+        filtered = filtered.filter(ad => normalizeText(ad.city) === city);
+    }
+    if (q !== '') {
+        filtered = filtered.filter(ad =>
+            normalizeText(ad.title).toLowerCase().includes(q) ||
+            normalizeText(ad.description).toLowerCase().includes(q) ||
+            normalizeText(ad.city).toLowerCase().includes(q) ||
+            normalizeText(ad.category).toLowerCase().includes(q) ||
+            normalizeText(ad.subcategory).toLowerCase().includes(q)
+        );
     }
 
-    allImages.forEach(imgRelPath => {
-      const fullPath = path.join(__dirname, imgRelPath);
-      if (fs.existsSync(fullPath)) {
-        fs.unlinkSync(fullPath);
-      }
-    });
-
-    db.run(`DELETE FROM ads WHERE id = ?`, [adId], function (deleteErr) {
-      if (deleteErr) return res.status(500).json({ error: 'فشل حذف الإعلان' });
-      return res.status(200).json({ message: 'تم حذف الإعلان بنجاح' });
-    });
-  });
+    res.json(filtered);
 });
 
-// 11. جلب رسائل الدردشة بين مستخدمين
-app.get('/api/messages', (req, res) => {
-  const { user1, user2 } = req.query;
-  if (!user1 || !user2) {
-    return res.status(400).json({ error: 'مطلوب تحديد الطرفين' });
-  }
-
-  const sql = `
-    SELECT * FROM messages
-    WHERE (sender_id = ? AND receiver_id = ?)
-       OR (sender_id = ? AND receiver_id = ?)
-    ORDER BY created_at ASC, id ASC
-  `;
-  db.all(sql, [user1, user2, user2, user1], (err, rows) => {
-    if (err) return res.status(500).json({ error: 'فشل جلب الرسائل' });
-    res.json(rows);
-  });
+app.get('/api/ads/:id', (req, res) => {
+    const ad = ads.find(item => String(item.id) === String(req.params.id));
+    if (!ad) {
+        return res.status(404).json({ message: 'الإعلان غير موجود' });
+    }
+    res.json(ad);
 });
 
-// 12. جلب قائمة المحادثات للمستخدم الحالي
-app.get('/api/conversations/:userId', (req, res) => {
-  const userId = Number(req.params.userId);
-  const sql = `
-    SELECT * FROM messages
-    WHERE sender_id = ? OR receiver_id = ?
-    ORDER BY created_at DESC, id DESC
-  `;
-  db.all(sql, [userId, userId], (err, rows) => {
-    if (err) return res.status(500).json({ error: 'فشل جلب المحادثات' });
-
-    const map = new Map();
-    rows.forEach(msg => {
-      const otherId = Number(msg.sender_id) === userId ? Number(msg.receiver_id) : Number(msg.sender_id);
-      const otherName = Number(msg.sender_id) === userId ? msg.receiver_name : msg.sender_name;
-      if (!map.has(otherId)) {
-        map.set(otherId, {
-          otherUserId: otherId,
-          otherUserName: otherName || `مستخدم #${otherId}`,
-          lastMessage: msg.content,
-          createdAt: msg.created_at
-        });
-      }
-    });
-
-    res.json(Array.from(map.values()));
-  });
-});
-
-// 13. إرسال رسالة دردشة
 app.post('/api/messages', (req, res) => {
-  const { sender_id, sender_name, receiver_id, receiver_name, ad_id, content } = req.body;
-  if (!sender_id || !receiver_id || !content || !content.trim()) {
-    return res.status(400).json({ error: 'يرجى كتابة رسالة صحيحة' });
-  }
+    const { sender, receiver, adId, adTitle, text } = req.body;
+    if (!sender || !receiver || !text) {
+        return res.status(400).json({ message: 'بيانات الرسالة ناقصة' });
+    }
+    const newMessage = {
+        id: Date.now(),
+        sender,
+        receiver,
+        adId: adId ? Number(adId) : null,
+        adTitle: adTitle || '',
+        text,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
+    messages.push(newMessage);
+    res.json({ message: 'تم إرسال الرسالة بنجاح', msg: newMessage });
+});
 
-  const sql = `INSERT INTO messages (sender_id, sender_name, receiver_id, receiver_name, ad_id, content) VALUES (?, ?, ?, ?, ?, ?)`;
-  db.run(sql, [sender_id, sender_name, receiver_id, receiver_name || 'مستخدم', ad_id || null, content.trim()], function (err) {
-    if (err) return res.status(500).json({ error: 'فشل إرسال الرسالة' });
-    res.status(201).json({
-      id: this.lastID,
-      sender_id,
-      sender_name,
-      receiver_id,
-      receiver_name,
-      ad_id,
-      content: content.trim()
-    });
-  });
+app.get('/api/messages/:username', (req, res) => {
+    const user = req.params.username;
+    const userMsgs = messages.filter(m => m.sender === user || m.receiver === user);
+    res.json(userMsgs);
 });
 
 app.listen(PORT, () => {
-  console.log(`السيرفر يعمل بكامل طاقته على المنفذ http://localhost:${PORT}`);
+    console.log(`${APP_NAME} server running on http://localhost:${PORT}`);
 });

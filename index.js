@@ -8,7 +8,7 @@ const nodemailer = require('nodemailer');
 const app = express();
 const PORT = 3000;
 
-const transporter = nodemailer.createTransport({
+  const transporter = nodemailer.createTransport({
   host: 'smtp-relay.brevo.com',
   port: 587,
   auth: {
@@ -16,6 +16,7 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS
   }
 });
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'uploads/');
@@ -24,6 +25,7 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + '-' + Math.round(Math.random() * 1e6) + path.extname(file.originalname));
   }
 });
+
 const upload = multer({ storage: storage });
 
 app.use(express.json());

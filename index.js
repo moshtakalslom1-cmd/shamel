@@ -9,7 +9,6 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// مجلد رفع الصور
 const uploadsDir = path.join(__dirname, 'public', 'uploads');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
@@ -28,16 +27,15 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage, limits: { files: 5 } });
 
-// تخزين البيانات في الذاكرة (أو يمكن استبداله بقاعدة بيانات لاحقاً)
-const users = new Map(); // username -> { username, password, bio, joinedAt }
-const ads = []; // { id, category, subcategory, title, price, city, phone, description, username, images, comments: [] }
-const directMessages = []; // { id, sender, receiver, text, timestamp }
+const users = new Map();
+const ads = [];
+const directMessages = [];
 
 function formatTimeNow() {
   return new Date().toLocaleTimeString('ar', { hour: '2-digit', minute: '2-digit' });
 }
 
-// --- المستخدمون والملف الشخصي ---
+// --- المستخدمون ---
 app.post('/api/signup', (req, res) => {
   const { username, password, bio } = req.body || {};
   if (!username || !password) {
@@ -46,13 +44,12 @@ app.post('/api/signup', (req, res) => {
   if (users.has(username)) {
     return res.status(400).json({ message: 'اسم المستخدم موجود مسبقاً' });
   }
-  const userObj = {
+  users.set(username, {
     username,
     password,
     bio: (bio && bio.trim()) || 'معلن في منصة رخيص',
     joinedAt: new Date().toISOString().slice(0, 10)
-  };
-  users.set(username, userObj);
+  });
   return res.json({ message: 'تم إنشاء الحساب بنجاح' });
 });
 
@@ -74,11 +71,7 @@ app.get('/api/users/:username', (req, res) => {
       joinedAt: new Date().toISOString().slice(0, 10)
     });
   }
-  return res.json({
-    username: user.username,
-    bio: user.bio,
-    joinedAt: user.joinedAt
-  });
+  return res.json({ username: user.username, bio: user.bio, joinedAt: user.joinedAt });
 });
 
 app.put('/api/users/:username/bio', (req, res) => {
@@ -103,18 +96,10 @@ app.get('/api/ads', (req, res) => {
   const { category, subcategory, q, username, city } = req.query;
   let result = [...ads];
 
-  if (category && category !== 'الكل') {
-    result = result.filter((a) => a.category === category);
-  }
-  if (subcategory && subcategory !== 'الكل') {
-    result = result.filter((a) => a.subcategory === subcategory);
-  }
-  if (city && city !== 'الكل') {
-    result = result.filter((a) => a.city === city);
-  }
-  if (username) {
-    result = result.filter((a) => a.username === username);
-  }
+  if (category && category !== 'الكل') result = result.filter((a) => a.category === category);
+  if (subcategory && subcategory !== 'الكل') result = result.filter((a) => a.subcategory === subcategory);
+  if (city && city !== 'الكل') result = result.filter((a) => a.city === city);
+  if (username) result = result.filter((a) => a.username === username);
   if (q && q.trim()) {
     const term = q.trim().toLowerCase();
     result = result.filter(
@@ -123,15 +108,12 @@ app.get('/api/ads', (req, res) => {
         (a.description && a.description.toLowerCase().includes(term))
     );
   }
-
   return res.json(result);
 });
 
 app.get('/api/ads/:id', (req, res) => {
   const ad = ads.find((a) => String(a.id) === String(req.params.id));
-  if (!ad) {
-    return res.status(404).json({ message: 'الإعلان غير موجود' });
-  }
+  if (!ad) return res.status(404).json({ message: 'الإعلان غير موجود' });
   return res.json(ad);
 });
 
@@ -160,12 +142,10 @@ app.post('/api/ads', upload.array('images', 5), (req, res) => {
   return res.json({ message: 'تم نشر الإعلان بنجاح', ad: newAd });
 });
 
-// --- التعليقات العامة على الإعلان ---
+// --- التعليقات ---
 app.get('/api/ads/:id/comments', (req, res) => {
   const ad = ads.find((a) => String(a.id) === String(req.params.id));
-  if (!ad) {
-    return res.status(404).json({ message: 'الإعلان غير موجود' });
-  }
+  if (!ad) return res.status(404).json({ message: 'الإعلان غير موجود' });
   return res.json(ad.comments || []);
 });
 
@@ -175,9 +155,7 @@ app.post('/api/ads/:id/comments', (req, res) => {
     return res.status(400).json({ message: 'يرجى كتابة تعليق صالح' });
   }
   const ad = ads.find((a) => String(a.id) === String(req.params.id));
-  if (!ad) {
-    return res.status(404).json({ message: 'الإعلان غير موجود' });
-  }
+  if (!ad) return res.status(404).json({ message: 'الإعلان غير موجود' });
 
   const comment = {
     id: String(Date.now()),
@@ -189,7 +167,7 @@ app.post('/api/ads/:id/comments', (req, res) => {
   return res.json({ message: 'تمت إضافة التعليق', comment });
 });
 
-// --- الدردشة المباشرة (شخص لشخص) ---
+// --- الدردشة المباشرة ---
 app.post('/api/chat/messages', (req, res) => {
   const { sender, receiver, text } = req.body || {};
   if (!sender || !receiver || !text || !text.trim()) {
@@ -208,9 +186,7 @@ app.post('/api/chat/messages', (req, res) => {
 
 app.get('/api/chat/messages', (req, res) => {
   const { user1, user2 } = req.query;
-  if (!user1 || !user2) {
-    return res.json([]);
-  }
+  if (!user1 || !user2) return res.json([]);
   const conversation = directMessages.filter(
     (m) =>
       (m.sender === user1 && m.receiver === user2) ||
@@ -221,10 +197,7 @@ app.get('/api/chat/messages', (req, res) => {
 
 app.get('/api/chat/conversations', (req, res) => {
   const { user } = req.query;
-  if (!user) {
-    return res.json([]);
-  }
-
+  if (!user) return res.json([]);
   const mapByPartner = new Map();
   directMessages.forEach((m) => {
     if (m.sender === user || m.receiver === user) {
@@ -236,11 +209,9 @@ app.get('/api/chat/conversations', (req, res) => {
       });
     }
   });
-
   return res.json(Array.from(mapByPartner.values()).reverse());
 });
 
-// تشغيل السيرفر
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

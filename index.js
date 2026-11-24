@@ -3,6 +3,7 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
+const uploadDir = path.join(__dirname, 'uploads');
 const nodemailer = require('nodemailer');
 
 const app = express();

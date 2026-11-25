@@ -55,10 +55,18 @@ function sanitizeUser(u) {
 
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
+app.get('/chat', (req, res) => {
+  const chatFile = path.join(__dirname, 'public', 'chat.html');
+  if (fs.existsSync(chatFile)) {
+    return res.sendFile(chatFile);
+  }
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 app.post('/api/auth/register', (req, res) => {
   const username = (req.body.username || '').trim();
   const password = (req.body.password || '').trim();
-  if (!username || !password) return res.status(400).json({ message: 'يرجى إدخال الاسم وكلمة المرور' });
+  if (!username || !password) return res.status(400).json({ message: 'يرجى إدخال اسم المستخدم وكلمة المرور' });
 
   const data = readData();
   if (data.users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
@@ -84,7 +92,7 @@ app.post('/api/auth/register', (req, res) => {
 app.post('/api/auth/login', (req, res) => {
   const username = (req.body.username || '').trim();
   const password = (req.body.password || '').trim();
-  if (!username || !password) return res.status(400).json({ message: 'يرجى إدخال الاسم وكلمة المرور' });
+  if (!username || !password) return res.status(400).json({ message: 'يرجى إدخال اسم المستخدم وكلمة المرور' });
 
   const data = readData();
   const user = data.users.find(u => u.username.toLowerCase() === username.toLowerCase());
@@ -137,7 +145,7 @@ app.post('/api/favorites/toggle', (req, res) => {
 
 app.get('/api/ads', (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
-  const { q, category, city, condition, sort } = req.query;
+  const { q, category, subType, brand, city, condition, sort } = req.query;
   const data = readData();
   let list = [...data.ads].reverse();
 
@@ -145,10 +153,14 @@ app.get('/api/ads', (req, res) => {
     const query = q.trim().toLowerCase();
     list = list.filter(a =>
       (a.title || '').toLowerCase().includes(query) ||
-      (a.description || '').toLowerCase().includes(query)
+      (a.description || '').toLowerCase().includes(query) ||
+      (a.brand || '').toLowerCase().includes(query) ||
+      (a.subType || '').toLowerCase().includes(query)
     );
   }
   if (category && category !== 'all') list = list.filter(a => a.category === category);
+  if (subType && subType !== 'all') list = list.filter(a => a.subType === subType);
+  if (brand && brand !== 'all') list = list.filter(a => a.brand === brand);
   if (city && city !== 'all') list = list.filter(a => a.city === city);
   if (condition && condition !== 'all') list = list.filter(a => a.condition === condition);
 
@@ -160,7 +172,7 @@ app.get('/api/ads', (req, res) => {
 });
 
 app.post('/api/ads', (req, res) => {
-  const { title, price, category, city, condition, negotiable, description, image, ownerUsername } = req.body;
+  const { title, price, category, subType, brand, city, condition, negotiable, description, image, ownerUsername } = req.body;
   if (!ownerUsername || !ownerUsername.trim()) {
     return res.status(401).json({ message: 'يجب تسجيل الدخول أولاً' });
   }
@@ -174,6 +186,8 @@ app.post('/api/ads', (req, res) => {
     title: title.trim(),
     price: price ? String(price).trim() : '0',
     category: category || 'أخرى',
+    subType: (subType || 'متنوعات').trim(),
+    brand: (brand || 'عام').trim(),
     city: city || 'دمشق',
     condition: condition || 'مستعمل',
     negotiable: Boolean(negotiable),
@@ -191,7 +205,7 @@ app.post('/api/ads', (req, res) => {
 });
 
 app.put('/api/ads/:id', (req, res) => {
-  const { title, price, category, city, condition, negotiable, description, image, ownerUsername } = req.body;
+  const { title, price, category, subType, brand, city, condition, negotiable, description, image, ownerUsername } = req.body;
   const data = readData();
   const idx = data.ads.findIndex(a => a.id === req.params.id);
   if (idx === -1) return res.status(404).json({ message: 'الإعلان غير موجود' });
@@ -206,6 +220,8 @@ app.put('/api/ads/:id', (req, res) => {
     title: title !== undefined ? title.trim() : ad.title,
     price: price !== undefined ? String(price).trim() : ad.price,
     category: category !== undefined ? category : ad.category,
+    subType: subType !== undefined ? String(subType).trim() : ad.subType,
+    brand: brand !== undefined ? String(brand).trim() : ad.brand,
     city: city !== undefined ? city : ad.city,
     condition: condition !== undefined ? condition : ad.condition,
     negotiable: negotiable !== undefined ? Boolean(negotiable) : ad.negotiable,

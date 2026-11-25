@@ -1,4 +1,4 @@
-const express = require('express');
+﻿const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
@@ -11,14 +11,9 @@ app.use(express.json({ limit: '15mb' }));
 app.use(express.urlencoded({ extended: true, limit: '15mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// تهيئة ملف البيانات data.json إذا لم يكن موجوداً
 function initDataFile() {
   if (!fs.existsSync(DATA_FILE)) {
-    const initialData = {
-      users: [],
-      ads: [],
-      messages: []
-    };
+    const initialData = { users: [], ads: [], messages: [] };
     fs.writeFileSync(DATA_FILE, JSON.stringify(initialData, null, 2), 'utf8');
   }
 }
@@ -43,41 +38,71 @@ function writeData(data) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
 }
 
-// منع خطأ 404 للأيقونة في الكونسول
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
-// تسجيل الدخول أو إنشاء حساب تلقائي مبسط بالبريد الإلكتروني
+// تسجيل الدخول بالاسم وكلمة المرور فقط
 app.post('/api/auth/login', (req, res) => {
-  const email = (req.body.email || '').trim().toLowerCase();
-  const name = (req.body.name || '').trim();
+  const username = (req.body.username || '').trim();
+  const password = (req.body.password || '').trim();
 
-  if (!email || !email.includes('@')) {
-    return res.status(400).json({ message: 'يرجى إدخال بريد إلكتروني صحيح' });
+  if (!username || !password) {
+    return res.status(400).json({ message: 'يرجى إدخال الاسم وكلمة المرور' });
   }
 
   const data = readData();
-  let user = data.users.find(u => u.email === email);
+  let user = data.users.find(
+    u => u.username.toLowerCase() === username.toLowerCase()
+  );
 
   if (!user) {
     user = {
       id: crypto.randomUUID(),
-      email,
-      name: name || email.split('@')[0],
+      username,
+      password,
+      favorites: [],
       joinedAt: new Date().toISOString().split('T')[0]
     };
     data.users.push(user);
     writeData(data);
-  } else if (name && user.name !== name) {
-    user.name = name;
-    writeData(data);
+  } else if (user.password !== password) {
+    return res.status(401).json({ message: 'كلمة المرور غير صحيحة لهذا الاسم' });
   }
 
-  res.json({ user });
+  res.json({
+    user: {
+      id: user.id,
+      username: user.username,
+      favorites: Array.isArray(user.favorites) ? user.favorites : []
+    }
+  });
 });
 
-// جلب جميع الإعلانات مع دعم البحث والتصفية
+// تبديل المفضلة (ميزة مستوحاة من Sahibinden)
+app.post('/api/favorites/toggle', (req, res) => {
+  const { username, adId } = req.body;
+  if (!username || !adId) {
+    return res.status(400).json({ message: 'بيانات غير مكتملة' });
+  }
+  const data = readData();
+  const user = data.users.find(u => u.username.toLowerCase() === username.trim().toLowerCase());
+  if (!user) {
+    return res.status(404).json({ message: 'المستخدم غير موجود' });
+  }
+  if (!Array.isArray(user.favorites)) user.favorites = [];
+
+  const idx = user.favorites.indexOf(adId);
+  if (idx === -1) {
+    user.favorites.push(adId);
+  } else {
+    user.favorites.splice(idx, 1);
+  }
+  writeData(data);
+  res.json({ favorites: user.favorites });
+});
+
+// جلب الإعلانات مع البحث والفلترة والترتيب
 app.get('/api/ads', (req, res) => {
-  const { q, category, subcategory, city, owner } = req.query;
+  const { q, category, city, condition, sort, owner } = req.query;
   const data = readData();
   let ads = [...data.ads].reverse();
 
@@ -88,42 +113,45 @@ app.get('/api/ads', (req, res) => {
       (ad.description || '').toLowerCase().includes(query)
     );
   }
-
   if (category && category !== 'all') {
     ads = ads.filter(ad => ad.category === category);
   }
-
-  if (subcategory && subcategory !== 'all') {
-    ads = ads.filter(ad => ad.subcategory === subcategory);
-  }
-
   if (city && city !== 'all') {
     ads = ads.filter(ad => ad.city === city);
   }
-
+  if (condition && condition !== 'all') {
+    ads = ads.filter(ad => ad.condition === condition);
+  }
   if (owner && owner.trim()) {
-    ads = ads.filter(ad => (ad.ownerEmail || '').toLowerCase() === owner.trim().toLowerCase());
+    ads = ads.filter(ad => (ad.ownerUsername || '').toLowerCase() === owner.trim().toLowerCase());
+  }
+
+  if (sort === 'price_asc') {
+    ads.sort((a, b) => (parseFloat(a.price) || 0) - (parseFloat(b.price) || 0));
+  } else if (sort === 'price_desc') {
+    ads.sort((a, b) => (parseFloat(b.price) || 0) - (parseFloat(a.price) || 0));
+  } else if (sort === 'views') {
+    ads.sort((a, b) => (Number(b.views) || 0) - (Number(a.views) || 0));
   }
 
   res.json(ads);
 });
 
-// جلب إعلان واحد بالمعرّف
-app.get('/api/ads/:id', (req, res) => {
+// زيادة عداد المشاهدات عند فتح/معاينة إعلان
+app.post('/api/ads/:id/view', (req, res) => {
   const data = readData();
   const ad = data.ads.find(a => a.id === req.params.id);
-  if (!ad) {
-    return res.status(404).json({ message: 'الإعلان غير موجود' });
-  }
-  res.json(ad);
+  if (!ad) return res.status(404).json({ message: 'الإعلان غير موجود' });
+  ad.views = (Number(ad.views) || 0) + 1;
+  writeData(data);
+  res.json({ views: ad.views });
 });
 
-// إضافة إعلان جديد
+// نشر إعلان جديد
 app.post('/api/ads', (req, res) => {
-  const { title, price, category, subcategory, city, description, image, ownerEmail, ownerName } = req.body;
-
-  if (!ownerEmail) {
-    return res.status(401).json({ message: 'يجب تسجيل الدخول أولاً' });
+  const { title, price, category, city, condition, negotiable, description, image, ownerUsername } = req.body;
+  if (!ownerUsername || !ownerUsername.trim()) {
+    return res.status(401).json({ message: 'يجب تسجيل الدخول بالاسم وكلمة المرور أولاً' });
   }
   if (!title || !title.trim()) {
     return res.status(400).json({ message: 'عنوان الإعلان مطلوب' });
@@ -135,34 +163,31 @@ app.post('/api/ads', (req, res) => {
     title: title.trim(),
     price: price ? String(price).trim() : '0',
     category: category || 'أخرى',
-    subcategory: subcategory || '',
-    city: city || 'غير محدد',
+    city: city || 'دمشق',
+    condition: condition || 'مستعمل',
+    negotiable: Boolean(negotiable),
     description: (description || '').trim(),
     image: image || '',
-    ownerEmail: ownerEmail.trim().toLowerCase(),
-    ownerName: (ownerName || ownerEmail.split('@')[0]).trim(),
+    ownerUsername: ownerUsername.trim(),
+    views: 0,
     createdAt: new Date().toISOString(),
     comments: []
   };
 
   data.ads.push(newAd);
   writeData(data);
-
   res.status(201).json(newAd);
 });
 
 // تعديل إعلان موجود
 app.put('/api/ads/:id', (req, res) => {
-  const { title, price, category, subcategory, city, description, image, ownerEmail } = req.body;
+  const { title, price, category, city, condition, negotiable, description, image, ownerUsername } = req.body;
   const data = readData();
   const index = data.ads.findIndex(a => a.id === req.params.id);
-
-  if (index === -1) {
-    return res.status(404).json({ message: 'الإعلان غير موجود' });
-  }
+  if (index === -1) return res.status(404).json({ message: 'الإعلان غير موجود' });
 
   const ad = data.ads[index];
-  if (!ownerEmail || ad.ownerEmail.toLowerCase() !== ownerEmail.trim().toLowerCase()) {
+  if (!ownerUsername || ad.ownerUsername.toLowerCase() !== ownerUsername.trim().toLowerCase()) {
     return res.status(403).json({ message: 'لا تملك صلاحية تعديل هذا الإعلان' });
   }
 
@@ -171,8 +196,9 @@ app.put('/api/ads/:id', (req, res) => {
     title: title !== undefined ? title.trim() : ad.title,
     price: price !== undefined ? String(price).trim() : ad.price,
     category: category !== undefined ? category : ad.category,
-    subcategory: subcategory !== undefined ? subcategory : ad.subcategory,
     city: city !== undefined ? city : ad.city,
+    condition: condition !== undefined ? condition : ad.condition,
+    negotiable: negotiable !== undefined ? Boolean(negotiable) : ad.negotiable,
     description: description !== undefined ? description.trim() : ad.description,
     image: image !== undefined && image !== '' ? image : ad.image,
     updatedAt: new Date().toISOString()
@@ -184,15 +210,12 @@ app.put('/api/ads/:id', (req, res) => {
 
 // حذف إعلان
 app.delete('/api/ads/:id', (req, res) => {
-  const ownerEmail = (req.body.ownerEmail || req.query.ownerEmail || '').trim().toLowerCase();
+  const ownerUsername = (req.body.ownerUsername || req.query.ownerUsername || '').trim().toLowerCase();
   const data = readData();
   const index = data.ads.findIndex(a => a.id === req.params.id);
+  if (index === -1) return res.status(404).json({ message: 'الإعلان غير موجود' });
 
-  if (index === -1) {
-    return res.status(404).json({ message: 'الإعلان غير موجود' });
-  }
-
-  if (!ownerEmail || data.ads[index].ownerEmail.toLowerCase() !== ownerEmail) {
+  if (!ownerUsername || data.ads[index].ownerUsername.toLowerCase() !== ownerUsername) {
     return res.status(403).json({ message: 'لا تملك صلاحية حذف هذا الإعلان' });
   }
 
@@ -201,28 +224,21 @@ app.delete('/api/ads/:id', (req, res) => {
   res.json({ message: 'تم حذف الإعلان بنجاح' });
 });
 
-// إضافة تعليق على إعلان
+// إضافة تعليق
 app.post('/api/ads/:id/comments', (req, res) => {
-  const { text, userEmail, userName } = req.body;
-  if (!userEmail) {
-    return res.status(401).json({ message: 'يجب تسجيل الدخول للتعليق' });
-  }
-  if (!text || !text.trim()) {
-    return res.status(400).json({ message: 'نص التعليق فارغ' });
-  }
+  const { text, username } = req.body;
+  if (!username) return res.status(401).json({ message: 'يجب تسجيل الدخول للتعليق' });
+  if (!text || !text.trim()) return res.status(400).json({ message: 'نص التعليق فارغ' });
 
   const data = readData();
   const ad = data.ads.find(a => a.id === req.params.id);
-  if (!ad) {
-    return res.status(404).json({ message: 'الإعلان غير موجود' });
-  }
+  if (!ad) return res.status(404).json({ message: 'الإعلان غير موجود' });
 
   if (!Array.isArray(ad.comments)) ad.comments = [];
   const comment = {
     id: crypto.randomUUID(),
     text: text.trim(),
-    userEmail: userEmail.trim().toLowerCase(),
-    userName: (userName || userEmail.split('@')[0]).trim(),
+    username: username.trim(),
     createdAt: new Date().toISOString()
   };
 
@@ -231,43 +247,38 @@ app.post('/api/ads/:id/comments', (req, res) => {
   res.status(201).json(comment);
 });
 
-// جلب الرسائل الخاصة بالمستخدم
+// جلب الرسائل والمحادثات للمستخدم
 app.get('/api/messages', (req, res) => {
-  const email = (req.query.email || '').trim().toLowerCase();
-  if (!email) {
-    return res.status(400).json({ message: 'البريد مطلوب' });
-  }
+  const username = (req.query.username || '').trim().toLowerCase();
+  if (!username) return res.status(400).json({ message: 'اسم المستخدم مطلوب' });
   const data = readData();
-  const userMessages = data.messages.filter(
-    m => m.from === email || m.to === email
+  const userMsgs = data.messages.filter(
+    m => (m.from || '').toLowerCase() === username || (m.to || '').toLowerCase() === username
   );
-  res.json(userMessages);
+  res.json(userMsgs);
 });
 
-// إرسال رسالة مباشرة
+// إرسال رسالة مباشرة أو رسالة سريعة من الإعلان
 app.post('/api/messages', (req, res) => {
   const { from, to, adId, adTitle, text } = req.body;
   if (!from || !to || !text || !text.trim()) {
     return res.status(400).json({ message: 'بيانات الرسالة غير مكتملة' });
   }
-
   const data = readData();
   const msg = {
     id: crypto.randomUUID(),
-    from: from.trim().toLowerCase(),
-    to: to.trim().toLowerCase(),
+    from: from.trim(),
+    to: to.trim(),
     adId: adId || '',
     adTitle: adTitle || '',
     text: text.trim(),
     createdAt: new Date().toISOString()
   };
-
   data.messages.push(msg);
   writeData(data);
   res.status(201).json(msg);
 });
 
-// إرجاع الواجهة لأي مسار غير معرف
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

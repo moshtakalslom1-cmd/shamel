@@ -3,17 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>رخيص - اعرض واطلب كل شيء بسهولة وأمان</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏷️</text></svg>">
+  <title>رخيص - سوق الإعلانات</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <style>
     :root {
-      --primary: #1f4e3d;
-      --primary-dark: #15382b;
-      --accent: #b92b27;
-      --accent-hover: #96201d;
-      --bg: #eef2ef;
+      --primary: #14362b;
+      --primary-light: #1f5443;
+      --accent: #e11d48;
+      --accent-hover: #be123c;
+      --neon: #38bdf8;
+      --neon-gold: #facc15;
+      --bg: #0f172a;
+      --surface: #1e293b;
       --card: #ffffff;
-      --text: #1e293b;
+      --text: #0f172a;
       --muted: #64748b;
       --border: #cbd5e1;
     }
@@ -26,36 +29,72 @@
     }
 
     body {
-      background-color: var(--bg);
+      background-color: #eef2f6;
       color: var(--text);
       line-height: 1.5;
     }
 
-    /* الشريط العلوي */
+    /* الهيدر وزخرفة اسم الموقع رخيص مع إضاءة ملفتة */
     header {
-      background-color: var(--primary);
+      background: linear-gradient(90deg, #090d16 0%, #132a23 50%, #090d16 100%);
       color: #fff;
-      padding: 10px 16px;
+      padding: 12px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
       position: sticky;
       top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      z-index: 200;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.35);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
     }
 
-    .logo {
-      background: #4b2e2a;
-      color: #fff;
-      font-weight: bold;
-      font-size: 1.2rem;
-      padding: 6px 18px;
-      border-radius: 20px;
+    .brand-logo {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 22px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #1a1025 0%, #2b1320 55%, #10242c 100%);
+      border: 1.5px solid rgba(56, 189, 248, 0.85);
       cursor: pointer;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      user-select: none;
+      box-shadow:
+        0 0 12px rgba(56, 189, 248, 0.55),
+        0 0 26px rgba(244, 63, 94, 0.35),
+        inset 0 0 10px rgba(250, 204, 21, 0.25);
+      animation: logoPulse 2.8s infinite alternate ease-in-out;
+    }
+
+    .brand-logo span.brand-text {
+      font-size: 1.35rem;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      background: linear-gradient(90deg, #ffffff 0%, #fde047 45%, #7dd3fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 14px rgba(250, 204, 21, 0.45);
+    }
+
+    .brand-logo span.brand-spark {
+      font-size: 1rem;
+      filter: drop-shadow(0 0 8px #facc15);
+    }
+
+    @keyframes logoPulse {
+      0% {
+        box-shadow:
+          0 0 10px rgba(56, 189, 248, 0.5),
+          0 0 22px rgba(244, 63, 94, 0.3);
+      }
+      100% {
+        box-shadow:
+          0 0 18px rgba(56, 189, 248, 0.9),
+          0 0 34px rgba(250, 204, 21, 0.55);
+      }
     }
 
     .user-controls {
@@ -65,120 +104,128 @@
       flex-wrap: wrap;
     }
 
-    .user-badge {
-      background: rgba(255, 255, 255, 0.12);
+    .user-chip {
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #e0f2fe;
       padding: 5px 12px;
-      border-radius: 6px;
-      font-size: 0.9rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
     }
 
-    /* الأزرار */
     button {
       cursor: pointer;
       border: none;
-      border-radius: 6px;
-      padding: 7px 14px;
+      border-radius: 7px;
+      padding: 8px 14px;
       font-size: 0.9rem;
-      font-weight: 600;
-      transition: background 0.2s, transform 0.1s;
+      font-weight: 700;
+      transition: transform 0.12s ease, opacity 0.15s ease, background 0.15s ease;
     }
 
     button:active {
-      transform: scale(0.98);
+      transform: scale(0.97);
     }
 
     .btn-green {
-      background-color: #2e7d32;
+      background: #16a34a;
       color: #fff;
     }
 
     .btn-green:hover {
-      background-color: #236327;
+      background: #15803d;
     }
 
     .btn-red {
-      background-color: var(--accent);
+      background: var(--accent);
       color: #fff;
     }
 
     .btn-red:hover {
-      background-color: var(--accent-hover);
+      background: var(--accent-hover);
+    }
+
+    .btn-blue {
+      background: #0284c7;
+      color: #fff;
+    }
+
+    .btn-blue:hover {
+      background: #0369a1;
     }
 
     .btn-outline {
       background: #fff;
-      color: var(--text);
+      color: #0f172a;
       border: 1px solid var(--border);
     }
 
     .btn-outline:hover {
-      background: #f8fafc;
+      background: #f1f5f9;
     }
 
-    /* منطقة البحث والتصفية */
-    .hero-search {
+    /* شريط البحث والفلاتر */
+    .search-section {
       background: #fff;
       padding: 16px;
       border-bottom: 1px solid var(--border);
-      text-align: center;
     }
 
-    .hero-search h1 {
-      font-size: 1.25rem;
-      margin-bottom: 12px;
-      color: #111;
-    }
-
-    .search-bar {
+    .search-grid {
+      max-width: 1200px;
+      margin: 0 auto;
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
       gap: 8px;
-      max-width: 1100px;
-      margin: 0 auto 12px;
+      align-items: center;
+      justify-content: center;
     }
 
-    .search-bar input,
-    .search-bar select {
-      padding: 8px 12px;
+    .search-grid input,
+    .search-grid select {
+      padding: 9px 12px;
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 7px;
       font-size: 0.9rem;
-      min-width: 150px;
       background: #fff;
+      min-width: 145px;
     }
 
-    .search-bar input {
+    .search-grid input[type="text"] {
       flex: 1;
-      min-width: 200px;
+      min-width: 210px;
     }
 
-    .quick-nav {
+    .action-bar {
+      max-width: 1200px;
+      margin: 12px auto 0;
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
       gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 8px;
     }
 
-    /* شريط الأقسام الأفقي */
-    .categories-strip {
+    /* الأقسام */
+    .categories-bar {
+      max-width: 1200px;
+      margin: 12px auto 0;
+      padding: 0 16px;
       display: flex;
       gap: 8px;
       overflow-x: auto;
-      padding: 12px 16px;
-      justify-content: center;
       flex-wrap: wrap;
+      justify-content: center;
     }
 
     .cat-pill {
       background: #fff;
       border: 1px solid var(--border);
       padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.88rem;
+      border-radius: 999px;
+      font-size: 0.86rem;
+      font-weight: 600;
       cursor: pointer;
-      white-space: nowrap;
     }
 
     .cat-pill.active {
@@ -187,45 +234,66 @@
       border-color: var(--primary);
     }
 
-    /* الحاوية الرئيسية */
+    /* الحاوية والإعلانات */
     .container {
-      max-width: 1150px;
-      margin: 16px auto;
+      max-width: 1200px;
+      margin: 16px auto 40px;
       padding: 0 16px;
     }
 
-    .section-title {
-      font-size: 1.15rem;
-      margin-bottom: 14px;
-      color: var(--primary-dark);
+    .top-list-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
     }
 
-    /* شبكة الإعلانات */
     .ads-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 16px;
     }
 
     .ad-card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
     }
 
-    .ad-image {
+    .ad-img-wrap {
+      position: relative;
+    }
+
+    .ad-img {
       width: 100%;
-      height: 185px;
+      height: 190px;
       object-fit: cover;
       background: #e2e8f0;
+      display: block;
       cursor: zoom-in;
+    }
+
+    .fav-btn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(255, 255, 255, 0.92);
+      color: #e11d48;
+      border-radius: 999px;
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     }
 
     .ad-body {
@@ -236,16 +304,36 @@
       gap: 6px;
     }
 
+    .badges-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: #f1f5f9;
+      color: #334155;
+    }
+
+    .badge-neg {
+      background: #fef9c3;
+      color: #854d0e;
+    }
+
     .ad-title {
       font-size: 1.05rem;
-      font-weight: 700;
+      font-weight: 800;
       color: #0f172a;
     }
 
     .ad-price {
-      font-weight: 700;
+      font-size: 1.05rem;
+      font-weight: 800;
       color: #15803d;
-      font-size: 1rem;
     }
 
     .ad-meta {
@@ -256,29 +344,51 @@
     .ad-desc {
       font-size: 0.88rem;
       color: #334155;
-      margin-top: 4px;
       white-space: pre-line;
+      margin-top: 2px;
+    }
+
+    /* صندوق الرسالة السريعة داخل بطاقة الإعلان */
+    .quick-msg-box {
+      padding: 8px 12px;
+      background: #f8fafc;
+      border-top: 1px dashed var(--border);
+      display: flex;
+      gap: 6px;
+    }
+
+    .quick-msg-box input {
+      flex: 1;
+      padding: 6px 9px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.82rem;
+    }
+
+    .quick-msg-box button {
+      padding: 6px 10px;
+      font-size: 0.8rem;
     }
 
     .ad-actions {
       padding: 10px 12px;
-      border-top: 1px solid #f1f5f9;
+      border-top: 1px solid #e2e8f0;
+      background: #f1f5f9;
       display: flex;
-      gap: 6px;
       flex-wrap: wrap;
-      background: #fafafa;
+      gap: 6px;
     }
 
     .ad-actions button {
+      padding: 6px 10px;
       font-size: 0.8rem;
-      padding: 5px 10px;
     }
 
-    /* النوافذ المنبثقة (Modals) */
-    .modal-overlay {
+    /* النوافذ المنبثقة */
+    .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(2, 6, 23, 0.68);
       display: none;
       align-items: center;
       justify-content: center;
@@ -286,107 +396,122 @@
       z-index: 9999;
     }
 
-    .modal-overlay.open {
+    .modal-backdrop.open {
       display: flex;
     }
 
-    .modal-box {
+    .modal-card {
       background: #fff;
       border-radius: 12px;
       width: 100%;
-      max-width: 520px;
+      max-width: 540px;
       max-height: 90vh;
       overflow-y: auto;
       padding: 20px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-      position: relative;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
     }
 
-    .modal-header {
+    .modal-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding-bottom: 10px;
       margin-bottom: 14px;
       border-bottom: 1px solid var(--border);
-      padding-bottom: 8px;
     }
 
-    .close-modal {
-      background: #e2e8f0;
-      color: #1e293b;
-      width: 30px;
-      height: 30px;
+    .close-x {
+      width: 32px;
+      height: 32px;
+      padding: 0;
       border-radius: 50%;
-      font-size: 1.1rem;
+      background: #e2e8f0;
+      color: #0f172a;
+      font-size: 1.15rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0;
     }
 
-    .form-group {
+    .field {
       margin-bottom: 12px;
     }
 
-    .form-group label {
+    .field label {
       display: block;
       font-size: 0.88rem;
-      font-weight: 600;
+      font-weight: 700;
       margin-bottom: 4px;
     }
 
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
+    .field input,
+    .field select,
+    .field textarea {
       width: 100%;
       padding: 8px 10px;
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 7px;
       font-size: 0.92rem;
     }
 
-    .preview-img {
+    .img-preview {
       max-width: 100%;
       max-height: 160px;
       margin-top: 8px;
-      border-radius: 6px;
+      border-radius: 8px;
       display: none;
     }
 
-    /* تكبير الصور */
-    .lightbox-img {
-      max-width: 95vw;
-      max-height: 90vh;
-      border-radius: 8px;
-    }
-
-    /* التعليقات والدردشة */
-    .comments-list,
-    .chat-messages {
-      max-height: 240px;
+    .chat-box {
+      max-height: 260px;
       overflow-y: auto;
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 10px;
-      margin-bottom: 10px;
       background: #f8fafc;
+      margin-bottom: 10px;
     }
 
-    .comment-item,
-    .chat-msg {
+    .msg-row {
       padding: 8px;
       border-bottom: 1px solid #e2e8f0;
       font-size: 0.88rem;
     }
 
-    .comment-item:last-child,
-    .chat-msg:last-child {
+    .msg-row:last-child {
       border-bottom: none;
     }
 
-    .empty-state {
+    .partners-list {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .partner-pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      background: #e2e8f0;
+      color: #0f172a;
+      cursor: pointer;
+    }
+
+    .partner-pill.active {
+      background: #0284c7;
+      color: #fff;
+    }
+
+    .lightbox-img {
+      max-width: 95vw;
+      max-height: 90vh;
+      border-radius: 10px;
+    }
+
+    .empty-msg {
       text-align: center;
-      padding: 40px 16px;
+      padding: 36px 16px;
       color: var(--muted);
       grid-column: 1 / -1;
     }
@@ -394,299 +519,401 @@
 </head>
 <body>
 
-  <!-- الشريط العلوي -->
   <header>
-    <div class="logo" data-action="reset-home">رخيص</div>
-    <div class="user-controls" id="authArea"></div>
+    <div class="brand-logo" data-action="reset-all" title="رخيص">
+      <span class="brand-spark">⚡</span>
+      <span class="brand-text">رخيص</span>
+    </div>
+    <div class="user-controls" id="authBox"></div>
   </header>
 
-  <!-- منطقة البحث والتنقل -->
-  <section class="hero-search">
-    <h1>اعرض واطلب كل شيء في رخيص بسهولة وأمان</h1>
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="ابحث عن منتج أو عنوان..." />
+  <section class="search-section">
+    <div class="search-grid">
+      <input type="text" id="searchQ" placeholder="ابحث عن أي غرض أو إعلان..." />
+
+      <select id="filterCity">
+        <option value="all">كل مدن سوريا</option>
+        <option value="دمشق">دمشق</option>
+        <option value="ريف دمشق">ريف دمشق</option>
+        <option value="حلب">حلب</option>
+        <option value="حمص">حمص</option>
+        <option value="حماة">حماة</option>
+        <option value="اللاذقية">اللاذقية</option>
+        <option value="طرطوس">طرطوس</option>
+        <option value="إدلب">إدلب</option>
+        <option value="درعا">درعا</option>
+        <option value="دير الزور">دير الزور</option>
+        <option value="الحسكة">الحسكة</option>
+        <option value="الرقة">الرقة</option>
+        <option value="السويداء">السويداء</option>
+        <option value="القنيطرة">القنيطرة</option>
+      </select>
+
       <select id="filterCategory">
         <option value="all">كل الأقسام</option>
-        <option value="إلكترونيات">إلكترونيات</option>
-        <option value="سيارات">سيارات</option>
+        <option value="سيارات ومركبات">سيارات ومركبات</option>
         <option value="عقارات">عقارات</option>
-        <option value="حيوانات">حيوانات</option>
+        <option value="موبايلات وإلكترونيات">موبايلات وإلكترونيات</option>
         <option value="أثاث ومنزل">أثاث ومنزل</option>
+        <option value="حيوانات وطيور">حيوانات وطيور</option>
         <option value="أخرى">أخرى</option>
       </select>
-      <select id="filterCity">
-        <option value="all">جميع المدن</option>
-        <option value="أنطاليا">أنطاليا</option>
-        <option value="إسطنبول">إسطنبول</option>
-        <option value="أنقرة">أنقرة</option>
-        <option value="إزمير">إزمير</option>
-        <option value="مرسين">مرسين</option>
-        <option value="غازي عنتاب">غازي عنتاب</option>
+
+      <select id="filterCondition">
+        <option value="all">كل الحالات</option>
+        <option value="جديد">جديد</option>
+        <option value="مستعمل">مستعمل</option>
       </select>
-      <button type="button" class="btn-green" data-action="search">بحث</button>
-      <button type="button" class="btn-red" data-action="reset-home">الكل</button>
+
+      <button type="button" class="btn-green" data-action="apply-filters">بحث</button>
+      <button type="button" class="btn-outline" data-action="reset-all">إعادة ضبط</button>
     </div>
 
-    <div class="quick-nav">
-      <button type="button" class="btn-green" data-action="my-profile">ملفي</button>
-      <button type="button" class="btn-green" data-action="open-inbox">الرسائل</button>
-      <button type="button" class="btn-red" data-action="open-add-ad">+ إعلان</button>
+    <div class="action-bar">
+      <button type="button" class="btn-red" data-action="open-create-ad">+ نشر إعلان</button>
+      <button type="button" class="btn-blue" data-action="open-inbox">💬 المحادثات</button>
+      <button type="button" class="btn-green" data-action="my-ads">إعلاناتي</button>
+      <button type="button" class="btn-outline" data-action="my-favorites">❤️ المفضلة</button>
     </div>
   </section>
 
-  <!-- شريط الأقسام -->
-  <div class="categories-strip" id="categoriesStrip">
+  <div class="categories-bar" id="catBar">
     <span class="cat-pill active" data-cat="all">الكل</span>
-    <span class="cat-pill" data-cat="إلكترونيات">📱 إلكترونيات</span>
-    <span class="cat-pill" data-cat="سيارات">🚗 سيارات</span>
+    <span class="cat-pill" data-cat="سيارات ومركبات">🚗 سيارات ومركبات</span>
     <span class="cat-pill" data-cat="عقارات">🏠 عقارات</span>
-    <span class="cat-pill" data-cat="حيوانات">🐑 حيوانات</span>
+    <span class="cat-pill" data-cat="موبايلات وإلكترونيات">📱 موبايلات وإلكترونيات</span>
     <span class="cat-pill" data-cat="أثاث ومنزل">🛋️ أثاث ومنزل</span>
+    <span class="cat-pill" data-cat="حيوانات وطيور">🐾 حيوانات وطيور</span>
     <span class="cat-pill" data-cat="أخرى">📦 أخرى</span>
   </div>
 
-  <!-- المحتوى الرئيسي -->
   <main class="container">
-    <div class="section-title">
-      <span id="viewTitle">أحدث الإعلانات</span>
-      <span id="adsCount" style="font-size: 0.85rem; color: var(--muted);"></span>
+    <div class="top-list-header">
+      <h2 id="listHeading" style="font-size:1.15rem;">أحدث الإعلانات</h2>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span id="adsCounter" style="font-size:0.85rem; color:var(--muted);"></span>
+        <select id="sortAds" style="padding:6px 10px; border:1px solid var(--border); border-radius:7px; background:#fff; font-size:0.85rem;">
+          <option value="newest">الترتيب: الأحدث</option>
+          <option value="price_asc">السعر: من الأقل للأعلى</option>
+          <option value="price_desc">السعر: من الأعلى للأقل</option>
+          <option value="views">الأكثر مشاهدة</option>
+        </select>
+      </div>
     </div>
-    <div class="ads-grid" id="adsContainer"></div>
+
+    <div class="ads-grid" id="adsGrid"></div>
   </main>
 
-  <!-- نافذة تسجيل الدخول -->
-  <div class="modal-overlay" id="loginModal">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3>تسجيل الدخول</h3>
-        <button type="button" class="close-modal" data-close-modal="loginModal">&times;</button>
+  <!-- نافذة تسجيل الدخول بالاسم وكلمة المرور فقط -->
+  <div class="modal-backdrop" id="authModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>تسجيل الدخول إلى رخيص</h3>
+        <button type="button" class="close-x" data-close="authModal">&times;</button>
       </div>
-      <form id="loginForm">
-        <div class="form-group">
-          <label for="loginEmail">البريد الإلكتروني</label>
-          <input type="email" id="loginEmail" required placeholder="example@gmail.com" />
+      <form id="authForm">
+        <div class="field">
+          <label for="authUsername">اسم المستخدم</label>
+          <input type="text" id="authUsername" required placeholder="اكتب اسمك" />
         </div>
-        <div class="form-group">
-          <label for="loginName">الاسم المعروض (اختياري)</label>
-          <input type="text" id="loginName" placeholder="اكتب اسمك" />
+        <div class="field">
+          <label for="authPassword">كلمة المرور</label>
+          <input type="password" id="authPassword" required placeholder="اكتب كلمة المرور" />
         </div>
-        <button type="submit" class="btn-green" style="width: 100%;">دخول</button>
+        <button type="submit" class="btn-green" style="width:100%;">دخول / تسجيل</button>
       </form>
     </div>
   </div>
 
-  <!-- نافذة إضافة / تعديل إعلان -->
-  <div class="modal-overlay" id="adModal">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3 id="adModalTitle">إضافة إعلان جديد</h3>
-        <button type="button" class="close-modal" data-close-modal="adModal">&times;</button>
+  <!-- نافذة نشر / تعديل إعلان -->
+  <div class="modal-backdrop" id="adFormModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3 id="adFormTitle">نشر إعلان جديد</h3>
+        <button type="button" class="close-x" data-close="adFormModal">&times;</button>
       </div>
       <form id="adForm">
-        <input type="hidden" id="editAdId" />
-        <div class="form-group">
-          <label for="adTitle">عنوان الإعلان *</label>
-          <input type="text" id="adTitle" required placeholder="مثال: آيفون 15 برو نظيف" />
+        <input type="hidden" id="adEditId" />
+
+        <div class="field">
+          <label for="adTitleInput">عنوان الإعلان *</label>
+          <input type="text" id="adTitleInput" required placeholder="مثال: سيارة هيونداي أفانتي" />
         </div>
-        <div class="form-group">
-          <label for="adPrice">السعر (ليرة تركية)</label>
-          <input type="text" id="adPrice" placeholder="مثال: 15000" />
+
+        <div class="field">
+          <label for="adPriceInput">السعر</label>
+          <input type="text" id="adPriceInput" placeholder="مثال: 5500$" />
         </div>
-        <div class="form-group">
-          <label for="adCategory">القسم</label>
-          <select id="adCategory">
-            <option value="إلكترونيات">إلكترونيات</option>
-            <option value="سيارات">سيارات</option>
+
+        <div class="field">
+          <label for="adCityInput">المدينة (سوريا)</label>
+          <select id="adCityInput">
+            <option value="دمشق">دمشق</option>
+            <option value="ريف دمشق">ريف دمشق</option>
+            <option value="حلب">حلب</option>
+            <option value="حمص">حمص</option>
+            <option value="حماة">حماة</option>
+            <option value="اللاذقية">اللاذقية</option>
+            <option value="طرطوس">طرطوس</option>
+            <option value="إدلب">إدلب</option>
+            <option value="درعا">درعا</option>
+            <option value="دير الزور">دير الزور</option>
+            <option value="الحسكة">الحسكة</option>
+            <option value="الرقة">الرقة</option>
+            <option value="السويداء">السويداء</option>
+            <option value="القنيطرة">القنيطرة</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="adCategoryInput">القسم</label>
+          <select id="adCategoryInput">
+            <option value="سيارات ومركبات">سيارات ومركبات</option>
             <option value="عقارات">عقارات</option>
-            <option value="حيوانات">حيوانات</option>
+            <option value="موبايلات وإلكترونيات">موبايلات وإلكترونيات</option>
             <option value="أثاث ومنزل">أثاث ومنزل</option>
+            <option value="حيوانات وطيور">حيوانات وطيور</option>
             <option value="أخرى">أخرى</option>
           </select>
         </div>
-        <div class="form-group">
-          <label for="adCity">المدينة</label>
-          <select id="adCity">
-            <option value="أنطاليا">أنطاليا</option>
-            <option value="إسطنبول">إسطنبول</option>
-            <option value="أنقرة">أنقرة</option>
-            <option value="إزمير">إزمير</option>
-            <option value="مرسين">مرسين</option>
-            <option value="غازي عنتاب">غازي عنتاب</option>
+
+        <div class="field">
+          <label for="adConditionInput">حالة المنتج</label>
+          <select id="adConditionInput">
+            <option value="مستعمل">مستعمل</option>
+            <option value="جديد">جديد</option>
           </select>
         </div>
-        <div class="form-group">
-          <label for="adDescription">تفاصيل الإعلان</label>
-          <textarea id="adDescription" rows="4" placeholder="اكتب مواصفات وحالة المنتج..."></textarea>
+
+        <div class="field">
+          <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+            <input type="checkbox" id="adNegotiableInput" style="width:auto;" />
+            <span>قابل للتفاوض</span>
+          </label>
         </div>
-        <div class="form-group">
-          <label for="adImageInput">صورة الإعلان</label>
-          <input type="file" id="adImageInput" accept="image/*" />
-          <img id="adImagePreview" class="preview-img" alt="معاينة الصورة" />
+
+        <div class="field">
+          <label for="adDescInput">الوصف والتفاصيل</label>
+          <textarea id="adDescInput" rows="4" placeholder="اكتب التفاصيل الكاملة للإعلان..."></textarea>
         </div>
-        <div style="display: flex; gap: 8px;">
-          <button type="submit" class="btn-green" id="saveAdBtn" style="flex: 1;">حفظ الإعلان</button>
-          <button type="button" class="btn-outline" data-close-modal="adModal">إلغاء</button>
+
+        <div class="field">
+          <label for="adImgFile">صورة الإعلان</label>
+          <input type="file" id="adImgFile" accept="image/*" />
+          <img id="adImgPreview" class="img-preview" alt="معاينة" />
         </div>
+
+        <div style="display:flex; gap:8px;">
+          <button type="submit" class="btn-green" id="adSubmitBtn" style="flex:1;">نشر الإعلان</button>
+          <button type="button" class="btn-outline" data-close="adFormModal">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- نافذة المحادثات -->
+  <div class="modal-backdrop" id="chatModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3 id="chatHeading">المحادثات</h3>
+        <button type="button" class="close-x" data-close="chatModal">&times;</button>
+      </div>
+      <div class="partners-list" id="partnersList"></div>
+      <div class="chat-box" id="chatBox"></div>
+      <form id="chatSendForm" style="display:flex; gap:8px;">
+        <input type="hidden" id="chatPartnerInput" />
+        <input type="hidden" id="chatAdIdInput" />
+        <input type="hidden" id="chatAdTitleInput" />
+        <input type="text" id="chatMsgInput" placeholder="اكتب رسالتك..." required style="flex:1; padding:8px; border:1px solid var(--border); border-radius:7px;" />
+        <button type="submit" class="btn-blue">إرسال</button>
       </form>
     </div>
   </div>
 
   <!-- نافذة التعليقات -->
-  <div class="modal-overlay" id="commentsModal">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3 id="commentsModalTitle">التعليقات</h3>
-        <button type="button" class="close-modal" data-close-modal="commentsModal">&times;</button>
+  <div class="modal-backdrop" id="commentsModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3 id="commentsHeading">التعليقات</h3>
+        <button type="button" class="close-x" data-close="commentsModal">&times;</button>
       </div>
-      <div class="comments-list" id="commentsList"></div>
-      <form id="commentForm" style="display: flex; gap: 8px;">
-        <input type="hidden" id="commentAdId" />
-        <input type="text" id="commentInput" placeholder="اكتب تعليقك هنا..." required style="flex: 1; padding: 8px; border: 1px solid var(--border); border-radius: 6px;" />
-        <button type="submit" class="btn-green">إرسال</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- نافذة الدردشة والرسائل -->
-  <div class="modal-overlay" id="chatModal">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3 id="chatModalTitle">الرسائل</h3>
-        <button type="button" class="close-modal" data-close-modal="chatModal">&times;</button>
-      </div>
-      <div class="chat-messages" id="chatMessagesList"></div>
-      <form id="chatForm" style="display: flex; gap: 8px;">
-        <input type="hidden" id="chatToEmail" />
-        <input type="hidden" id="chatAdId" />
-        <input type="hidden" id="chatAdTitle" />
-        <input type="text" id="chatInput" placeholder="اكتب رسالتك..." required style="flex: 1; padding: 8px; border: 1px solid var(--border); border-radius: 6px;" />
+      <div class="chat-box" id="commentsBox"></div>
+      <form id="commentSendForm" style="display:flex; gap:8px;">
+        <input type="hidden" id="commentAdIdInput" />
+        <input type="text" id="commentTextInput" placeholder="اكتب تعليقاً..." required style="flex:1; padding:8px; border:1px solid var(--border); border-radius:7px;" />
         <button type="submit" class="btn-green">إرسال</button>
       </form>
     </div>
   </div>
 
   <!-- نافذة تكبير الصورة -->
-  <div class="modal-overlay" id="lightboxModal" data-close-modal="lightboxModal">
-    <img id="lightboxImg" class="lightbox-img" alt="صورة مكبرة" />
+  <div class="modal-backdrop" id="lightboxModal" data-close="lightboxModal">
+    <img id="lightboxTarget" class="lightbox-img" alt="صورة مكبرة" />
   </div>
 
   <script>
     (function () {
       'use strict';
 
-      // حالة التطبيق
       let currentUser = null;
-      let allAds = [];
-      let isMyProfileView = false;
-      let uploadedImageBase64 = '';
+      let adsList = [];
+      let currentMode = 'all';
+      let selectedImageData = '';
+      let activeChatPartner = '';
 
-      // استرجاع بيانات المستخدم من localStorage بأمان
-      function loadStoredUser() {
+      function loadUser() {
         try {
-          const raw = localStorage.getItem('rakhis_user');
+          const raw = localStorage.getItem('rakhis_auth_user');
           currentUser = raw ? JSON.parse(raw) : null;
         } catch (e) {
-          localStorage.removeItem('rakhis_user');
           currentUser = null;
         }
         renderAuthHeader();
       }
 
-      function renderAuthHeader() {
-        const authArea = document.getElementById('authArea');
-        if (!authArea) return;
+      function saveUser() {
+        if (currentUser) {
+          localStorage.setItem('rakhis_auth_user', JSON.stringify(currentUser));
+        } else {
+          localStorage.removeItem('rakhis_auth_user');
+        }
+        renderAuthHeader();
+      }
 
-        if (currentUser && currentUser.email) {
-          authArea.innerHTML = `
+      function renderAuthHeader() {
+        const box = document.getElementById('authBox');
+        if (!box) return;
+        if (currentUser && currentUser.username) {
+          box.innerHTML = `
+            <span class="user-chip">👤 ${escapeHtml(currentUser.username)}</span>
             <button type="button" class="btn-red" data-action="logout">خروج</button>
-            <span class="user-badge">${escapeHtml(currentUser.email)}</span>
           `;
         } else {
-          authArea.innerHTML = `
-            <button type="button" class="btn-green" data-action="open-login">تسجيل الدخول</button>
+          box.innerHTML = `
+            <button type="button" class="btn-green" data-action="open-auth">تسجيل الدخول</button>
           `;
         }
       }
 
-      function escapeHtml(str) {
-        return String(str || '')
+      function escapeHtml(text) {
+        return String(text || '')
           .replace(/&/g, '&amp;')
           .replace(/</g, '&lt;')
           .replace(/>/g, '&gt;')
           .replace(/"/g, '&quot;');
       }
 
-      function openModal(modalId) {
-        const el = document.getElementById(modalId);
+      function openModal(id) {
+        const el = document.getElementById(id);
         if (el) el.classList.add('open');
       }
 
-      function closeModal(modalId) {
-        const el = document.getElementById(modalId);
+      function closeModal(id) {
+        const el = document.getElementById(id);
         if (el) el.classList.remove('open');
       }
 
-      function requireAuth() {
-        if (currentUser && currentUser.email) return true;
-        openModal('loginModal');
+      function ensureLoggedIn() {
+        if (currentUser && currentUser.username) return true;
+        openModal('authModal');
         return false;
       }
 
-      // جلب الإعلانات من السيرفر
-      async function fetchAds() {
-        const q = document.getElementById('searchInput').value.trim();
-        const category = document.getElementById('filterCategory').value;
+      async function loadAds() {
+        const q = document.getElementById('searchQ').value.trim();
         const city = document.getElementById('filterCity').value;
+        const category = document.getElementById('filterCategory').value;
+        const condition = document.getElementById('filterCondition').value;
+        const sort = document.getElementById('sortAds').value;
 
         const params = new URLSearchParams();
         if (q) params.set('q', q);
-        if (category && category !== 'all') params.set('category', category);
         if (city && city !== 'all') params.set('city', city);
-        if (isMyProfileView && currentUser) params.set('owner', currentUser.email);
+        if (category && category !== 'all') params.set('category', category);
+        if (condition && condition !== 'all') params.set('condition', condition);
+        if (sort) params.set('sort', sort);
+        if (currentMode === 'mine' && currentUser) params.set('owner', currentUser.username);
 
         try {
           const res = await fetch('/api/ads?' + params.toString());
-          if (!res.ok) throw new Error('فشل جلب الإعلانات');
-          allAds = await res.json();
-          renderAds(allAds);
+          if (!res.ok) throw new Error('فشل تحميل الإعلانات');
+          let data = await res.json();
+
+          if (currentMode === 'favorites') {
+            const favs = (currentUser && currentUser.favorites) || [];
+            data = data.filter(ad => favs.includes(ad.id));
+          }
+
+          adsList = data;
+          renderAds(adsList);
         } catch (err) {
           console.error(err);
-          document.getElementById('adsContainer').innerHTML =
-            '<div class="empty-state">تعذر تحميل الإعلانات حالياً.</div>';
+          document.getElementById('adsGrid').innerHTML =
+            '<div class="empty-msg">تعذر تحميل الإعلانات حالياً.</div>';
         }
       }
 
-      function renderAds(ads) {
-        const container = document.getElementById('adsContainer');
-        const countEl = document.getElementById('adsCount');
-        countEl.textContent = `(${ads.length} إعلان)`;
+      function renderAds(items) {
+        const grid = document.getElementById('adsGrid');
+        document.getElementById('adsCounter').textContent = `(${items.length} إعلان)`;
 
-        if (!ads.length) {
-          container.innerHTML = '<div class="empty-state">لا توجد إعلانات مطابقة.</div>';
+        if (!items.length) {
+          grid.innerHTML = '<div class="empty-msg">لا توجد إعلانات مطابقة.</div>';
           return;
         }
 
-        container.innerHTML = ads.map(ad => {
-          const isOwner = currentUser && currentUser.email.toLowerCase() === (ad.ownerEmail || '').toLowerCase();
-          const imgSrc = ad.image || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="250"><rect width="100%" height="100%" fill="%23e2e8f0"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2364748b" font-size="20">بدون صورة</text></svg>';
+        const favs = (currentUser && currentUser.favorites) || [];
+
+        grid.innerHTML = items.map(ad => {
+          const isOwner =
+            currentUser &&
+            currentUser.username.toLowerCase() === (ad.ownerUsername || '').toLowerCase();
+          const isFav = favs.includes(ad.id);
+          const imgSrc =
+            ad.image ||
+            'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="240"><rect width="100%" height="100%" fill="%23e2e8f0"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2364748b" font-size="18">بدون صورة</text></svg>';
+
           const commentsCount = Array.isArray(ad.comments) ? ad.comments.length : 0;
+          const viewsCount = Number(ad.views) || 0;
 
           return `
-            <div class="ad-card" data-id="${escapeHtml(ad.id)}">
-              <img src="${imgSrc}" class="ad-image" data-action="zoom-img" alt="${escapeHtml(ad.title)}" />
+            <div class="ad-card" data-ad-id="${escapeHtml(ad.id)}">
+              <div class="ad-img-wrap">
+                <img src="${imgSrc}" class="ad-img" data-action="zoom" data-ad-id="${escapeHtml(ad.id)}" alt="${escapeHtml(ad.title)}" />
+                <button type="button" class="fav-btn" data-action="toggle-fav" data-ad-id="${escapeHtml(ad.id)}" title="حفظ في المفضلة">
+                  ${isFav ? '❤️' : '🤍'}
+                </button>
+              </div>
+
               <div class="ad-body">
+                <div class="badges-row">
+                  <span class="badge">${escapeHtml(ad.city || 'سوريا')}</span>
+                  <span class="badge">${escapeHtml(ad.condition || 'مستعمل')}</span>
+                  ${ad.negotiable ? '<span class="badge badge-neg">قابل للتفاوض</span>' : ''}
+                  <span class="badge">👁️ ${viewsCount}</span>
+                </div>
+
                 <div class="ad-title">${escapeHtml(ad.title)}</div>
-                <div class="ad-price">${escapeHtml(ad.price)} ل.ت</div>
-                <div class="ad-meta">${escapeHtml(ad.category)} • ${escapeHtml(ad.city)} • ${escapeHtml(ad.ownerName)}</div>
+                <div class="ad-price">${escapeHtml(ad.price)}</div>
+                <div class="ad-meta">${escapeHtml(ad.category)} • الناشر: <strong>${escapeHtml(ad.ownerUsername)}</strong></div>
                 <div class="ad-desc">${escapeHtml(ad.description)}</div>
               </div>
+
+              ${!isOwner ? `
+                <div class="quick-msg-box">
+                  <input type="text" class="quick-msg-input" placeholder="رسالة سريعة لصاحب الإعلان..." />
+                  <button type="button" class="btn-blue" data-action="quick-send" data-ad-id="${escapeHtml(ad.id)}">إرسال</button>
+                </div>
+              ` : ''}
+
               <div class="ad-actions">
                 <button type="button" class="btn-outline" data-action="open-comments" data-ad-id="${escapeHtml(ad.id)}">
                   💬 تعليقات (${commentsCount})
                 </button>
+
                 ${!isOwner ? `
-                  <button type="button" class="btn-green" data-action="open-chat" data-ad-id="${escapeHtml(ad.id)}">
-                    ✉️ مراسلة
+                  <button type="button" class="btn-green" data-action="open-ad-chat" data-ad-id="${escapeHtml(ad.id)}">
+                    ✉️ محادثة
                   </button>
                 ` : `
                   <button type="button" class="btn-green" data-action="edit-ad" data-ad-id="${escapeHtml(ad.id)}">
@@ -702,172 +929,222 @@
         }).join('');
       }
 
-      // فتح نافذة إضافة إعلان
-      function handleOpenAddAd() {
-        if (!requireAuth()) return;
+      function openCreateAdModal() {
+        if (!ensureLoggedIn()) return;
         document.getElementById('adForm').reset();
-        document.getElementById('editAdId').value = '';
-        document.getElementById('adModalTitle').textContent = 'إضافة إعلان جديد';
-        document.getElementById('saveAdBtn').textContent = 'نشر الإعلان';
-        uploadedImageBase64 = '';
-        const preview = document.getElementById('adImagePreview');
+        document.getElementById('adEditId').value = '';
+        document.getElementById('adFormTitle').textContent = 'نشر إعلان جديد';
+        document.getElementById('adSubmitBtn').textContent = 'نشر الإعلان';
+        selectedImageData = '';
+        const preview = document.getElementById('adImgPreview');
         preview.style.display = 'none';
         preview.src = '';
-        openModal('adModal');
+        openModal('adFormModal');
       }
 
-      // فتح نافذة تعديل إعلان
-      function handleOpenEditAd(adId) {
-        if (!requireAuth()) return;
-        const ad = allAds.find(a => a.id === adId);
-        if (!ad) {
-          alert('لم يتم العثور على الإعلان');
-          return;
-        }
+      function openEditAdModal(adId) {
+        if (!ensureLoggedIn()) return;
+        const ad = adsList.find(item => item.id === adId);
+        if (!ad) return alert('لم يتم العثور على الإعلان');
 
-        document.getElementById('editAdId').value = ad.id;
-        document.getElementById('adModalTitle').textContent = 'تعديل الإعلان';
-        document.getElementById('saveAdBtn').textContent = 'حفظ التعديلات';
-        document.getElementById('adTitle').value = ad.title || '';
-        document.getElementById('adPrice').value = ad.price || '';
-        document.getElementById('adCategory').value = ad.category || 'أخرى';
-        document.getElementById('adCity').value = ad.city || 'أنطاليا';
-        document.getElementById('adDescription').value = ad.description || '';
-        uploadedImageBase64 = ad.image || '';
+        document.getElementById('adEditId').value = ad.id;
+        document.getElementById('adFormTitle').textContent = 'تعديل الإعلان';
+        document.getElementById('adSubmitBtn').textContent = 'حفظ التعديلات';
+        document.getElementById('adTitleInput').value = ad.title || '';
+        document.getElementById('adPriceInput').value = ad.price || '';
+        document.getElementById('adCityInput').value = ad.city || 'دمشق';
+        document.getElementById('adCategoryInput').value = ad.category || 'أخرى';
+        document.getElementById('adConditionInput').value = ad.condition || 'مستعمل';
+        document.getElementById('adNegotiableInput').checked = Boolean(ad.negotiable);
+        document.getElementById('adDescInput').value = ad.description || '';
+        selectedImageData = ad.image || '';
 
-        const preview = document.getElementById('adImagePreview');
+        const preview = document.getElementById('adImgPreview');
         if (ad.image) {
           preview.src = ad.image;
           preview.style.display = 'block';
         } else {
           preview.style.display = 'none';
         }
-
-        openModal('adModal');
+        openModal('adFormModal');
       }
 
-      // حذف إعلان
-      async function handleDeleteAd(adId) {
-        if (!requireAuth()) return;
-        if (!confirm('هل أنت متأكد من حذف هذا الإعلان؟')) return;
+      async function deleteAdById(adId) {
+        if (!ensureLoggedIn()) return;
+        if (!confirm('هل تريد حذف هذا الإعلان نهائياً؟')) return;
 
         try {
           const res = await fetch(`/api/ads/${encodeURIComponent(adId)}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ownerEmail: currentUser.email })
+            body: JSON.stringify({ ownerUsername: currentUser.username })
           });
-          if (!res.ok) {
-            const errData = await res.json().catch(() => ({}));
-            throw new Error(errData.message || 'فشل الحذف');
-          }
-          await fetchAds();
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.message || 'فشل الحذف');
+          await loadAds();
         } catch (err) {
           alert(err.message);
         }
       }
 
-      // التعليقات
-      function handleOpenComments(adId) {
-        const ad = allAds.find(a => a.id === adId);
-        if (!ad) return;
-        document.getElementById('commentAdId').value = ad.id;
-        document.getElementById('commentsModalTitle').textContent = `تعليقات: ${ad.title}`;
-        const list = document.getElementById('commentsList');
-        const comments = Array.isArray(ad.comments) ? ad.comments : [];
-
-        if (!comments.length) {
-          list.innerHTML = '<div style="color: var(--muted); text-align:center;">لا توجد تعليقات بعد.</div>';
-        } else {
-          list.innerHTML = comments.map(c => `
-            <div class="comment-item">
-              <strong>${escapeHtml(c.userName)}:</strong> ${escapeHtml(c.text)}
-            </div>
-          `).join('');
-        }
-        openModal('commentsModal');
-      }
-
-      // الدردشة المباشرة وصندوق الوارد
-      async function handleOpenChat(adId) {
-        if (!requireAuth()) return;
-        const ad = allAds.find(a => a.id === adId);
-        if (!ad) return;
-
-        document.getElementById('chatToEmail').value = ad.ownerEmail;
-        document.getElementById('chatAdId').value = ad.id;
-        document.getElementById('chatAdTitle').value = ad.title;
-        document.getElementById('chatModalTitle').textContent = `مراسلة بخصوص: ${ad.title}`;
-        document.getElementById('chatForm').style.display = 'flex';
-        await loadMessages(ad.ownerEmail);
-        openModal('chatModal');
-      }
-
-      async function handleOpenInbox() {
-        if (!requireAuth()) return;
-        document.getElementById('chatModalTitle').textContent = 'صندوق الرسائل';
-        document.getElementById('chatForm').style.display = 'none';
-        await loadMessages(null);
-        openModal('chatModal');
-      }
-
-      async function loadMessages(partnerEmail) {
-        const list = document.getElementById('chatMessagesList');
-        list.innerHTML = 'جاري التحميل...';
+      async function toggleFavorite(adId) {
+        if (!ensureLoggedIn()) return;
         try {
-          const res = await fetch(`/api/messages?email=${encodeURIComponent(currentUser.email)}`);
+          const res = await fetch('/api/favorites/toggle', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: currentUser.username, adId })
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.message || 'تعذر تحديث المفضلة');
+          currentUser.favorites = data.favorites || [];
+          saveUser();
+          await loadAds();
+        } catch (err) {
+          alert(err.message);
+        }
+      }
+
+      async function sendQuickMessageAndOpenChat(cardEl, adId) {
+        if (!ensureLoggedIn()) return;
+        const ad = adsList.find(item => item.id === adId);
+        if (!ad) return;
+
+        const inputEl = cardEl ? cardEl.querySelector('.quick-msg-input') : null;
+        const text = inputEl ? inputEl.value.trim() : '';
+        if (!text) {
+          openChatWithPartner(ad.ownerUsername, ad.id, ad.title);
+          return;
+        }
+
+        try {
+          const res = await fetch('/api/messages', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              from: currentUser.username,
+              to: ad.ownerUsername,
+              adId: ad.id,
+              adTitle: ad.title,
+              text
+            })
+          });
+          if (!res.ok) throw new Error('فشل إرسال الرسالة السريعة');
+          if (inputEl) inputEl.value = '';
+          await openChatWithPartner(ad.ownerUsername, ad.id, ad.title);
+        } catch (err) {
+          alert(err.message);
+        }
+      }
+
+      async function openChatWithPartner(partnerName, adId = '', adTitle = '') {
+        if (!ensureLoggedIn()) return;
+        activeChatPartner = partnerName || '';
+        document.getElementById('chatPartnerInput').value = activeChatPartner;
+        document.getElementById('chatAdIdInput').value = adId;
+        document.getElementById('chatAdTitleInput').value = adTitle;
+        document.getElementById('chatHeading').textContent = activeChatPartner
+          ? `محادثة مع: ${activeChatPartner}`
+          : 'المحادثات';
+
+        await refreshChatView();
+        openModal('chatModal');
+      }
+
+      async function refreshChatView() {
+        const partnersEl = document.getElementById('partnersList');
+        const boxEl = document.getElementById('chatBox');
+        boxEl.innerHTML = 'جاري التحميل...';
+
+        try {
+          const res = await fetch(`/api/messages?username=${encodeURIComponent(currentUser.username)}`);
           const msgs = await res.json();
-          const filtered = partnerEmail
-            ? msgs.filter(m => m.from === partnerEmail || m.to === partnerEmail)
+
+          const me = currentUser.username.toLowerCase();
+          const partnerSet = new Set();
+          msgs.forEach(m => {
+            const other = (m.from || '').toLowerCase() === me ? m.to : m.from;
+            if (other) partnerSet.add(other);
+          });
+          if (activeChatPartner) partnerSet.add(activeChatPartner);
+
+          const partners = Array.from(partnerSet);
+          if (!activeChatPartner && partners.length) {
+            activeChatPartner = partners[0];
+            document.getElementById('chatPartnerInput').value = activeChatPartner;
+          }
+
+          partnersEl.innerHTML = partners.map(p => `
+            <span class="partner-pill ${p.toLowerCase() === (activeChatPartner || '').toLowerCase() ? 'active' : ''}" data-action="select-partner" data-partner="${escapeHtml(p)}">
+              ${escapeHtml(p)}
+            </span>
+          `).join('');
+
+          const thread = activeChatPartner
+            ? msgs.filter(m =>
+                ((m.from || '').toLowerCase() === me && (m.to || '').toLowerCase() === activeChatPartner.toLowerCase()) ||
+                ((m.to || '').toLowerCase() === me && (m.from || '').toLowerCase() === activeChatPartner.toLowerCase())
+              )
             : msgs;
 
-          if (!filtered.length) {
-            list.innerHTML = '<div style="color: var(--muted); text-align:center;">لا توجد رسائل.</div>';
+          if (!thread.length) {
+            boxEl.innerHTML = '<div style="text-align:center; color:var(--muted);">لا توجد رسائل في هذه المحادثة بعد.</div>';
             return;
           }
 
-          list.innerHTML = filtered.map(m => `
-            <div class="chat-msg">
+          boxEl.innerHTML = thread.map(m => `
+            <div class="msg-row">
               <div style="font-size:0.78rem; color:var(--muted);">
-                من: <strong>${escapeHtml(m.from)}</strong> إلى: <strong>${escapeHtml(m.to)}</strong>
-                ${m.adTitle ? ` (${escapeHtml(m.adTitle)})` : ''}
+                <strong>${escapeHtml(m.from)}</strong> → <strong>${escapeHtml(m.to)}</strong>
+                ${m.adTitle ? `• <span>${escapeHtml(m.adTitle)}</span>` : ''}
               </div>
               <div>${escapeHtml(m.text)}</div>
             </div>
           `).join('');
-        } catch (e) {
-          list.innerHTML = 'خطأ في تحميل الرسائل.';
+          boxEl.scrollTop = boxEl.scrollHeight;
+        } catch (err) {
+          boxEl.innerHTML = 'تعذر تحميل المحادثات.';
         }
       }
 
-      // مستمع نقرات موحد (Event Delegation) يعمل على سطح المكتب والجوال دون تعارض
-      document.addEventListener('click', (e) => {
-        // إغلاق المودال
-        const closeTarget = e.target.closest('[data-close-modal]');
-        if (closeTarget) {
-          const modalId = closeTarget.getAttribute('data-close-modal');
-          if (e.target === closeTarget || closeTarget.classList.contains('close-modal')) {
-            closeModal(modalId);
-            return;
-          }
+      function openCommentsForAd(adId) {
+        const ad = adsList.find(item => item.id === adId);
+        if (!ad) return;
+        document.getElementById('commentAdIdInput').value = ad.id;
+        document.getElementById('commentsHeading').textContent = `تعليقات: ${ad.title}`;
+        const box = document.getElementById('commentsBox');
+        const comments = Array.isArray(ad.comments) ? ad.comments : [];
+        box.innerHTML = comments.length
+          ? comments.map(c => `
+              <div class="msg-row">
+                <strong>${escapeHtml(c.username)}:</strong> ${escapeHtml(c.text)}
+              </div>
+            `).join('')
+          : '<div style="text-align:center; color:var(--muted);">لا توجد تعليقات بعد.</div>';
+        openModal('commentsModal');
+      }
+
+      document.addEventListener('click', async (e) => {
+        const closeBtn = e.target.closest('[data-close]');
+        if (closeBtn && (e.target === closeBtn || closeBtn.classList.contains('close-x'))) {
+          closeModal(closeBtn.getAttribute('data-close'));
+          return;
         }
 
-        // النقر خارج صندوق المودال يغلقه
-        if (e.target.classList.contains('modal-overlay')) {
+        if (e.target.classList.contains('modal-backdrop')) {
           e.target.classList.remove('open');
           return;
         }
 
-        // اختيار قسم من الشريط الأفقي
         const catPill = e.target.closest('.cat-pill');
         if (catPill) {
           document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
           catPill.classList.add('active');
           document.getElementById('filterCategory').value = catPill.dataset.cat;
-          isMyProfileView = false;
-          document.getElementById('viewTitle').textContent =
+          currentMode = 'all';
+          document.getElementById('listHeading').textContent =
             catPill.dataset.cat === 'all' ? 'أحدث الإعلانات' : `قسم: ${catPill.dataset.cat}`;
-          fetchAds();
+          loadAds();
           return;
         }
 
@@ -876,105 +1153,129 @@
 
         const action = actionEl.dataset.action;
         const adId = actionEl.dataset.adId;
+        const cardEl = actionEl.closest('.ad-card');
 
-        if (action === 'open-login') {
-          openModal('loginModal');
+        if (action === 'open-auth') {
+          openModal('authModal');
         } else if (action === 'logout') {
-          localStorage.removeItem('rakhis_user');
           currentUser = null;
-          isMyProfileView = false;
-          renderAuthHeader();
-          fetchAds();
-        } else if (action === 'open-add-ad') {
-          handleOpenAddAd();
+          currentMode = 'all';
+          saveUser();
+          document.getElementById('listHeading').textContent = 'أحدث الإعلانات';
+          loadAds();
+        } else if (action === 'open-create-ad') {
+          openCreateAdModal();
         } else if (action === 'edit-ad') {
-          handleOpenEditAd(adId);
+          openEditAdModal(adId);
         } else if (action === 'delete-ad') {
-          handleDeleteAd(adId);
-        } else if (action === 'open-comments') {
-          handleOpenComments(adId);
-        } else if (action === 'open-chat') {
-          handleOpenChat(adId);
+          await deleteAdById(adId);
+        } else if (action === 'toggle-fav') {
+          await toggleFavorite(adId);
+        } else if (action === 'quick-send') {
+          await sendQuickMessageAndOpenChat(cardEl, adId);
+        } else if (action === 'open-ad-chat') {
+          const ad = adsList.find(item => item.id === adId);
+          if (ad) {
+            await openChatWithPartner(ad.ownerUsername, ad.id, ad.title);
+          }
         } else if (action === 'open-inbox') {
-          handleOpenInbox();
-        } else if (action === 'my-profile') {
-          if (!requireAuth()) return;
-          isMyProfileView = true;
-          document.getElementById('viewTitle').textContent = `إعلاناتي (${currentUser.email})`;
-          fetchAds();
-        } else if (action === 'search') {
-          isMyProfileView = false;
-          document.getElementById('viewTitle').textContent = 'نتائج البحث';
-          fetchAds();
-        } else if (action === 'reset-home') {
-          isMyProfileView = false;
-          document.getElementById('searchInput').value = '';
-          document.getElementById('filterCategory').value = 'all';
+          await openChatWithPartner('', '', '');
+        } else if (action === 'select-partner') {
+          activeChatPartner = actionEl.dataset.partner || '';
+          document.getElementById('chatPartnerInput').value = activeChatPartner;
+          document.getElementById('chatHeading').textContent = `محادثة مع: ${activeChatPartner}`;
+          await refreshChatView();
+        } else if (action === 'open-comments') {
+          openCommentsForAd(adId);
+        } else if (action === 'my-ads') {
+          if (!ensureLoggedIn()) return;
+          currentMode = 'mine';
+          document.getElementById('listHeading').textContent = `إعلاناتي (${currentUser.username})`;
+          loadAds();
+        } else if (action === 'my-favorites') {
+          if (!ensureLoggedIn()) return;
+          currentMode = 'favorites';
+          document.getElementById('listHeading').textContent = 'الإعلانات المفضلة';
+          loadAds();
+        } else if (action === 'apply-filters') {
+          currentMode = 'all';
+          document.getElementById('listHeading').textContent = 'نتائج البحث';
+          loadAds();
+        } else if (action === 'reset-all') {
+          currentMode = 'all';
+          document.getElementById('searchQ').value = '';
           document.getElementById('filterCity').value = 'all';
+          document.getElementById('filterCategory').value = 'all';
+          document.getElementById('filterCondition').value = 'all';
+          document.getElementById('sortAds').value = 'newest';
           document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
           document.querySelector('.cat-pill[data-cat="all"]').classList.add('active');
-          document.getElementById('viewTitle').textContent = 'أحدث الإعلانات';
-          fetchAds();
-        } else if (action === 'zoom-img') {
-          document.getElementById('lightboxImg').src = actionEl.src;
+          document.getElementById('listHeading').textContent = 'أحدث الإعلانات';
+          loadAds();
+        } else if (action === 'zoom') {
+          document.getElementById('lightboxTarget').src = actionEl.src;
           openModal('lightboxModal');
+          if (adId) {
+            fetch(`/api/ads/${encodeURIComponent(adId)}/view`, { method: 'POST' })
+              .then(() => loadAds())
+              .catch(() => {});
+          }
         }
       });
 
-      // معالجة رفع الصورة وتحويلها إلى Base64
-      document.getElementById('adImageInput').addEventListener('change', function () {
+      document.getElementById('sortAds').addEventListener('change', loadAds);
+
+      document.getElementById('adImgFile').addEventListener('change', function () {
         const file = this.files && this.files[0];
         if (!file) return;
         const reader = new FileReader();
         reader.onload = function (ev) {
-          uploadedImageBase64 = ev.target.result;
-          const preview = document.getElementById('adImagePreview');
-          preview.src = uploadedImageBase64;
+          selectedImageData = ev.target.result;
+          const preview = document.getElementById('adImgPreview');
+          preview.src = selectedImageData;
           preview.style.display = 'block';
         };
         reader.readAsDataURL(file);
       });
 
-      // إرسال نموذج تسجيل الدخول
-      document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      document.getElementById('authForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const email = document.getElementById('loginEmail').value.trim();
-        const name = document.getElementById('loginName').value.trim();
+        const username = document.getElementById('authUsername').value.trim();
+        const password = document.getElementById('authPassword').value.trim();
 
         try {
           const res = await fetch('/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, name })
+            body: JSON.stringify({ username, password })
           });
           const data = await res.json();
           if (!res.ok) throw new Error(data.message || 'فشل تسجيل الدخول');
 
           currentUser = data.user;
-          localStorage.setItem('rakhis_user', JSON.stringify(currentUser));
-          renderAuthHeader();
-          closeModal('loginModal');
-          fetchAds();
+          saveUser();
+          closeModal('authModal');
+          loadAds();
         } catch (err) {
           alert(err.message);
         }
       });
 
-      // إرسال نموذج إضافة / تعديل إعلان
       document.getElementById('adForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        if (!requireAuth()) return;
+        if (!ensureLoggedIn()) return;
 
-        const editId = document.getElementById('editAdId').value.trim();
+        const editId = document.getElementById('adEditId').value.trim();
         const payload = {
-          title: document.getElementById('adTitle').value.trim(),
-          price: document.getElementById('adPrice').value.trim(),
-          category: document.getElementById('adCategory').value,
-          city: document.getElementById('adCity').value,
-          description: document.getElementById('adDescription').value.trim(),
-          image: uploadedImageBase64,
-          ownerEmail: currentUser.email,
-          ownerName: currentUser.name
+          title: document.getElementById('adTitleInput').value.trim(),
+          price: document.getElementById('adPriceInput').value.trim(),
+          city: document.getElementById('adCityInput').value,
+          category: document.getElementById('adCategoryInput').value,
+          condition: document.getElementById('adConditionInput').value,
+          negotiable: document.getElementById('adNegotiableInput').checked,
+          description: document.getElementById('adDescInput').value.trim(),
+          image: selectedImageData,
+          ownerUsername: currentUser.username
         };
 
         const url = editId ? `/api/ads/${encodeURIComponent(editId)}` : '/api/ads';
@@ -987,53 +1288,25 @@
             body: JSON.stringify(payload)
           });
           const data = await res.json();
-          if (!res.ok) throw new Error(data.message || 'حدث خطأ أثناء الحفظ');
+          if (!res.ok) throw new Error(data.message || 'فشل حفظ الإعلان');
 
-          closeModal('adModal');
-          await fetchAds();
+          closeModal('adFormModal');
+          await loadAds();
         } catch (err) {
           alert(err.message);
         }
       });
 
-      // إرسال تعليق
-      document.getElementById('commentForm').addEventListener('submit', async (e) => {
+      document.getElementById('chatSendForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        if (!requireAuth()) return;
+        if (!ensureLoggedIn()) return;
 
-        const adId = document.getElementById('commentAdId').value;
-        const text = document.getElementById('commentInput').value.trim();
-        if (!text) return;
+        const to = document.getElementById('chatPartnerInput').value.trim() || activeChatPartner;
+        const adId = document.getElementById('chatAdIdInput').value;
+        const adTitle = document.getElementById('chatAdTitleInput').value;
+        const text = document.getElementById('chatMsgInput').value.trim();
 
-        try {
-          const res = await fetch(`/api/ads/${encodeURIComponent(adId)}/comments`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              text,
-              userEmail: currentUser.email,
-              userName: currentUser.name
-            })
-          });
-          if (!res.ok) throw new Error('فشل إضافة التعليق');
-
-          document.getElementById('commentInput').value = '';
-          await fetchAds();
-          handleOpenComments(adId);
-        } catch (err) {
-          alert(err.message);
-        }
-      });
-
-      // إرسال رسالة مباشرة
-      document.getElementById('chatForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (!requireAuth()) return;
-
-        const to = document.getElementById('chatToEmail').value;
-        const adId = document.getElementById('chatAdId').value;
-        const adTitle = document.getElementById('chatAdTitle').value;
-        const text = document.getElementById('chatInput').value.trim();
+        if (!to) return alert('اختر مستخدماً للمراسلة');
         if (!text) return;
 
         try {
@@ -1041,7 +1314,7 @@
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              from: currentUser.email,
+              from: currentUser.username,
               to,
               adId,
               adTitle,
@@ -1049,17 +1322,38 @@
             })
           });
           if (!res.ok) throw new Error('فشل إرسال الرسالة');
-
-          document.getElementById('chatInput').value = '';
-          await loadMessages(to);
+          document.getElementById('chatMsgInput').value = '';
+          await refreshChatView();
         } catch (err) {
           alert(err.message);
         }
       });
 
-      // تشغيل أولي عند تحميل الصفحة
-      loadStoredUser();
-      fetchAds();
+      document.getElementById('commentSendForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!ensureLoggedIn()) return;
+
+        const adId = document.getElementById('commentAdIdInput').value;
+        const text = document.getElementById('commentTextInput').value.trim();
+        if (!text) return;
+
+        try {
+          const res = await fetch(`/api/ads/${encodeURIComponent(adId)}/comments`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text, username: currentUser.username })
+          });
+          if (!res.ok) throw new Error('فشل إضافة التعليق');
+          document.getElementById('commentTextInput').value = '';
+          await loadAds();
+          openCommentsForAd(adId);
+        } catch (err) {
+          alert(err.message);
+        }
+      });
+
+      loadUser();
+      loadAds();
     })();
   </script>
 </body>

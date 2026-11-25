@@ -883,7 +883,7 @@
   <header>
     <div class="header-inner">
       <div class="brand-group">
-        <div class="brand-logo" onclick="showMarketView()">
+        <div class="brand-logo" onclick="goHomeReset()">
           <span class="badge-dot">رخيص</span>
           <span>السوق الشامل</span>
         </div>
@@ -924,7 +924,7 @@
     <section id="appChatView">
       <div class="chat-header-bar">
         <div style="display:flex; align-items:center; gap:10px;">
-          <button type="button" class="btn btn-surface" onclick="showMarketView()">⬅️ العودة للسوق</button>
+          <button type="button" class="btn btn-surface" onclick="handleBackAction()">⬅️ العودة للسوق</button>
           <strong style="color:var(--primary); font-size:1rem;">💬 المراسلات المباشرة</strong>
         </div>
         <span id="chatUserTag" style="font-size:0.82rem; color:var(--text-muted);"></span>
@@ -1038,7 +1038,7 @@
 
   <!-- شريط التنقل السفلي مثل التطبيقات الحديثة -->
   <nav class="bottom-nav">
-    <button type="button" class="bnav-item active" onclick="showMarketView()">
+    <button type="button" class="bnav-item active" onclick="goHomeReset()">
       <span class="bnav-ico">🏠</span>
       <span>الرئيسية</span>
     </button>
@@ -1205,6 +1205,8 @@
       }
     ];
 
+    const MODAL_IDS = ['authModal', 'publishModal', 'profileModal', 'detailsModal', 'cartModal'];
+
     let state = {
       currentUser: null,
       ads: [],
@@ -1217,10 +1219,97 @@
       activeChatPeer: '',
       activeChatAdId: '',
       adImageBase64: '',
-      avatarBase64: ''
+      avatarBase64: '',
+      historyDepth: 0,
+      ignoringPopState: false
     };
 
+    function pushNavState(kind) {
+      if (state.ignoringPopState) return;
+      try {
+        state.historyDepth += 1;
+        history.pushState({ rakhisNav: kind, depth: state.historyDepth }, '', '');
+      } catch (e) {}
+    }
+
+    function ensureBaseHistoryState() {
+      try {
+        if (!history.state || !history.state.rakhisBase) {
+          history.replaceState({ rakhisBase: true, depth: 0 }, '', '');
+        }
+      } catch (e) {}
+    }
+
+    function getOpenModalId() {
+      for (const id of MODAL_IDS) {
+        const el = document.getElementById(id);
+        if (el && el.classList.contains('open')) return id;
+      }
+      return '';
+    }
+
+    function handleBackAction() {
+      const openModalId = getOpenModalId();
+      if (openModalId) {
+        document.getElementById(openModalId).classList.remove('open');
+        return true;
+      }
+
+      const chatView = document.getElementById('appChatView');
+      if (chatView && chatView.classList.contains('active')) {
+        chatView.classList.remove('active');
+        document.getElementById('marketMainView').style.display = 'block';
+        return true;
+      }
+
+      if (state.selectedSubCategory) {
+        state.selectedSubCategory = '';
+        document.getElementById('filterSubCat').value = '';
+        updateCategoryUI();
+        applyFilters();
+        return true;
+      }
+
+      if (state.selectedCategory) {
+        state.selectedCategory = '';
+        state.selectedSubCategory = '';
+        document.getElementById('filterMainCat').value = '';
+        document.getElementById('filterSubCat').value = '';
+        updateCategoryUI();
+        applyFilters();
+        return true;
+      }
+
+      return false;
+    }
+
+    window.addEventListener('popstate', () => {
+      if (state.ignoringPopState) {
+        state.ignoringPopState = false;
+        return;
+      }
+      const handled = handleBackAction();
+      if (handled) {
+        try {
+          state.ignoringPopState = true;
+          history.pushState({ rakhisGuard: true, ts: Date.now() }, '', '');
+          setTimeout(() => { state.ignoringPopState = false; }, 50);
+        } catch (e) {
+          state.ignoringPopState = false;
+        }
+      }
+    });
+
     window.onload = async () => {
+      ensureBaseHistoryState();
+      try {
+        state.ignoringPopState = true;
+        history.pushState({ rakhisGuard: true, ts: Date.now() }, '', '');
+        setTimeout(() => { state.ignoringPopState = false; }, 50);
+      } catch (e) {
+        state.ignoringPopState = false;
+      }
+
       try {
         const savedUser = localStorage.getItem('rakhis_user');
         if (savedUser) state.currentUser = JSON.parse(savedUser);
@@ -1259,6 +1348,7 @@
 
     function openModal(id) {
       document.getElementById(id).classList.add('open');
+      pushNavState('modal:' + id);
     }
 
     function closeModal(id) {
@@ -1285,19 +1375,24 @@
     }
 
     function selectMainCategory(catName) {
+      const changed = state.selectedCategory !== catName;
       state.selectedCategory = catName;
       state.selectedSubCategory = '';
 
       document.getElementById('filterMainCat').value = catName;
       updateCategoryUI();
       applyFilters();
+      if (catName && changed) pushNavState('cat:' + catName);
     }
 
     function handleMainCategoryDropdown() {
-      state.selectedCategory = document.getElementById('filterMainCat').value;
+      const catName = document.getElementById('filterMainCat').value;
+      const changed = state.selectedCategory !== catName;
+      state.selectedCategory = catName;
       state.selectedSubCategory = '';
       updateCategoryUI();
       applyFilters();
+      if (catName && changed) pushNavState('cat:' + catName);
     }
 
     function updateCategoryUI() {
@@ -1332,10 +1427,12 @@
     }
 
     function selectSubCategory(subName) {
+      const changed = state.selectedSubCategory !== subName;
       state.selectedSubCategory = subName;
       document.getElementById('filterSubCat').value = subName;
       updateCategoryUI();
       applyFilters();
+      if (subName && changed) pushNavState('subcat:' + subName);
     }
 
     function clearCategorySelection() {
@@ -1345,6 +1442,12 @@
       document.getElementById('filterSubCat').value = '';
       updateCategoryUI();
       applyFilters();
+    }
+
+    function goHomeReset() {
+      document.getElementById('appChatView').classList.remove('active');
+      document.getElementById('marketMainView').style.display = 'block';
+      clearCategorySelection();
     }
 
     function populatePublishSubCats() {
@@ -1387,9 +1490,11 @@
       }
       state.activeChatAdId = adId || '';
 
+      const wasChatOpen = document.getElementById('appChatView').classList.contains('active');
       document.getElementById('marketMainView').style.display = 'none';
       document.getElementById('appChatView').classList.add('active');
       document.getElementById('chatUserTag').textContent = `حسابك: ${state.currentUser.username}`;
+      if (!wasChatOpen) pushNavState('chat');
 
       loadMessages().then(() => {
         renderChatUI();

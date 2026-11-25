@@ -48,9 +48,18 @@ function sanitizeUser(u) {
     city: u.city || 'دمشق',
     phone: u.phone || '',
     bio: u.bio || '',
+    avatar: u.avatar || '',
     favorites: Array.isArray(u.favorites) ? u.favorites : [],
     joinedAt: u.joinedAt || ''
   };
+}
+
+function normalizeSypPrice(raw) {
+  const digits = String(raw || '').replace(/[^\d]/g, '');
+  if (!digits) return null;
+  const num = Number(digits);
+  if (!Number.isFinite(num) || num <= 0) return null;
+  return String(num);
 }
 
 app.get('/favicon.ico', (req, res) => res.status(204).end());
@@ -80,6 +89,7 @@ app.post('/api/auth/register', (req, res) => {
     city: 'دمشق',
     phone: '',
     bio: '',
+    avatar: '',
     favorites: [],
     joinedAt: new Date().toISOString().split('T')[0]
   };
@@ -104,7 +114,7 @@ app.post('/api/auth/login', (req, res) => {
 });
 
 app.put('/api/profile/settings', (req, res) => {
-  const { username, city, phone, bio } = req.body;
+  const { username, city, phone, bio, avatar } = req.body;
   if (!username) return res.status(400).json({ message: 'اسم المستخدم مطلوب' });
 
   const data = readData();
@@ -114,6 +124,9 @@ app.put('/api/profile/settings', (req, res) => {
   user.city = String(city || '').trim() || 'دمشق';
   user.phone = String(phone || '').trim();
   user.bio = String(bio || '').trim();
+  if (avatar !== undefined) {
+    user.avatar = String(avatar || '').trim();
+  }
 
   writeData(data);
   res.json({ user: sanitizeUser(user) });
@@ -164,8 +177,13 @@ app.get('/api/ads', (req, res) => {
   if (city && city !== 'all') list = list.filter(a => a.city === city);
   if (condition && condition !== 'all') list = list.filter(a => a.condition === condition);
 
-  if (sort === 'price_asc') list.sort((a, b) => parseFloat(a.price || 0) - parseFloat(b.price || 0));
-  else if (sort === 'price_desc') list.sort((a, b) => parseFloat(b.price || 0) - parseFloat(a.price || 0));
+  const numericPrice = item => {
+    const n = Number(String(item.price || '').replace(/[^\d]/g, ''));
+    return Number.isFinite(n) ? n : 0;
+  };
+
+  if (sort === 'price_asc') list.sort((a, b) => numericPrice(a) - numericPrice(b));
+  else if (sort === 'price_desc') list.sort((a, b) => numericPrice(b) - numericPrice(a));
   else if (sort === 'views') list.sort((a, b) => (b.views || 0) - (a.views || 0));
 
   res.json(list);
@@ -180,11 +198,17 @@ app.post('/api/ads', (req, res) => {
     return res.status(400).json({ message: 'عنوان الإعلان مطلوب' });
   }
 
+  const normalizedPrice = normalizeSypPrice(price);
+  if (!normalizedPrice) {
+    return res.status(400).json({ message: 'يرجى إدخال السعر بالأرقام بالليرة السورية' });
+  }
+
   const data = readData();
   const newAd = {
     id: crypto.randomUUID(),
     title: title.trim(),
-    price: price ? String(price).trim() : '0',
+    price: normalizedPrice,
+    currency: 'ل.س',
     category: category || 'أخرى',
     subType: (subType || 'متنوعات').trim(),
     brand: (brand || 'عام').trim(),
@@ -215,10 +239,20 @@ app.put('/api/ads/:id', (req, res) => {
     return res.status(403).json({ message: 'لا تملك صلاحية التعديل' });
   }
 
+  let updatedPrice = ad.price;
+  if (price !== undefined) {
+    const parsed = normalizeSypPrice(price);
+    if (!parsed) {
+      return res.status(400).json({ message: 'يرجى إدخال السعر بالأرقام بالليرة السورية' });
+    }
+    updatedPrice = parsed;
+  }
+
   data.ads[idx] = {
     ...ad,
     title: title !== undefined ? title.trim() : ad.title,
-    price: price !== undefined ? String(price).trim() : ad.price,
+    price: updatedPrice,
+    currency: 'ل.س',
     category: category !== undefined ? category : ad.category,
     subType: subType !== undefined ? String(subType).trim() : ad.subType,
     brand: brand !== undefined ? String(brand).trim() : ad.brand,

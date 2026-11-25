@@ -11,7 +11,7 @@
     :root {
       --bg-dark: #070b14;
       --bg-mid: #0f172a;
-      --surface: rgba(19, 29, 49, 0.86);
+      --surface: rgba(19, 29, 49, 0.88);
       --surface-soft: rgba(30, 41, 59, 0.72);
       --surface-hover: rgba(37, 53, 84, 0.96);
       --cyan: #38bdf8;
@@ -41,13 +41,12 @@
       line-height: 1.5;
     }
 
-    /* Header & Segmented Snake Light around Large Title */
     header {
       position: sticky;
       top: 0;
       z-index: 300;
       padding: 14px 20px;
-      background: rgba(7, 11, 20, 0.88);
+      background: rgba(7, 11, 20, 0.9);
       backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--border);
       display: flex;
@@ -101,11 +100,9 @@
       z-index: 2;
       font-size: 2.25rem;
       font-weight: 900;
-      letter-spacing: 0.5px;
       background: linear-gradient(95deg, #ffffff 0%, #fde047 38%, #38bdf8 72%, #f472b6 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 22px rgba(56, 189, 248, 0.35);
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -118,9 +115,7 @@
     }
 
     @keyframes snakeOrbit {
-      to {
-        transform: rotate(360deg);
-      }
+      to { transform: rotate(360deg); }
     }
 
     .header-actions {
@@ -134,11 +129,22 @@
       background: rgba(56, 189, 248, 0.14);
       border: 1px solid rgba(56, 189, 248, 0.5);
       color: #e0f2fe;
-      padding: 7px 14px;
+      padding: 6px 13px;
       border-radius: 11px;
       font-size: 0.88rem;
       font-weight: 800;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chip-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--cyan);
     }
 
     button {
@@ -148,12 +154,10 @@
       padding: 8px 14px;
       font-size: 0.86rem;
       font-weight: 800;
-      transition: transform 0.14s ease, filter 0.15s ease, background 0.15s ease;
+      transition: transform 0.14s ease, background 0.15s ease;
     }
 
-    button:active {
-      transform: scale(0.97);
-    }
+    button:active { transform: scale(0.97); }
 
     .btn-green { background: #16a34a; color: #fff; }
     .btn-green:hover { background: #15803d; }
@@ -174,7 +178,6 @@
       padding: 20px 18px 50px;
     }
 
-    /* Compact Filter Bar */
     .filter-panel {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -192,15 +195,11 @@
     }
 
     @media (max-width: 1050px) {
-      .filter-row {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+      .filter-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 560px) {
-      .filter-row {
-        grid-template-columns: 1fr;
-      }
+      .filter-row { grid-template-columns: 1fr; }
     }
 
     .filter-row input,
@@ -220,7 +219,6 @@
       border-color: var(--cyan);
     }
 
-    /* Compact Side-by-Side Categories & Brands Strip */
     .taxonomy-box {
       background: var(--surface-soft);
       border: 1px solid var(--border);
@@ -248,15 +246,11 @@
     }
 
     @media (max-width: 1120px) {
-      .cat-clusters {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+      .cat-clusters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 600px) {
-      .cat-clusters {
-        grid-template-columns: 1fr;
-      }
+      .cat-clusters { grid-template-columns: 1fr; }
     }
 
     .cluster-card {
@@ -279,9 +273,7 @@
       cursor: pointer;
     }
 
-    .cluster-head:hover {
-      color: var(--cyan);
-    }
+    .cluster-head:hover { color: var(--cyan); }
 
     .sub-group-label {
       font-size: 0.74rem;
@@ -307,14 +299,12 @@
       cursor: pointer;
     }
 
-    .mini-chip:hover,
-    .mini-chip.active {
+    .mini-chip:hover {
       background: var(--cyan);
       color: #070b14;
       border-color: var(--cyan);
     }
 
-    /* Ads Header & 4-Column Grid */
     .list-header {
       display: flex;
       align-items: center;
@@ -331,21 +321,15 @@
     }
 
     @media (max-width: 1100px) {
-      .ads-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
+      .ads-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
 
     @media (max-width: 820px) {
-      .ads-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+      .ads-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 520px) {
-      .ads-grid {
-        grid-template-columns: 1fr;
-      }
+      .ads-grid { grid-template-columns: 1fr; }
     }
 
     .ad-card {
@@ -358,9 +342,7 @@
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
     }
 
-    .ad-img-wrap {
-      position: relative;
-    }
+    .ad-img-wrap { position: relative; }
 
     .ad-img {
       width: 100%;
@@ -473,9 +455,7 @@
       border: 1px solid rgba(56, 189, 248, 0.3);
     }
 
-    .preset-btn:hover {
-      background: rgba(56, 189, 248, 0.28);
-    }
+    .preset-btn:hover { background: rgba(56, 189, 248, 0.28); }
 
     .ad-actions {
       padding: 8px 10px;
@@ -484,6 +464,7 @@
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
+      align-items: center;
     }
 
     .ad-actions button {
@@ -491,7 +472,6 @@
       font-size: 0.75rem;
     }
 
-    /* Icon Toast Banner (No Browser Alerts) */
     .toast-banner {
       position: fixed;
       bottom: 18px;
@@ -526,7 +506,6 @@
       color: #dcfce7;
     }
 
-    /* Modals */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -539,9 +518,7 @@
       padding: 16px;
     }
 
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
 
     .modal-card {
       width: 100%;
@@ -578,9 +555,7 @@
       justify-content: center;
     }
 
-    .field {
-      margin-bottom: 11px;
-    }
+    .field { margin-bottom: 11px; }
 
     .field label {
       display: block;
@@ -608,6 +583,16 @@
       margin-top: 8px;
       border-radius: 9px;
       display: none;
+    }
+
+    .avatar-preview {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--cyan);
+      background: #1e293b;
+      display: block;
     }
 
     .tabs-bar {
@@ -646,9 +631,9 @@
       margin-bottom: 12px;
     }
 
-    .profile-avatar {
-      width: 56px;
-      height: 56px;
+    .profile-avatar-box {
+      width: 62px;
+      height: 62px;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--cyan), var(--purple));
       color: #070b14;
@@ -657,6 +642,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .profile-avatar-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .lightbox-img {
@@ -689,7 +682,7 @@
     <div class="header-actions">
       <button type="button" class="btn-red" data-action="open-create-ad">+ نشر إعلان</button>
       <a href="/chat" class="btn btn-blue" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">💬 صفحة الدردشة</a>
-      <button type="button" class="btn-green" data-action="open-my-profile">👤 ملفي</button>
+      <button type="button" class="btn-green" data-action="open-my-profile">👤 ملفي والإعدادات</button>
       <button type="button" class="btn-outline" data-action="my-favorites">❤️ المفضلة</button>
       <span id="authBox" style="display:inline-flex; gap:8px; align-items:center;"></span>
     </div>
@@ -749,7 +742,7 @@
     <section class="taxonomy-box">
       <div class="taxonomy-top-title">
         <span>🗂️ الأقسام والأنواع والماركات</span>
-        <span style="font-size:0.8rem; color:var(--muted); font-weight:700;">اضغط على أي قسم أو نوع أو ماركة للتصفية السريعة</span>
+        <span style="font-size:0.8rem; color:var(--muted); font-weight:700;">الأسعار موحدة بالليرة السورية (ل.س)</span>
       </div>
 
       <div class="cat-clusters">
@@ -828,8 +821,8 @@
         <span id="adsCounter" style="font-size:0.84rem; color:var(--muted);"></span>
         <select id="sortAds" style="padding:7px 11px; border-radius:9px; border:1px solid var(--border); background:#0f172a; color:#fff; font-size:0.84rem;">
           <option value="newest">الترتيب: الأحدث</option>
-          <option value="price_asc">السعر: من الأقل للأعلى</option>
-          <option value="price_desc">السعر: من الأعلى للأقل</option>
+          <option value="price_asc">السعر: من الأقل للأعلى (ل.س)</option>
+          <option value="price_desc">السعر: من الأعلى للأقل (ل.س)</option>
           <option value="views">الأكثر مشاهدة</option>
         </select>
       </div>
@@ -868,11 +861,11 @@
     </div>
   </div>
 
-  <!-- Profile Modal -->
+  <!-- Profile & Settings Modal -->
   <div class="modal-backdrop" id="profileModal">
     <div class="modal-card">
       <div class="modal-head">
-        <h3>الملف الشخصي</h3>
+        <h3>الملف الشخصي وإعدادات الحساب</h3>
         <button type="button" class="close-x" data-close="profileModal">&times;</button>
       </div>
       <div id="targetProfileContent"></div>
@@ -893,8 +886,14 @@
           <input type="text" id="adTitleInput" required placeholder="مثال: آيفون 15 برو أو تويوتا كورولا" />
         </div>
         <div class="field">
-          <label for="adPriceInput">السعر</label>
-          <input type="text" id="adPriceInput" placeholder="مثال: 650$" />
+          <label for="adPriceInput">السعر بالليرة السورية (أرقام فقط - ل.س) *</label>
+          <input
+            type="text"
+            id="adPriceInput"
+            inputmode="numeric"
+            required
+            placeholder="مثال: 500000 أو 100000"
+          />
         </div>
         <div class="field">
           <label for="adCityInput">المدينة (سوريا)</label>
@@ -1026,9 +1025,7 @@
         },
         'أخرى': {
           types: ['متنوعات'],
-          brandsByType: {
-            'متنوعات': ['عام']
-          },
+          brandsByType: { 'متنوعات': ['عام'] },
           allBrands: ['عام']
         }
       };
@@ -1038,6 +1035,7 @@
       let currentMode = 'all';
       let authMode = 'login';
       let selectedImageData = '';
+      let selectedAvatarData = '';
       let toastTimer = null;
 
       function showToast(msg, type = 'info') {
@@ -1073,6 +1071,18 @@
           .replace(/"/g, '&quot;');
       }
 
+      function parseSypAmount(raw) {
+        const cleaned = String(raw || '').replace(/[^\d]/g, '');
+        if (!cleaned) return null;
+        return Number(cleaned);
+      }
+
+      function formatSypPrice(raw) {
+        const num = parseSypAmount(raw);
+        if (num === null || Number.isNaN(num)) return '0 ل.س';
+        return `${num.toLocaleString('en-US')} ل.س`;
+      }
+
       function openModal(id) { document.getElementById(id)?.classList.add('open'); }
       function closeModal(id) { document.getElementById(id)?.classList.remove('open'); }
 
@@ -1098,8 +1108,14 @@
         const box = document.getElementById('authBox');
         if (!box) return;
         if (currentUser && currentUser.username) {
+          const avatarHtml = currentUser.avatar
+            ? `<img src="${escapeHtml(currentUser.avatar)}" class="chip-avatar" alt="صورة الحساب" />`
+            : `<span>👤</span>`;
           box.innerHTML = `
-            <span class="user-chip" data-action="view-profile" data-username="${escapeHtml(currentUser.username)}">👤 ${escapeHtml(currentUser.username)}</span>
+            <span class="user-chip" data-action="view-profile" data-username="${escapeHtml(currentUser.username)}">
+              ${avatarHtml}
+              <span>${escapeHtml(currentUser.username)}</span>
+            </span>
             <button type="button" class="btn-outline" data-action="logout">خروج</button>
           `;
         } else {
@@ -1227,7 +1243,7 @@
                   <span class="badge">👁️ ${ad.views || 0}</span>
                 </div>
                 <div class="ad-title">${escapeHtml(ad.title)}</div>
-                <div class="ad-price">${escapeHtml(ad.price)}</div>
+                <div class="ad-price">${escapeHtml(formatSypPrice(ad.price))}</div>
                 <div class="ad-meta" data-action="view-profile" data-username="${escapeHtml(ad.ownerUsername)}">
                   ${escapeHtml(ad.category)} • <strong>${escapeHtml(ad.ownerUsername)}</strong>
                 </div>
@@ -1237,7 +1253,7 @@
               ${!isOwner ? `
                 <div class="preset-msgs">
                   <button type="button" class="preset-btn" data-action="send-preset" data-id="${escapeHtml(ad.id)}" data-text="هل هذا المنتج متاح؟">هل هذا المنتج متاح؟</button>
-                  <button type="button" class="preset-btn" data-action="send-preset" data-id="${escapeHtml(ad.id)}" data-text="مهتم بالتواصل بخصوص الإعلان">مهتم بالتواصل</button>
+                  <button type="button" class="preset-btn" data-action="send-preset" data-id="${escapeHtml(ad.id)}" data-text="مهتم بهذا المنتج، هل يمكن التواصل؟">مهتم بهذا المنتج</button>
                 </div>
               ` : `
                 <div class="ad-actions">
@@ -1249,7 +1265,7 @@
               <div class="ad-actions">
                 <button type="button" class="btn-outline" data-action="open-comments" data-id="${escapeHtml(ad.id)}">💬 (${ad.comments?.length || 0})</button>
                 ${!isOwner ? `
-                  <a href="/chat?to=${encodeURIComponent(ad.ownerUsername)}&adId=${encodeURIComponent(ad.id)}" class="btn btn-blue" style="flex:1; text-align:center; text-decoration:none; padding:5px 9px; font-size:0.75rem; border-radius:10px;">✉️ محادثة</a>
+                  <a href="/chat?to=${encodeURIComponent(ad.ownerUsername)}&adId=${encodeURIComponent(ad.id)}" class="btn btn-blue" style="flex:1; text-align:center; text-decoration:none; padding:5px 9px; font-size:0.75rem; border-radius:10px;">✉️ فتح الدردشة</a>
                 ` : ''}
               </div>
             </div>
@@ -1264,10 +1280,16 @@
           if (!res.ok) throw new Error(data.message || 'تعذر جلب بيانات الحساب');
 
           const isMe = currentUser && currentUser.username.toLowerCase() === data.username.toLowerCase();
+          selectedAvatarData = data.avatar || '';
+
+          const avatarContent = data.avatar
+            ? `<img src="${escapeHtml(data.avatar)}" alt="${escapeHtml(data.username)}" />`
+            : escapeHtml((data.username || 'م')[0].toUpperCase());
+
           const container = document.getElementById('targetProfileContent');
           container.innerHTML = `
             <div class="profile-header">
-              <div class="profile-avatar">${escapeHtml((data.username || 'م')[0].toUpperCase())}</div>
+              <div class="profile-avatar-box">${avatarContent}</div>
               <div>
                 <h3 style="font-size:1.15rem;">${escapeHtml(data.username)}</h3>
                 <p style="font-size:0.84rem; color:var(--muted);">المدينة: ${escapeHtml(data.city)} • انضم: ${escapeHtml(data.joinedAt)}</p>
@@ -1275,23 +1297,46 @@
               </div>
             </div>
             <div style="font-size:0.88rem; color:#e2e8f0; margin-bottom:10px;">
-              <strong>النبذة:</strong>
+              <strong>النبذة التعريفية:</strong>
               <p style="margin-top:4px; color:#cbd5e1;">${escapeHtml(data.bio || 'لا توجد نبذة تعريفية.')}</p>
             </div>
             ${!isMe ? `
-              <a href="/chat?to=${encodeURIComponent(data.username)}" class="btn btn-blue" style="width:100%; justify-content:center; text-decoration:none; margin-top:8px;">💬 فتح محادثة مع ${escapeHtml(data.username)}</a>
+              <a href="/chat?to=${encodeURIComponent(data.username)}" class="btn btn-blue" style="width:100%; justify-content:center; text-decoration:none; margin-top:8px;">💬 مراسلة ${escapeHtml(data.username)} في صفحة الدردشة</a>
             ` : `
               <div style="border-top:1px solid var(--border); padding-top:12px; margin-top:10px;">
-                <h4 style="margin-bottom:8px;">تعديل إعدادات الحساب</h4>
+                <h4 style="margin-bottom:10px; color:var(--cyan);">⚙️ إعدادات الملف الشخصي</h4>
                 <form id="profileUpdateForm">
+                  <div class="field" style="display:flex; align-items:center; gap:12px;">
+                    <img id="upAvatarPreview" src="${escapeHtml(selectedAvatarData || 'data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\'><rect width=\'100%\' height=\'100%\' fill=\'%231e293b\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%2394a3b8\' font-size=\'14\'>صورة</text></svg>')}" class="avatar-preview" alt="معاينة الصورة الشخصية" />
+                    <div style="flex:1;">
+                      <label for="upAvatarFile">صورة الملف الشخصي</label>
+                      <input type="file" id="upAvatarFile" accept="image/*" />
+                    </div>
+                  </div>
                   <div class="field"><label for="upCity">المدينة</label><input type="text" id="upCity" value="${escapeHtml(currentUser.city)}" /></div>
-                  <div class="field"><label for="upPhone">رقم الهاتف</label><input type="text" id="upPhone" value="${escapeHtml(currentUser.phone || '')}" /></div>
-                  <div class="field"><label for="upBio">النبذة</label><textarea id="upBio" rows="2">${escapeHtml(currentUser.bio || '')}</textarea></div>
-                  <button type="submit" class="btn-green" style="width:100%;">حفظ التغييرات</button>
+                  <div class="field"><label for="upPhone">رقم الهاتف</label><input type="text" id="upPhone" value="${escapeHtml(currentUser.phone || '')}" placeholder="مثال: 0991234567" /></div>
+                  <div class="field"><label for="upBio">النبذة التعريفية</label><textarea id="upBio" rows="2" placeholder="اكتب نبذة قصيرة عنك...">${escapeHtml(currentUser.bio || '')}</textarea></div>
+                  <button type="submit" class="btn-green" style="width:100%;">حفظ الإعدادات</button>
                 </form>
               </div>
             `}
           `;
+
+          const avatarInput = document.getElementById('upAvatarFile');
+          if (avatarInput) {
+            avatarInput.addEventListener('change', function () {
+              const file = this.files && this.files[0];
+              if (!file) return;
+              const reader = new FileReader();
+              reader.onload = function (ev) {
+                selectedAvatarData = ev.target.result;
+                const prev = document.getElementById('upAvatarPreview');
+                if (prev) prev.src = selectedAvatarData;
+              };
+              reader.readAsDataURL(file);
+            });
+          }
+
           openModal('profileModal');
         } catch (err) {
           showToast(err.message || 'تعذر فتح الملف الشخصي', 'error');
@@ -1309,7 +1354,8 @@
         document.getElementById('adFormTitle').textContent = 'تعديل الإعلان';
         document.getElementById('adSubmitBtn').textContent = 'حفظ التعديلات';
         document.getElementById('adTitleInput').value = ad.title || '';
-        document.getElementById('adPriceInput').value = ad.price || '';
+        const numericPrice = parseSypAmount(ad.price);
+        document.getElementById('adPriceInput').value = numericPrice !== null ? String(numericPrice) : '';
         document.getElementById('adCityInput').value = ad.city || 'دمشق';
         document.getElementById('adCategoryInput').value = ad.category || 'أخرى';
         syncFormSubAndBrand(ad.subType || '', ad.brand || '');
@@ -1326,6 +1372,14 @@
         }
         openModal('adFormModal');
       }
+
+      document.getElementById('adPriceInput').addEventListener('input', function () {
+        const digitsOnly = this.value.replace(/[^\d]/g, '');
+        if (this.value !== digitsOnly) {
+          this.value = digitsOnly;
+          showToast('يُسمح بإدخال أرقام فقط للسعر بالليرة السورية', 'error');
+        }
+      });
 
       document.getElementById('filterCategory').addEventListener('change', () => {
         syncFilterSubAndBrand();
@@ -1468,12 +1522,12 @@
                 text: target.dataset.text,
                 adId: ad.id,
                 adTitle: ad.title,
-                adPrice: ad.price
+                adPrice: formatSypPrice(ad.price)
               })
             });
             const data = await res.json().catch(() => ({}));
             if (!res.ok) throw new Error(data.message || 'فشل إرسال الرسالة');
-            showToast('تم إرسال الرسالة مع تفاصيل الإعلان إلى صفحة الدردشة', 'success');
+            window.location.href = `/chat?to=${encodeURIComponent(ad.ownerUsername)}&adId=${encodeURIComponent(ad.id)}`;
           } catch (err) {
             showToast(err.message || 'فشل إرسال الرسالة', 'error');
           }
@@ -1481,7 +1535,7 @@
           await openProfile(target.dataset.username);
         } else if (action === 'open-my-profile') {
           if (!currentUser) {
-            showToast('سجل دخولك لعرض ملفك الشخصي', 'error');
+            showToast('سجل دخولك لعرض ملفك الشخصي وإعداداته', 'error');
             openModal('authModal');
             return;
           }
@@ -1566,10 +1620,18 @@
             openModal('authModal');
             return;
           }
+          const rawPriceInput = document.getElementById('adPriceInput').value.trim();
+          const priceNum = parseSypAmount(rawPriceInput);
+          if (priceNum === null || priceNum <= 0) {
+            showToast('يرجى إدخال سعر صحيح بالأرقام بالليرة السورية (مثال: 500000)', 'error');
+            return;
+          }
+
           const editId = document.getElementById('adEditId').value.trim();
           const payload = {
             title: document.getElementById('adTitleInput').value.trim(),
-            price: document.getElementById('adPriceInput').value.trim(),
+            price: String(priceNum),
+            currency: 'ل.س',
             city: document.getElementById('adCityInput').value,
             category: document.getElementById('adCategoryInput').value,
             subType: document.getElementById('adSubTypeInput').value,
@@ -1608,14 +1670,15 @@
                 username: currentUser.username,
                 city: document.getElementById('upCity').value.trim(),
                 phone: document.getElementById('upPhone').value.trim(),
-                bio: document.getElementById('upBio').value.trim()
+                bio: document.getElementById('upBio').value.trim(),
+                avatar: selectedAvatarData
               })
             });
             const data = await res.json().catch(() => ({}));
             if (!res.ok) throw new Error(data.message || 'فشل التحديث');
             currentUser = data.user;
             saveUser();
-            showToast('تم حفظ بيانات الحساب', 'success');
+            showToast('تم حفظ إعدادات الملف الشخصي', 'success');
             await openProfile(currentUser.username);
             await fetchAds();
           } catch (err) {

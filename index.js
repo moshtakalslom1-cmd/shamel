@@ -38,7 +38,52 @@ function writeData(data) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
 }
 
+function sanitizeUser(u) {
+  return {
+    id: u.id,
+    username: u.username,
+    city: u.city || 'دمشق',
+    phone: u.phone || '',
+    bio: u.bio || '',
+    favorites: Array.isArray(u.favorites) ? u.favorites : [],
+    joinedAt: u.joinedAt || ''
+  };
+}
+
 app.get('/favicon.ico', (req, res) => res.status(204).end());
+
+// إنشاء حساب جديد أولاً بالاسم وكلمة المرور
+app.post('/api/auth/register', (req, res) => {
+  const username = (req.body.username || '').trim();
+  const password = (req.body.password || '').trim();
+
+  if (!username || !password) {
+    return res.status(400).json({ message: 'يرجى إدخال الاسم وكلمة المرور لإنشاء الحساب' });
+  }
+
+  const data = readData();
+  const exists = data.users.some(
+    u => u.username.toLowerCase() === username.toLowerCase()
+  );
+  if (exists) {
+    return res.status(409).json({ message: 'اسم المستخدم موجود مسبقاً، يرجى اختيار اسم آخر أو تسجيل الدخول' });
+  }
+
+  const newUser = {
+    id: crypto.randomUUID(),
+    username,
+    password,
+    city: 'دمشق',
+    phone: '',
+    bio: '',
+    favorites: [],
+    joinedAt: new Date().toISOString().split('T')[0]
+  };
+
+  data.users.push(newUser);
+  writeData(data);
+  res.status(201).json({ message: 'تم إنشاء الحساب بنجاح، يمكنك الآن تسجيل الدخول', user: sanitizeUser(newUser) });
+});
 
 // تسجيل الدخول بالاسم وكلمة المرور فقط
 app.post('/api/auth/login', (req, res) => {
@@ -50,34 +95,46 @@ app.post('/api/auth/login', (req, res) => {
   }
 
   const data = readData();
-  let user = data.users.find(
+  const user = data.users.find(
     u => u.username.toLowerCase() === username.toLowerCase()
   );
 
   if (!user) {
-    user = {
-      id: crypto.randomUUID(),
-      username,
-      password,
-      favorites: [],
-      joinedAt: new Date().toISOString().split('T')[0]
-    };
-    data.users.push(user);
-    writeData(data);
-  } else if (user.password !== password) {
-    return res.status(401).json({ message: 'كلمة المرور غير صحيحة لهذا الاسم' });
+    return res.status(404).json({ message: 'الحساب غير موجود، يرجى إنشاء حساب أولاً' });
   }
 
-  res.json({
-    user: {
-      id: user.id,
-      username: user.username,
-      favorites: Array.isArray(user.favorites) ? user.favorites : []
-    }
-  });
+  if (user.password !== password) {
+    return res.status(401).json({ message: 'كلمة المرور غير صحيحة' });
+  }
+
+  res.json({ user: sanitizeUser(user) });
 });
 
-// تبديل المفضلة (ميزة مستوحاة من Sahibinden)
+// تحديث إعدادات الملف الشخصي وتغيير كلمة المرور
+app.put('/api/profile/settings', (req, res) => {
+  const { username, city, phone, bio, newPassword } = req.body;
+  if (!username) {
+    return res.status(400).json({ message: 'اسم المستخدم مطلوب' });
+  }
+
+  const data = readData();
+  const user = data.users.find(u => u.username.toLowerCase() === username.trim().toLowerCase());
+  if (!user) {
+    return res.status(404).json({ message: 'المستخدم غير موجود' });
+  }
+
+  if (city !== undefined) user.city = String(city).trim();
+  if (phone !== undefined) user.phone = String(phone).trim();
+  if (bio !== undefined) user.bio = String(bio).trim();
+  if (newPassword && String(newPassword).trim().length >= 3) {
+    user.password = String(newPassword).trim();
+  }
+
+  writeData(data);
+  res.json({ message: 'تم حفظ إعدادات الملف الشخصي', user: sanitizeUser(user) });
+});
+
+// تبديل المفضلة (قلب)
 app.post('/api/favorites/toggle', (req, res) => {
   const { username, adId } = req.body;
   if (!username || !adId) {
@@ -137,7 +194,7 @@ app.get('/api/ads', (req, res) => {
   res.json(ads);
 });
 
-// زيادة عداد المشاهدات عند فتح/معاينة إعلان
+// زيادة عداد المشاهدات
 app.post('/api/ads/:id/view', (req, res) => {
   const data = readData();
   const ad = data.ads.find(a => a.id === req.params.id);
@@ -258,7 +315,7 @@ app.get('/api/messages', (req, res) => {
   res.json(userMsgs);
 });
 
-// إرسال رسالة مباشرة أو رسالة سريعة من الإعلان
+// إرسال رسالة مباشرة أو رسالة سريعة جاهزة
 app.post('/api/messages', (req, res) => {
   const { from, to, adId, adTitle, text } = req.body;
   if (!from || !to || !text || !text.trim()) {

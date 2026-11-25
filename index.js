@@ -27,9 +27,40 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage, limits: { files: 5 } });
 
-const users = new Map();
-const ads = [];
-const directMessages = [];
+// --- نظام الحفظ الدائم في ملف JSON ---
+const DATA_FILE = path.join(__dirname, 'data.json');
+let users = new Map();
+let ads = [];
+let directMessages = [];
+
+function loadDataFromDisk() {
+  try {
+    if (fs.existsSync(DATA_FILE)) {
+      const raw = fs.readFileSync(DATA_FILE, 'utf8');
+      const parsed = JSON.parse(raw);
+      if (parsed.users) users = new Map(Object.entries(parsed.users));
+      if (Array.isArray(parsed.ads)) ads = parsed.ads;
+      if (Array.isArray(parsed.directMessages)) directMessages = parsed.directMessages;
+    }
+  } catch (err) {
+    console.error('Error loading data.json:', err);
+  }
+}
+
+function saveDataToDisk() {
+  try {
+    const obj = {
+      users: Object.fromEntries(users),
+      ads,
+      directMessages
+    };
+    fs.writeFileSync(DATA_FILE, JSON.stringify(obj, null, 2), 'utf8');
+  } catch (err) {
+    console.error('Error saving data.json:', err);
+  }
+}
+
+loadDataFromDisk();
 
 function formatTimeNow() {
   return new Date().toLocaleTimeString('ar', { hour: '2-digit', minute: '2-digit' });
@@ -50,6 +81,7 @@ app.post('/api/signup', (req, res) => {
     bio: (bio && bio.trim()) || 'معلن في منصة رخيص',
     joinedAt: new Date().toISOString().slice(0, 10)
   });
+  saveDataToDisk();
   return res.json({ message: 'تم إنشاء الحساب بنجاح' });
 });
 
@@ -88,6 +120,7 @@ app.put('/api/users/:username/bio', (req, res) => {
   } else {
     user.bio = (bio || '').trim() || 'معلن في منصة رخيص';
   }
+  saveDataToDisk();
   return res.json({ message: 'تم حفظ النبذة بنجاح', bio: user.bio });
 });
 
@@ -139,7 +172,49 @@ app.post('/api/ads', upload.array('images', 5), (req, res) => {
   };
 
   ads.unshift(newAd);
+  saveDataToDisk();
   return res.json({ message: 'تم نشر الإعلان بنجاح', ad: newAd });
+});
+
+// تعديل إعلان قائم
+app.put('/api/ads/:id', upload.array('images', 5), (req, res) => {
+  const adIndex = ads.findIndex((a) => String(a.id) === String(req.params.id));
+  if (adIndex === -1) return res.status(404).json({ message: 'الإعلان غير موجود' });
+
+  const { category, subcategory, title, price, city, phone, description, username } = req.body || {};
+  if (ads[adIndex].username !== username) {
+    return res.status(403).json({ message: 'غير مصرح لك بتعديل هذا الإعلان' });
+  }
+
+  ads[adIndex].category = category || ads[adIndex].category;
+  ads[adIndex].subcategory = subcategory || ads[adIndex].subcategory;
+  ads[adIndex].title = title || ads[adIndex].title;
+  ads[adIndex].price = price || ads[adIndex].price;
+  ads[adIndex].city = city || ads[adIndex].city;
+  ads[adIndex].phone = phone || ads[adIndex].phone;
+  ads[adIndex].description = description !== undefined ? description : ads[adIndex].description;
+
+  if (req.files && req.files.length > 0) {
+    ads[adIndex].images = req.files.map((f) => `/uploads/${f.filename}`);
+  }
+
+  saveDataToDisk();
+  return res.json({ message: 'تم تحديث الإعلان بنجاح', ad: ads[adIndex] });
+});
+
+// حذف إعلان
+app.delete('/api/ads/:id', (req, res) => {
+  const adIndex = ads.findIndex((a) => String(a.id) === String(req.params.id));
+  if (adIndex === -1) return res.status(404).json({ message: 'الإعلان غير موجود' });
+
+  const { username } = req.query;
+  if (ads[adIndex].username !== username) {
+    return res.status(403).json({ message: 'غير مصرح لك بحذف هذا الإعلان' });
+  }
+
+  ads.splice(adIndex, 1);
+  saveDataToDisk();
+  return res.json({ message: 'تم حذف الإعلان بنجاح' });
 });
 
 // --- التعليقات ---
@@ -164,6 +239,7 @@ app.post('/api/ads/:id/comments', (req, res) => {
     timestamp: formatTimeNow()
   };
   ad.comments.push(comment);
+  saveDataToDisk();
   return res.json({ message: 'تمت إضافة التعليق', comment });
 });
 
@@ -181,6 +257,7 @@ app.post('/api/chat/messages', (req, res) => {
     timestamp: formatTimeNow()
   };
   directMessages.push(msg);
+  saveDataToDisk();
   return res.json({ message: 'تم إرسال الرسالة', data: msg });
 });
 

@@ -209,7 +209,7 @@
             bottom: 18px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 2000;
+            z-index: 3000;
             display: flex;
             flex-direction: column;
             gap: 8px;
@@ -260,8 +260,55 @@
         .btn-submit { background: var(--emerald); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
         .btn-cancel { background: var(--coral); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
 
-        .ad-details-images { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 4px; }
-        .ad-details-images img { width: 88px; height: 88px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1; flex-shrink: 0; }
+        .ad-details-images { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 4px; }
+        .ad-details-images img {
+            width: 95px;
+            height: 95px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #cbd5e1;
+            flex-shrink: 0;
+            cursor: zoom-in;
+            transition: transform 0.15s, border-color 0.15s;
+        }
+        .ad-details-images img:hover {
+            transform: scale(1.04);
+            border-color: var(--teal);
+        }
+
+        /* نافذة تكبير الصورة (Lightbox) */
+        #imageLightboxModal {
+            z-index: 2500;
+            background: rgba(0, 0, 0, 0.92);
+            flex-direction: column;
+        }
+        #lightboxImg {
+            max-width: 94%;
+            max-height: 80vh;
+            border-radius: 8px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            object-fit: contain;
+        }
+
+        .owner-controls {
+            display: none;
+            gap: 8px;
+            margin-top: 10px;
+            padding: 10px;
+            background: #fffbeb;
+            border: 1px dashed var(--amber);
+            border-radius: 8px;
+        }
+        .owner-controls button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.88rem;
+        }
 
         .comments-section { border-top: 2px solid #e2e8f0; margin-top: 14px; padding-top: 12px; }
         .comment-input-box { display: flex; gap: 6px; margin-bottom: 12px; }
@@ -435,13 +482,14 @@
     </div>
 </div>
 
+<!-- نافذة نشر إعلان جديد -->
 <div id="adModal" class="modal">
     <div class="modal-content">
         <h2>نشر إعلان جديد</h2>
         <form id="adForm" onsubmit="handleAddAd(event)">
             <div class="form-group">
                 <label>القسم الرئيسي</label>
-                <select id="adCategory" onchange="populateAdSubcategories()">
+                <select id="adCategory" onchange="populateAdSubcategories('adCategory', 'adSubcategory')">
                     <option value="إلكترونيات">إلكترونيات</option>
                     <option value="سيارات">سيارات</option>
                     <option value="عقارات">عقارات</option>
@@ -453,7 +501,7 @@
             <div class="form-group"><label>السعر (TL)</label><input type="text" id="adPrice" required></div>
             <div class="form-group"><label>المدينة</label><select id="adCity" required></select></div>
             <div class="form-group"><label>رقم الهاتف</label><input type="text" id="adPhone" required></div>
-            <div class="form-group"><label>الصور</label><input type="file" id="adImages" accept="image/*" multiple></div>
+            <div class="form-group"><label>الصور (حتى 5 صور)</label><input type="file" id="adImages" accept="image/*" multiple></div>
             <div class="form-group"><label>الوصف</label><textarea id="adDescription" rows="3"></textarea></div>
             <div class="modal-buttons">
                 <button type="submit" class="btn-submit">نشر</button>
@@ -463,6 +511,36 @@
     </div>
 </div>
 
+<!-- نافذة تعديل الإعلان -->
+<div id="editAdModal" class="modal">
+    <div class="modal-content">
+        <h2>تعديل الإعلان</h2>
+        <form id="editAdForm" onsubmit="handleEditAd(event)">
+            <div class="form-group">
+                <label>القسم الرئيسي</label>
+                <select id="editAdCategory" onchange="populateAdSubcategories('editAdCategory', 'editAdSubcategory')">
+                    <option value="إلكترونيات">إلكترونيات</option>
+                    <option value="سيارات">سيارات</option>
+                    <option value="عقارات">عقارات</option>
+                    <option value="حيوانات">حيوانات</option>
+                </select>
+            </div>
+            <div class="form-group"><label>القسم الفرعي</label><select id="editAdSubcategory"></select></div>
+            <div class="form-group"><label>العنوان</label><input type="text" id="editAdTitle" required></div>
+            <div class="form-group"><label>السعر (TL)</label><input type="text" id="editAdPrice" required></div>
+            <div class="form-group"><label>المدينة</label><select id="editAdCity" required></select></div>
+            <div class="form-group"><label>رقم الهاتف</label><input type="text" id="editAdPhone" required></div>
+            <div class="form-group"><label>تحديث الصور (اختياري - يستبدل القديمة)</label><input type="file" id="editAdImages" accept="image/*" multiple></div>
+            <div class="form-group"><label>الوصف</label><textarea id="editAdDescription" rows="3"></textarea></div>
+            <div class="modal-buttons">
+                <button type="submit" class="btn-submit">حفظ التعديلات</button>
+                <button type="button" class="btn-cancel" onclick="browserBack()">إلغاء</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- تفاصيل الإعلان -->
 <div id="detailsModal" class="modal">
     <div class="modal-content" style="max-width: 650px;">
         <h2 id="detTitle" style="font-size: 1.35rem; color: #065f46; margin-top:0;"></h2>
@@ -476,12 +554,18 @@
                 <span><strong>المعلن:</strong> <span id="detUser" style="color:var(--emerald); font-weight:bold;"></span></span>
                 <div style="display:flex; gap:6px; flex-wrap:wrap;">
                     <button type="button" class="btn-submit" style="padding: 6px 10px; background:var(--emerald);" onclick="viewProfileOf(document.getElementById('detUser').innerText)">👤 الملف الشخصي</button>
-                    <button type="button" class="btn-submit" style="padding: 6px 10px; background:var(--teal);" onclick="openDirectChatFromDetails(document.getElementById('detUser').innerText)">💬 مراسلة مباشرة</button>
+                    <button type="button" class="btn-submit" id="directChatBtn" style="padding: 6px 10px; background:var(--teal);" onclick="openDirectChatFromDetails(document.getElementById('detUser').innerText)">💬 مراسلة مباشرة</button>
                 </div>
+            </div>
+
+            <!-- أزرار التحكم لصاحب الإعلان (تعديل / حذف) -->
+            <div id="ownerControls" class="owner-controls">
+                <button type="button" style="background: var(--amber);" onclick="openEditAdModal()">✏️ تعديل الإعلان</button>
+                <button type="button" style="background: var(--coral);" onclick="deleteCurrentAd()">🗑️ حذف الإعلان</button>
             </div>
             
             <!-- زر الرسالة السريعة -->
-            <div style="margin-top: 10px;">
+            <div id="quickMsgBox" style="margin-top: 10px;">
                 <button type="button" class="btn-submit" style="width: 100%; padding: 10px; background: linear-gradient(135deg, #f59e0b, #d97706); font-size: 0.95rem;" onclick="sendQuickMessage(document.getElementById('detUser').innerText, document.getElementById('detTitle').innerText)">⚡ إرسال رسالة سريعة: "هل هذا المنتج متاح؟"</button>
             </div>
         </div>
@@ -504,6 +588,13 @@
     </div>
 </div>
 
+<!-- نافذة تكبير الصورة -->
+<div id="imageLightboxModal" class="modal">
+    <img id="lightboxImg" src="" alt="صورة الإعلان">
+    <button type="button" class="btn-cancel" style="margin-top: 14px; padding: 8px 24px; font-size: 0.95rem;" onclick="browserBack()">إغلاق الصورة</button>
+</div>
+
+<!-- نافذة الدردشة المباشرة -->
 <div id="directChatModal" class="modal">
     <div class="modal-content" style="max-width: 550px; height: 85vh; display: flex; flex-direction: column;">
         <div class="chat-header-info">
@@ -526,6 +617,7 @@
     </div>
 </div>
 
+<!-- قائمة المحادثات -->
 <div id="allConversationsModal" class="modal">
     <div class="modal-content" style="max-width: 600px;">
         <h2 style="margin-top:0; font-size: 1.3rem;">رسائلي ومحادثاتي</h2>
@@ -543,12 +635,13 @@
         'حيوانات': ['طيور', 'قطط وكلاب', 'أغنام ومواشٍ', 'مستلزمات وأعلاف']
     };
 
-    let currentUser = null;
+    // استرجاع المستخدم المحفوظ من المتصفح تلقائياً
+    let currentUser = localStorage.getItem('rakhis_user') || null;
     let activeCategory = 'الكل';
     let activeSubcategory = 'الكل';
     let activeCity = 'الكل';
     let activeProfileUser = '';
-    let currentAdIdForDetails = null;
+    let currentAdDetailsObj = null;
     let currentChatTarget = '';
     let chatPollInterval = null;
     let lastRenderedMsgCount = 0;
@@ -569,7 +662,7 @@
         }, 2800);
     }
 
-    // إدارة زر الرجوع في الموبايل والمتصفح (History API)
+    // إدارة زر الرجوع (History API)
     window.history.replaceState({ page: 'main' }, '');
 
     window.addEventListener('popstate', function() {
@@ -595,7 +688,6 @@
         }
     }
 
-    // استبدال النافذة الحالية بنافذة جديدة دون تراكم في السجل
     function replaceCurrentModal(oldId, newId) {
         const idx = modalStack.indexOf(oldId);
         if (idx > -1) {
@@ -633,19 +725,22 @@
     function populateCitiesDropdowns() {
         const searchCityEl = document.getElementById('searchCity');
         const adCityEl = document.getElementById('adCity');
+        const editAdCityEl = document.getElementById('editAdCity');
         if (searchCityEl) searchCityEl.innerHTML = '<option value="الكل">جميع المدن</option>';
         if (adCityEl) adCityEl.innerHTML = '<option value="">اختر المدينة...</option>';
+        if (editAdCityEl) editAdCityEl.innerHTML = '<option value="">اختر المدينة...</option>';
         SYRIAN_CITIES.forEach(city => {
             if (searchCityEl) searchCityEl.innerHTML += `<option value="${city}">${city}</option>`;
             if (adCityEl) adCityEl.innerHTML += `<option value="${city}">${city}</option>`;
+            if (editAdCityEl) editAdCityEl.innerHTML += `<option value="${city}">${city}</option>`;
         });
     }
 
-    function populateAdSubcategories() {
-        const catSelect = document.getElementById('adCategory');
+    function populateAdSubcategories(catId = 'adCategory', subId = 'adSubcategory') {
+        const catSelect = document.getElementById(catId);
         if (!catSelect) return;
         const cat = catSelect.value;
-        const subSelect = document.getElementById('adSubcategory');
+        const subSelect = document.getElementById(subId);
         if (!subSelect) return;
         subSelect.innerHTML = '';
         (SUBCATEGORIES[cat] || ['عام']).forEach(sub => subSelect.innerHTML += `<option value="${sub}">${sub}</option>`);
@@ -783,6 +878,7 @@
         if (res.ok) {
             browserBack();
             currentUser = signupUser.value;
+            localStorage.setItem('rakhis_user', currentUser);
             updateUserUI();
         }
     }
@@ -802,6 +898,7 @@
         if (res.ok) {
             browserBack();
             currentUser = loginUser.value;
+            localStorage.setItem('rakhis_user', currentUser);
             updateUserUI();
         }
     }
@@ -816,7 +913,7 @@
             if (msgBtn) msgBtn.style.display = 'inline-block';
             if (profileBtn) profileBtn.style.display = 'inline-block';
         } else {
-            userSection.innerHTML = `<button type="button" onclick="openModal('loginModal')">دخول</button><button type="button" onclick="openModal('signupModal')">حساب</button>`;
+            userSection.innerHTML = `<button type="button" onclick="openModal('loginModal')">تسجيل الدخول</button><button type="button" onclick="openModal('signupModal')">إنشاء حساب</button>`;
             if (msgBtn) msgBtn.style.display = 'none';
             if (profileBtn) profileBtn.style.display = 'none';
         }
@@ -830,6 +927,7 @@
         }
         stopChatPolling();
         currentUser = null;
+        localStorage.removeItem('rakhis_user');
         updateUserUI();
         if (activeProfileUser) resetFilters();
         showToast('تم تسجيل الخروج', 'warning', '👋');
@@ -843,7 +941,7 @@
             openModal('loginModal');
             return;
         }
-        populateAdSubcategories();
+        populateAdSubcategories('adCategory', 'adSubcategory');
         openModal('adModal');
     }
 
@@ -879,10 +977,86 @@
             browserBack();
             document.getElementById('adForm')?.reset();
             populateCitiesDropdowns();
-            populateAdSubcategories();
+            populateAdSubcategories('adCategory', 'adSubcategory');
             const searchInput = document.getElementById('searchInput');
             loadAds(activeCategory, activeSubcategory, searchInput ? searchInput.value : '', activeProfileUser, activeCity);
         }
+    }
+
+    // فتح نافذة تعديل الإعلان وتعبئة بياناته الحالية
+    function openEditAdModal() {
+        if (!currentAdDetailsObj || currentUser !== currentAdDetailsObj.username) return;
+        document.getElementById('editAdCategory').value = currentAdDetailsObj.category;
+        populateAdSubcategories('editAdCategory', 'editAdSubcategory');
+        document.getElementById('editAdSubcategory').value = currentAdDetailsObj.subcategory || 'عام';
+        document.getElementById('editAdTitle').value = currentAdDetailsObj.title;
+        document.getElementById('editAdPrice').value = currentAdDetailsObj.price;
+        document.getElementById('editAdCity').value = currentAdDetailsObj.city;
+        document.getElementById('editAdPhone').value = currentAdDetailsObj.phone;
+        document.getElementById('editAdDescription').value = currentAdDetailsObj.description || '';
+        document.getElementById('editAdImages').value = '';
+
+        openModal('editAdModal');
+    }
+
+    // حفظ تعديلات الإعلان
+    async function handleEditAd(e) {
+        e.preventDefault();
+        if (!currentAdDetailsObj || !currentUser) return;
+
+        const formData = new FormData();
+        formData.append('category', document.getElementById('editAdCategory').value);
+        formData.append('subcategory', document.getElementById('editAdSubcategory').value);
+        formData.append('title', document.getElementById('editAdTitle').value);
+        formData.append('price', document.getElementById('editAdPrice').value);
+        formData.append('city', document.getElementById('editAdCity').value);
+        formData.append('phone', document.getElementById('editAdPhone').value);
+        formData.append('description', document.getElementById('editAdDescription').value);
+        formData.append('username', currentUser);
+
+        const editImages = document.getElementById('editAdImages');
+        if (editImages && editImages.files && editImages.files.length > 0) {
+            for (let i = 0; i < editImages.files.length; i++) {
+                formData.append('images', editImages.files[i]);
+            }
+        }
+
+        const res = await fetch(`/api/ads/${currentAdDetailsObj.id}`, {
+            method: 'PUT',
+            body: formData
+        });
+        const data = await res.json();
+        showToast(data.message || (res.ok ? 'تم تعديل الإعلان بنجاح' : 'فشل التعديل'), res.ok ? 'success' : 'error', res.ok ? '✏️' : '⚠️');
+        if (res.ok) {
+            // إغلاق نافذة التعديل وتحديث تفاصيل الإعلان والشبكة
+            browserBack();
+            await viewAdDetails(currentAdDetailsObj.id, true);
+            const searchInput = document.getElementById('searchInput');
+            loadAds(activeCategory, activeSubcategory, searchInput ? searchInput.value : '', activeProfileUser, activeCity);
+        }
+    }
+
+    // حذف الإعلان
+    async function deleteCurrentAd() {
+        if (!currentAdDetailsObj || !currentUser) return;
+        const res = await fetch(`/api/ads/${currentAdDetailsObj.id}?username=${encodeURIComponent(currentUser)}`, {
+            method: 'DELETE'
+        });
+        const data = await res.json();
+        showToast(data.message || (res.ok ? 'تم حذف الإعلان' : 'تعذر الحذف'), res.ok ? 'success' : 'error', res.ok ? '🗑️' : '⚠️');
+        if (res.ok) {
+            browserBack(); // إغلاق نافذة التفاصيل
+            const searchInput = document.getElementById('searchInput');
+            loadAds(activeCategory, activeSubcategory, searchInput ? searchInput.value : '', activeProfileUser, activeCity);
+        }
+    }
+
+    // فتح الصورة بحجم كامل
+    function openFullImage(src) {
+        const imgEl = document.getElementById('lightboxImg');
+        if (!imgEl || !src) return;
+        imgEl.src = src;
+        openModal('imageLightboxModal');
     }
 
     async function loadAds(category = 'الكل', subcategory = 'الكل', q = '', filterUser = '', city = 'الكل') {
@@ -916,11 +1090,11 @@
         });
     }
 
-    async function viewAdDetails(id) {
+    async function viewAdDetails(id, skipModalOpen = false) {
         const res = await fetch(`/api/ads/${id}`);
         const ad = await res.json();
         if (res.ok) {
-            currentAdIdForDetails = ad.id;
+            currentAdDetailsObj = ad;
             document.getElementById('detTitle').innerText = ad.title;
             document.getElementById('detCategory').innerText = ad.category;
             document.getElementById('detSubcategory').innerText = ad.subcategory || 'عام';
@@ -930,13 +1104,23 @@
             document.getElementById('detUser').innerText = ad.username;
             document.getElementById('detDesc').innerText = ad.description;
 
+            // إظهار أزرار التعديل والحذف إذا كان المستخدم الحالي هو صاحب الإعلان
+            const isOwner = currentUser && currentUser === ad.username;
+            document.getElementById('ownerControls').style.display = isOwner ? 'flex' : 'none';
+            document.getElementById('quickMsgBox').style.display = isOwner ? 'none' : 'block';
+            document.getElementById('directChatBtn').style.display = isOwner ? 'none' : 'inline-block';
+
             const imgsDiv = document.getElementById('detImages');
             if (imgsDiv) {
                 imgsDiv.innerHTML = '';
-                (ad.images || []).forEach(img => imgsDiv.innerHTML += `<img src="${img}">`);
+                (ad.images || []).forEach(img => {
+                    imgsDiv.innerHTML += `<img src="${img}" onclick="openFullImage('${img}')" title="اضغط لتكبير الصورة">`;
+                });
             }
             loadComments(ad.id);
-            openModal('detailsModal');
+            if (!skipModalOpen) {
+                openModal('detailsModal');
+            }
         }
     }
 
@@ -967,11 +1151,11 @@
             return;
         }
         const input = document.getElementById('commentInput');
-        if (!input || !currentAdIdForDetails) return;
+        if (!input || !currentAdDetailsObj) return;
         const text = input.value.trim();
         if (!text) return;
 
-        const res = await fetch(`/api/ads/${currentAdIdForDetails}/comments`, {
+        const res = await fetch(`/api/ads/${currentAdDetailsObj.id}/comments`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user: currentUser, text })
@@ -979,7 +1163,7 @@
         if (res.ok) {
             input.value = '';
             showToast('تمت إضافة التعليق', 'success', '💬');
-            loadComments(currentAdIdForDetails);
+            loadComments(currentAdDetailsObj.id);
         }
     }
 
@@ -1009,7 +1193,6 @@
         openModal('directChatModal');
     }
 
-    // الانتقال الفوري من قائمة المحادثات مع إغلاق القائمة تماماً
     function openChatFromList(targetUser) {
         if (!currentUser) return;
         startChatSession(targetUser);
@@ -1162,8 +1345,10 @@
         loadAds('الكل', 'الكل', '', username, 'الكل');
     }
 
+    // التهيئة عند تحميل الصفحة
+    updateUserUI();
     populateCitiesDropdowns();
-    populateAdSubcategories();
+    populateAdSubcategories('adCategory', 'adSubcategory');
     loadAds('الكل', 'الكل', '', '', 'الكل');
 </script>
 

@@ -646,6 +646,8 @@
     let modalStack = [];
     let ignoreNextPopstate = false;
 
+    const FALLBACK_IMG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='100'><rect width='120' height='100' fill='%23e2e8f0'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='11'>بلا صورة</text></svg>";
+
     function showToast(message, type = 'success', icon = '✅') {
         const container = document.getElementById('toastContainer');
         if (!container) return;
@@ -1121,10 +1123,11 @@
             }
 
             ads.forEach(ad => {
-                const firstImage = ad.images && ad.images.length > 0 ? ad.images[0] : '';
+                const firstImage = ad.images && ad.images.length > 0 ? ad.images[0] : FALLBACK_IMG;
+                const safeId = encodeURIComponent(ad.id);
                 grid.innerHTML += `
-                    <div class="ad-card" onclick="viewAdDetails('${ad.id}')">
-                        <img src="${firstImage}" class="ad-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'120\\' height=\\'100\\'><rect width=\\'120\\' height=\\'100\\' fill=\\'%23e2e8f0\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' font-size=\\'11\\'>بلا صورة</text></svg>'">
+                    <div class="ad-card" onclick="viewAdDetails('${safeId}')">
+                        <img src="${firstImage}" class="ad-img" onerror="this.onerror=null;this.src='${FALLBACK_IMG}';">
                         <div class="ad-info">
                             <div class="ad-title">${ad.title}</div>
                             <div class="ad-sub">${ad.category} • ${ad.subcategory || ''}</div>
@@ -1163,7 +1166,11 @@
                 if (imgsDiv) {
                     imgsDiv.innerHTML = '';
                     (ad.images || []).forEach(img => {
-                        imgsDiv.innerHTML += `<img src="${img}" onclick="openFullImage('${img}')" title="اضغط لتكبير الصورة">`;
+                        const imgEl = document.createElement('img');
+                        imgEl.src = img;
+                        imgEl.title = 'اضغط لتكبير الصورة';
+                        imgEl.onclick = () => openFullImage(img);
+                        imgsDiv.appendChild(imgEl);
                     });
                 }
                 loadComments(ad.id);
@@ -1361,15 +1368,17 @@
         } else {
             convos.forEach(c => {
                 const otherUser = c.participants.find(p => p !== currentUser);
-                list.innerHTML += `
-                    <div style="background:white; padding:10px; border-radius:8px; border-right:4px solid var(--teal); display:flex; justify-content:space-between; align-items:center; gap:8px; cursor:pointer;" onclick="openChatFromList('${otherUser}')">
-                        <div>
-                            <div style="font-weight:bold; font-size: 1rem; color:#065f46;">👤 ${otherUser}</div>
-                            <div style="font-size: 0.85rem; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width: 200px;">${c.lastMessage}</div>
-                        </div>
-                        <button type="button" class="btn-submit" style="background:var(--emerald); padding:6px 12px; cursor:pointer;">فتح</button>
+                const row = document.createElement('div');
+                row.style.cssText = 'background:white; padding:10px; border-radius:8px; border-right:4px solid var(--teal); display:flex; justify-content:space-between; align-items:center; gap:8px; cursor:pointer;';
+                row.onclick = () => openChatFromList(otherUser);
+                row.innerHTML = `
+                    <div>
+                        <div style="font-weight:bold; font-size: 1rem; color:#065f46;">👤 ${otherUser}</div>
+                        <div style="font-size: 0.85rem; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width: 200px;">${c.lastMessage}</div>
                     </div>
+                    <button type="button" class="btn-submit" style="background:var(--emerald); padding:6px 12px; cursor:pointer;">فتح</button>
                 `;
+                list.appendChild(row);
             });
         }
         openModal('allConversationsModal');
@@ -1397,7 +1406,7 @@
         loadAds('الكل', 'الكل', '', username, 'الكل');
     }
 
-    updateUserUI();s
+    updateUserUI();
     populateCitiesDropdowns();
     populateAdSubcategories('adCategory', 'adSubcategory');
     populateAdSubcategories('editAdCategory', 'editAdSubcategory');

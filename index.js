@@ -146,7 +146,7 @@ app.get('/api/ads', (req, res) => {
 });
 
 app.get('/api/ads/:id', (req, res) => {
-  const ad = ads.find((a) => String(a.id) === String(req.params.id));
+  const ad = ads.find((a) => String(a.id) === String(decodeURIComponent(req.params.id)));
   if (!ad) return res.status(404).json({ message: 'الإعلان غير موجود' });
   return res.json(ad);
 });
@@ -179,7 +179,7 @@ app.post('/api/ads', upload.array('images', 5), (req, res) => {
 });
 
 app.put('/api/ads/:id', upload.array('images', 5), (req, res) => {
-  const adIndex = ads.findIndex((a) => String(a.id) === String(req.params.id));
+  const adIndex = ads.findIndex((a) => String(a.id) === String(decodeURIComponent(req.params.id)));
   if (adIndex === -1) return res.status(404).json({ message: 'الإعلان غير موجود' });
 
   const { category, subcategory, title, price, city, phone, description, username } = req.body || {};
@@ -204,7 +204,7 @@ app.put('/api/ads/:id', upload.array('images', 5), (req, res) => {
 });
 
 app.delete('/api/ads/:id', (req, res) => {
-  const adIndex = ads.findIndex((a) => String(a.id) === String(req.params.id));
+  const adIndex = ads.findIndex((a) => String(a.id) === String(decodeURIComponent(req.params.id)));
   if (adIndex === -1) return res.status(404).json({ message: 'الإعلان غير موجود' });
 
   const { username } = req.query;
@@ -219,7 +219,7 @@ app.delete('/api/ads/:id', (req, res) => {
 
 // --- التعليقات ---
 app.get('/api/ads/:id/comments', (req, res) => {
-  const ad = ads.find((a) => String(a.id) === String(req.params.id));
+  const ad = ads.find((a) => String(a.id) === String(decodeURIComponent(req.params.id)));
   if (!ad) return res.status(404).json({ message: 'الإعلان غير موجود' });
   return res.json(ad.comments || []);
 });
@@ -229,7 +229,7 @@ app.post('/api/ads/:id/comments', (req, res) => {
   if (!user || !text || !text.trim()) {
     return res.status(400).json({ message: 'يرجى كتابة تعليق صالح' });
   }
-  const ad = ads.find((a) => String(a.id) === String(req.params.id));
+  const ad = ads.find((a) => String(a.id) === String(decodeURIComponent(req.params.id)));
   if (!ad) return res.status(404).json({ message: 'الإعلان غير موجود' });
 
   const comment = {

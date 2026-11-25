@@ -320,6 +320,12 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      cursor: pointer;
+    }
+
+    .ad-meta:hover {
+      color: #0284c7;
+      text-decoration: underline;
     }
 
     .ad-desc {
@@ -331,7 +337,6 @@
       overflow: hidden;
     }
 
-    /* أزرار رسائل جاهزة سريعة على بطاقة الإعلان */
     .preset-msgs {
       padding: 6px 10px;
       background: #f8fafc;
@@ -348,31 +353,11 @@
       background: #e0f2fe;
       color: #0369a1;
       font-weight: 700;
+      text-align: right;
     }
 
     .preset-btn:hover {
       background: #bae6fd;
-    }
-
-    .quick-msg-box {
-      padding: 6px 10px 8px;
-      background: #f8fafc;
-      display: flex;
-      gap: 5px;
-    }
-
-    .quick-msg-box input {
-      flex: 1;
-      min-width: 0;
-      padding: 5px 8px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 0.76rem;
-    }
-
-    .quick-msg-box button {
-      padding: 5px 8px;
-      font-size: 0.74rem;
     }
 
     .ad-actions {
@@ -389,19 +374,42 @@
       font-size: 0.74rem;
     }
 
+    /* أيقونة إشعار داخل التطبيق بدل رسائل المتصفح */
     .toast-banner {
       position: fixed;
       bottom: 18px;
       left: 18px;
       background: #0f172a;
       color: #fff;
-      padding: 10px 16px;
-      border-radius: 8px;
+      padding: 10px 15px;
+      border-radius: 10px;
       font-size: 0.86rem;
       font-weight: 700;
-      z-index: 10000;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      z-index: 10001;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
       display: none;
+      align-items: center;
+      gap: 8px;
+      border-right: 4px solid #38bdf8;
+      max-width: 360px;
+    }
+
+    .toast-banner.error {
+      background: #450a0a;
+      border-right-color: #f87171;
+      color: #fee2e2;
+    }
+
+    .toast-banner.success {
+      background: #052e16;
+      border-right-color: #4ade80;
+      color: #dcfce7;
+    }
+
+    .toast-icon {
+      font-size: 1.05rem;
+      line-height: 1;
+      flex-shrink: 0;
     }
 
     .modal-backdrop {
@@ -423,11 +431,13 @@
       background: #fff;
       border-radius: 12px;
       width: 100%;
-      max-width: 560px;
+      max-width: 600px;
       max-height: 90vh;
       overflow-y: auto;
       padding: 20px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
     }
 
     .modal-head {
@@ -481,45 +491,84 @@
       display: none;
     }
 
-    .chat-box {
-      max-height: 250px;
+    .chat-container {
+      display: flex;
+      flex: 1;
+      height: 350px;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .partners-sidebar {
+      width: 180px;
+      border-left: 1px solid var(--border);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-left: 8px;
+    }
+
+    .partner-item {
+      padding: 8px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f1f5f9;
+      font-weight: 600;
+    }
+
+    .partner-item.active {
+      background: #0284c7;
+      color: #fff;
+    }
+
+    .chat-main-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .chat-messages {
+      flex: 1;
       overflow-y: auto;
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 10px;
+      padding: 12px;
       background: #f8fafc;
-      margin-bottom: 10px;
-    }
-
-    .msg-row {
-      padding: 8px;
-      border-bottom: 1px solid #e2e8f0;
-      font-size: 0.86rem;
-    }
-
-    .msg-row:last-child {
-      border-bottom: none;
-    }
-
-    .partners-list {
       display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin-bottom: 10px;
+      flex-direction: column;
+      gap: 10px;
     }
 
-    .partner-pill {
-      padding: 4px 10px;
-      border-radius: 999px;
+    .msg-bubble {
+      max-width: 82%;
+      padding: 10px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      align-self: flex-start;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .msg-bubble.mine {
+      align-self: flex-end;
+      background: #dcf8c6;
+      border-color: #a3e08f;
+    }
+
+    .ad-context-card {
+      background: #e0f2fe;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 8px;
+      margin-bottom: 8px;
       font-size: 0.8rem;
-      background: #e2e8f0;
-      color: #0f172a;
-      cursor: pointer;
-    }
-
-    .partner-pill.active {
-      background: #0284c7;
-      color: #fff;
     }
 
     .tabs-bar {
@@ -541,6 +590,42 @@
       padding: 36px 16px;
       color: var(--muted);
       grid-column: 1 / -1;
+    }
+
+    .profile-view {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .profile-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #0284c7;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+
+    .profile-info h3 {
+      font-size: 1.25rem;
+    }
+
+    .profile-info p {
+      color: var(--muted);
+      font-size: 0.88rem;
     }
   </style>
 </head>
@@ -598,8 +683,8 @@
 
     <div class="action-bar">
       <button type="button" class="btn-red" data-action="open-create-ad">+ نشر إعلان</button>
-      <button type="button" class="btn-blue" data-action="open-inbox">💬 المحادثات</button>
-      <button type="button" class="btn-green" data-action="open-profile">👤 الملف الشخصي</button>
+      <button type="button" class="btn-blue" data-action="open-inbox">💬 صندوق المحادثات</button>
+      <button type="button" class="btn-green" data-action="open-my-profile">👤 ملفي الشخصي</button>
       <button type="button" class="btn-outline" data-action="my-favorites">❤️ المفضلة</button>
     </div>
   </section>
@@ -631,21 +716,23 @@
     <div class="ads-grid" id="adsGrid"></div>
   </main>
 
-  <div class="toast-banner" id="toastBanner"></div>
+  <!-- إشعار بأيقونة داخل التطبيق -->
+  <div class="toast-banner" id="toastBanner" role="status" aria-live="polite">
+    <span class="toast-icon" id="toastIcon">ℹ️</span>
+    <span id="toastText"></span>
+  </div>
 
-  <!-- نافذة إنشاء حساب جديد وتسجيل الدخول -->
+  <!-- Auth Modal -->
   <div class="modal-backdrop" id="authModal">
     <div class="modal-card">
       <div class="modal-head">
         <h3 id="authModalHeading">تسجيل الدخول إلى رخيص</h3>
         <button type="button" class="close-x" data-close="authModal">&times;</button>
       </div>
-
       <div class="tabs-bar">
         <button type="button" class="btn-green" id="tabLoginBtn" data-action="switch-auth-tab" data-tab="login">تسجيل الدخول</button>
         <button type="button" class="btn-outline" id="tabRegisterBtn" data-action="switch-auth-tab" data-tab="register">إنشاء حساب جديد</button>
       </div>
-
       <form id="authForm">
         <div class="field">
           <label for="authUsername">اسم المستخدم</label>
@@ -660,67 +747,18 @@
     </div>
   </div>
 
-  <!-- نافذة الملف الشخصي والإعدادات والمفضلة -->
+  <!-- Profile Modal -->
   <div class="modal-backdrop" id="profileModal">
     <div class="modal-card">
       <div class="modal-head">
         <h3 id="profileHeading">الملف الشخصي</h3>
         <button type="button" class="close-x" data-close="profileModal">&times;</button>
       </div>
-
-      <div class="tabs-bar">
-        <button type="button" class="btn-blue" id="profTabInfo" data-action="switch-prof-tab" data-tab="info">الإعدادات والبيانات</button>
-        <button type="button" class="btn-outline" id="profTabFavs" data-action="switch-prof-tab" data-tab="favs">❤️ المفضلة المحفوظة</button>
-        <button type="button" class="btn-outline" id="profTabMine" data-action="switch-prof-tab" data-tab="mine">إعلاناتي</button>
-      </div>
-
-      <div id="profSectionInfo">
-        <form id="profileSettingsForm">
-          <div class="field">
-            <label>اسم المستخدم</label>
-            <input type="text" id="profUsernameDisplay" disabled />
-          </div>
-          <div class="field">
-            <label for="profCityInput">المدينة المفضلة</label>
-            <select id="profCityInput">
-              <option value="دمشق">دمشق</option>
-              <option value="ريف دمشق">ريف دمشق</option>
-              <option value="حلب">حلب</option>
-              <option value="حمص">حمص</option>
-              <option value="حماة">حماة</option>
-              <option value="اللاذقية">اللاذقية</option>
-              <option value="طرطوس">طرطوس</option>
-              <option value="إدلب">إدلب</option>
-              <option value="درعا">درعا</option>
-              <option value="دير الزور">دير الزور</option>
-              <option value="الحسكة">الحسكة</option>
-              <option value="الرقة">الرقة</option>
-              <option value="السويداء">السويداء</option>
-              <option value="القنيطرة">القنيطرة</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="profPhoneInput">رقم التواصل (اختياري)</label>
-            <input type="text" id="profPhoneInput" placeholder="مثال: 0991234567" />
-          </div>
-          <div class="field">
-            <label for="profBioInput">نبذة تعريفية</label>
-            <textarea id="profBioInput" rows="2" placeholder="اكتب نبذة قصيرة عنك..."></textarea>
-          </div>
-          <div class="field">
-            <label for="profNewPassInput">تغيير كلمة المرور (اختياري)</label>
-            <input type="password" id="profNewPassInput" placeholder="اتركه فارغاً إذا لم ترد التغيير" />
-          </div>
-          <button type="submit" class="btn-green" style="width:100%;">حفظ الإعدادات</button>
-        </form>
-      </div>
-
-      <div id="profSectionFavs" style="display:none;"></div>
-      <div id="profSectionMine" style="display:none;"></div>
+      <div id="targetProfileContent" class="profile-view"></div>
     </div>
   </div>
 
-  <!-- نافذة نشر / تعديل إعلان -->
+  <!-- Ad Form Modal -->
   <div class="modal-backdrop" id="adFormModal">
     <div class="modal-card">
       <div class="modal-head">
@@ -729,17 +767,14 @@
       </div>
       <form id="adForm">
         <input type="hidden" id="adEditId" />
-
         <div class="field">
           <label for="adTitleInput">عنوان الإعلان *</label>
           <input type="text" id="adTitleInput" required placeholder="مثال: سيارة هيونداي أفانتي" />
         </div>
-
         <div class="field">
           <label for="adPriceInput">السعر</label>
           <input type="text" id="adPriceInput" placeholder="مثال: 5500$" />
         </div>
-
         <div class="field">
           <label for="adCityInput">المدينة (سوريا)</label>
           <select id="adCityInput">
@@ -759,7 +794,6 @@
             <option value="القنيطرة">القنيطرة</option>
           </select>
         </div>
-
         <div class="field">
           <label for="adCategoryInput">القسم</label>
           <select id="adCategoryInput">
@@ -771,7 +805,6 @@
             <option value="أخرى">أخرى</option>
           </select>
         </div>
-
         <div class="field">
           <label for="adConditionInput">حالة المنتج</label>
           <select id="adConditionInput">
@@ -779,25 +812,21 @@
             <option value="جديد">جديد</option>
           </select>
         </div>
-
         <div class="field">
           <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
             <input type="checkbox" id="adNegotiableInput" style="width:auto;" />
             <span>قابل للتفاوض</span>
           </label>
         </div>
-
         <div class="field">
           <label for="adDescInput">الوصف والتفاصيل</label>
-          <textarea id="adDescInput" rows="3" placeholder="اكتب التفاصيل الكاملة للإعلان..."></textarea>
+          <textarea id="adDescInput" rows="3" placeholder="اكتب التفاصيل الكاملة..."></textarea>
         </div>
-
         <div class="field">
           <label for="adImgFile">صورة الإعلان</label>
           <input type="file" id="adImgFile" accept="image/*" />
           <img id="adImgPreview" class="img-preview" alt="معاينة" />
         </div>
-
         <div style="display:flex; gap:8px;">
           <button type="submit" class="btn-green" id="adSubmitBtn" style="flex:1;">نشر الإعلان</button>
           <button type="button" class="btn-outline" data-close="adFormModal">إلغاء</button>
@@ -806,34 +835,36 @@
     </div>
   </div>
 
-  <!-- نافذة المحادثات -->
+  <!-- Standalone Inbox/Chat Modal -->
   <div class="modal-backdrop" id="chatModal">
-    <div class="modal-card">
+    <div class="modal-card" style="max-width: 800px;">
       <div class="modal-head">
-        <h3 id="chatHeading">المحادثات</h3>
+        <h3 id="chatModalHeading">صندوق المحادثات</h3>
         <button type="button" class="close-x" data-close="chatModal">&times;</button>
       </div>
-      <div class="partners-list" id="partnersList"></div>
-      <div class="chat-box" id="chatBox"></div>
-      <form id="chatSendForm" style="display:flex; gap:8px;">
-        <input type="hidden" id="chatPartnerInput" />
-        <input type="hidden" id="chatAdIdInput" />
-        <input type="hidden" id="chatAdTitleInput" />
-        <input type="text" id="chatMsgInput" placeholder="اكتب رسالتك..." required style="flex:1; padding:8px; border:1px solid var(--border); border-radius:7px;" />
-        <button type="submit" class="btn-blue">إرسال</button>
-      </form>
+      <div class="chat-container">
+        <div class="partners-sidebar" id="partnersSidebar"></div>
+        <div class="chat-main-area">
+          <div id="activeAdContextArea"></div>
+          <div class="chat-messages" id="chatMessagesArea"></div>
+          <form id="standaloneMsgForm" style="display:flex; gap:8px; margin-top:8px;">
+            <input type="text" id="standaloneMsgInput" placeholder="اكتب رسالتك هنا..." required style="flex:1; padding:8px; border:1px solid var(--border); border-radius:7px;" />
+            <button type="submit" class="btn-blue">إرسال</button>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- نافذة التعليقات -->
+  <!-- Comments Modal -->
   <div class="modal-backdrop" id="commentsModal">
     <div class="modal-card">
       <div class="modal-head">
         <h3 id="commentsHeading">التعليقات</h3>
         <button type="button" class="close-x" data-close="commentsModal">&times;</button>
       </div>
-      <div class="chat-box" id="commentsBox"></div>
-      <form id="commentSendForm" style="display:flex; gap:8px;">
+      <div class="chat-messages" id="commentsBox" style="height:250px;"></div>
+      <form id="commentSendForm" style="display:flex; gap:8px; margin-top:8px;">
         <input type="hidden" id="commentAdIdInput" />
         <input type="text" id="commentTextInput" placeholder="اكتب تعليقاً..." required style="flex:1; padding:8px; border:1px solid var(--border); border-radius:7px;" />
         <button type="submit" class="btn-green">إرسال</button>
@@ -841,7 +872,7 @@
     </div>
   </div>
 
-  <!-- نافذة تكبير الصورة -->
+  <!-- Lightbox -->
   <div class="modal-backdrop" id="lightboxModal" data-close="lightboxModal">
     <img id="lightboxTarget" class="lightbox-img" alt="صورة مكبرة" />
   </div>
@@ -851,78 +882,37 @@
       'use strict';
 
       let currentUser = null;
-      let allFetchedAds = [];
-      let displayedAds = [];
+      let allAds = [];
       let currentMode = 'all';
-      let authMode = 'login'; // 'login' | 'register'
+      let authMode = 'login';
       let selectedImageData = '';
-      let activeChatPartner = '';
+      let activePartner = null;
+      let activeAdContext = null;
       let toastTimer = null;
 
-      function showToast(msg) {
+      function showToast(msg, type = 'info') {
         const el = document.getElementById('toastBanner');
-        if (!el) return;
-        el.textContent = msg;
-        el.style.display = 'block';
+        const iconEl = document.getElementById('toastIcon');
+        const textEl = document.getElementById('toastText');
+        if (!el || !iconEl || !textEl) return;
+
+        el.classList.remove('error', 'success');
+        if (type === 'error') {
+          el.classList.add('error');
+          iconEl.textContent = '⚠️';
+        } else if (type === 'success') {
+          el.classList.add('success');
+          iconEl.textContent = '✅';
+        } else {
+          iconEl.textContent = 'ℹ️';
+        }
+
+        textEl.textContent = msg;
+        el.style.display = 'flex';
         clearTimeout(toastTimer);
         toastTimer = setTimeout(() => {
           el.style.display = 'none';
-        }, 2600);
-      }
-
-      function loadUser() {
-        try {
-          const raw = localStorage.getItem('rakhis_auth_user');
-          currentUser = raw ? JSON.parse(raw) : null;
-        } catch (e) {
-          currentUser = null;
-        }
-        renderAuthHeader();
-      }
-
-      function saveUser() {
-        if (currentUser) {
-          localStorage.setItem('rakhis_auth_user', JSON.stringify(currentUser));
-        } else {
-          localStorage.removeItem('rakhis_auth_user');
-        }
-        renderAuthHeader();
-      }
-
-      function renderAuthHeader() {
-        const box = document.getElementById('authBox');
-        if (!box) return;
-        if (currentUser && currentUser.username) {
-          box.innerHTML = `
-            <span class="user-chip" data-action="open-profile" style="cursor:pointer;">👤 ${escapeHtml(currentUser.username)}</span>
-            <button type="button" class="btn-red" data-action="logout">خروج</button>
-          `;
-        } else {
-          box.innerHTML = `
-            <button type="button" class="btn-green" data-action="open-login">تسجيل الدخول</button>
-            <button type="button" class="btn-outline" data-action="open-register">إنشاء حساب</button>
-          `;
-        }
-      }
-
-      function setAuthTab(mode) {
-        authMode = mode;
-        const loginBtn = document.getElementById('tabLoginBtn');
-        const regBtn = document.getElementById('tabRegisterBtn');
-        const heading = document.getElementById('authModalHeading');
-        const submitBtn = document.getElementById('authSubmitBtn');
-
-        if (mode === 'register') {
-          loginBtn.className = 'btn-outline';
-          regBtn.className = 'btn-green';
-          heading.textContent = 'إنشاء حساب جديد في رخيص';
-          submitBtn.textContent = 'إنشاء الحساب';
-        } else {
-          loginBtn.className = 'btn-green';
-          regBtn.className = 'btn-outline';
-          heading.textContent = 'تسجيل الدخول إلى رخيص';
-          submitBtn.textContent = 'تسجيل الدخول';
-        }
+        }, 3000);
       }
 
       function escapeHtml(text) {
@@ -933,24 +923,52 @@
           .replace(/"/g, '&quot;');
       }
 
-      function openModal(id) {
-        const el = document.getElementById(id);
-        if (el) el.classList.add('open');
+      function openModal(id) { document.getElementById(id)?.classList.add('open'); }
+      function closeModal(id) { document.getElementById(id)?.classList.remove('open'); }
+
+      function loadUser() {
+        try {
+          currentUser = JSON.parse(localStorage.getItem('rakhis_user') || 'null');
+        } catch (e) {
+          currentUser = null;
+        }
+        renderAuth();
       }
 
-      function closeModal(id) {
-        const el = document.getElementById(id);
-        if (el) el.classList.remove('open');
+      function saveUser() {
+        if (currentUser) {
+          localStorage.setItem('rakhis_user', JSON.stringify(currentUser));
+        } else {
+          localStorage.removeItem('rakhis_user');
+        }
+        renderAuth();
       }
 
-      function ensureLoggedIn() {
-        if (currentUser && currentUser.username) return true;
-        setAuthTab('login');
-        openModal('authModal');
-        return false;
+      function renderAuth() {
+        const box = document.getElementById('authBox');
+        if (!box) return;
+        if (currentUser && currentUser.username) {
+          box.innerHTML = `
+            <span class="user-chip" data-action="view-profile" data-username="${escapeHtml(currentUser.username)}" style="cursor:pointer;">👤 ${escapeHtml(currentUser.username)}</span>
+            <button type="button" class="btn-red" data-action="logout">خروج</button>
+          `;
+        } else {
+          box.innerHTML = `
+            <button type="button" class="btn-green" data-action="open-auth" data-type="login">تسجيل الدخول</button>
+            <button type="button" class="btn-outline" data-action="open-auth" data-type="register">إنشاء حساب</button>
+          `;
+        }
       }
 
-      async function loadAds() {
+      function switchAuthTab(type) {
+        authMode = type;
+        document.getElementById('tabLoginBtn').className = type === 'login' ? 'btn-green' : 'btn-outline';
+        document.getElementById('tabRegisterBtn').className = type === 'register' ? 'btn-green' : 'btn-outline';
+        document.getElementById('authModalHeading').textContent = type === 'register' ? 'إنشاء حساب جديد في رخيص' : 'تسجيل الدخول إلى رخيص';
+        document.getElementById('authSubmitBtn').textContent = type === 'register' ? 'إنشاء الحساب' : 'دخول';
+      }
+
+      async function fetchAds() {
         const q = document.getElementById('searchQ').value.trim();
         const city = document.getElementById('filterCity').value;
         const category = document.getElementById('filterCategory').value;
@@ -965,190 +983,130 @@
         if (sort) params.set('sort', sort);
 
         try {
-          const allRes = await fetch('/api/ads');
-          allFetchedAds = allRes.ok ? await allRes.json() : [];
-
-          if (currentMode === 'mine' && currentUser) {
-            params.set('owner', currentUser.username);
-          }
-
-          const res = await fetch('/api/ads?' + params.toString());
-          if (!res.ok) throw new Error('فشل تحميل الإعلانات');
-          let data = await res.json();
-
-          if (currentMode === 'favorites') {
-            const favs = (currentUser && currentUser.favorites) || [];
-            data = data.filter(ad => favs.includes(ad.id));
-          }
-
-          displayedAds = data;
-          renderAds(displayedAds);
+          const res = await fetch('/api/ads?' + params.toString(), { cache: 'no-store' });
+          if (!res.ok) throw new Error('تعذر جلب الإعلانات من الخادم');
+          allAds = await res.json();
+          filterAndRenderAds();
         } catch (err) {
-          console.error(err);
-          document.getElementById('adsGrid').innerHTML =
-            '<div class="empty-msg">تعذر تحميل الإعلانات حالياً.</div>';
+          document.getElementById('adsGrid').innerHTML = '<div class="empty-msg">فشل تحميل البيانات.</div>';
+          showToast(err.message || 'تعذر تحميل الإعلانات', 'error');
         }
       }
 
-      function renderAds(items) {
-        const grid = document.getElementById('adsGrid');
-        document.getElementById('adsCounter').textContent = `(${items.length} إعلان)`;
+      function filterAndRenderAds() {
+        let list = [...allAds];
+        const favIds = currentUser?.favorites || [];
 
-        if (!items.length) {
+        if (currentMode === 'favorites') {
+          list = list.filter(a => favIds.includes(a.id));
+        }
+
+        const grid = document.getElementById('adsGrid');
+        document.getElementById('adsCounter').textContent = `(${list.length} إعلان)`;
+
+        if (!list.length) {
           grid.innerHTML = '<div class="empty-msg">لا توجد إعلانات مطابقة.</div>';
           return;
         }
 
-        const favs = (currentUser && currentUser.favorites) || [];
-
-        grid.innerHTML = items.map(ad => {
-          const isOwner =
-            currentUser &&
-            currentUser.username.toLowerCase() === (ad.ownerUsername || '').toLowerCase();
-          const isFav = favs.includes(ad.id);
-          const imgSrc =
-            ad.image ||
-            'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="220"><rect width="100%" height="100%" fill="%23e2e8f0"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2364748b" font-size="16">بدون صورة</text></svg>';
-
-          const commentsCount = Array.isArray(ad.comments) ? ad.comments.length : 0;
-          const viewsCount = Number(ad.views) || 0;
+        grid.innerHTML = list.map(ad => {
+          const isOwner = currentUser && currentUser.username.toLowerCase() === (ad.ownerUsername || '').toLowerCase();
+          const isFav = favIds.includes(ad.id);
+          const imgSrc = ad.image || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="220"><rect width="100%" height="100%" fill="%23e2e8f0"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2364748b" font-size="16">بدون صورة</text></svg>';
 
           return `
-            <div class="ad-card" data-ad-id="${escapeHtml(ad.id)}">
+            <div class="ad-card">
               <div class="ad-img-wrap">
-                <img src="${imgSrc}" class="ad-img" data-action="zoom" data-ad-id="${escapeHtml(ad.id)}" alt="${escapeHtml(ad.title)}" />
-                <button type="button" class="fav-btn" data-action="toggle-fav" data-ad-id="${escapeHtml(ad.id)}" title="حفظ في المفضلة">
-                  ${isFav ? '❤️' : '🤍'}
-                </button>
+                <img src="${imgSrc}" class="ad-img" data-action="zoom" data-id="${escapeHtml(ad.id)}" data-src="${escapeHtml(ad.image)}" alt="${escapeHtml(ad.title)}" />
+                <button type="button" class="fav-btn" data-action="toggle-fav" data-id="${escapeHtml(ad.id)}">${isFav ? '❤️' : '🤍'}</button>
               </div>
-
               <div class="ad-body">
                 <div class="badges-row">
-                  <span class="badge">${escapeHtml(ad.city || 'سوريا')}</span>
-                  <span class="badge">${escapeHtml(ad.condition || 'مستعمل')}</span>
+                  <span class="badge">${escapeHtml(ad.city)}</span>
+                  <span class="badge">${escapeHtml(ad.condition)}</span>
                   ${ad.negotiable ? '<span class="badge badge-neg">قابل للتفاوض</span>' : ''}
-                  <span class="badge">👁️ ${viewsCount}</span>
+                  <span class="badge">👁️ ${ad.views || 0}</span>
                 </div>
-
                 <div class="ad-title">${escapeHtml(ad.title)}</div>
                 <div class="ad-price">${escapeHtml(ad.price)}</div>
-                <div class="ad-meta">${escapeHtml(ad.category)} • <strong>${escapeHtml(ad.ownerUsername)}</strong></div>
+                <div class="ad-meta" data-action="view-profile" data-username="${escapeHtml(ad.ownerUsername)}">
+                  ${escapeHtml(ad.category)} • <strong>${escapeHtml(ad.ownerUsername)}</strong>
+                </div>
                 <div class="ad-desc">${escapeHtml(ad.description)}</div>
               </div>
 
               ${!isOwner ? `
                 <div class="preset-msgs">
-                  <button type="button" class="preset-btn" data-action="preset-send" data-ad-id="${escapeHtml(ad.id)}" data-preset="هل هذا المنتج متاح؟">هل هذا المنتج متاح؟</button>
-                  <button type="button" class="preset-btn" data-action="preset-send" data-ad-id="${escapeHtml(ad.id)}" data-preset="مهتم، يرجى التواصل">مهتم بالتواصل</button>
+                  <button type="button" class="preset-btn" data-action="send-preset" data-id="${escapeHtml(ad.id)}" data-text="هل هذا المنتج متاح؟">هل هذا المنتج متاح؟</button>
+                  <button type="button" class="preset-btn" data-action="send-preset" data-id="${escapeHtml(ad.id)}" data-text="مهتم، يرجى التواصل">مهتم بالتواصل</button>
                 </div>
-                <div class="quick-msg-box">
-                  <input type="text" class="quick-msg-input" placeholder="رسالة سريعة..." />
-                  <button type="button" class="btn-blue" data-action="quick-send" data-ad-id="${escapeHtml(ad.id)}">إرسال</button>
+              ` : `
+                <div class="ad-actions">
+                  <button type="button" class="btn-green" data-action="open-edit" data-id="${escapeHtml(ad.id)}">✏️ تعديل</button>
+                  <button type="button" class="btn-red" data-action="delete-ad" data-id="${escapeHtml(ad.id)}">🗑️ حذف</button>
                 </div>
-              ` : ''}
+              `}
 
               <div class="ad-actions">
-                <button type="button" class="btn-outline" data-action="open-comments" data-ad-id="${escapeHtml(ad.id)}">
-                  💬 (${commentsCount})
-                </button>
-
+                <button type="button" class="btn-outline" data-action="open-comments" data-id="${escapeHtml(ad.id)}">💬 (${ad.comments?.length || 0})</button>
                 ${!isOwner ? `
-                  <button type="button" class="btn-green" data-action="open-ad-chat" data-ad-id="${escapeHtml(ad.id)}">
-                    ✉️ محادثة
-                  </button>
-                ` : `
-                  <button type="button" class="btn-green" data-action="edit-ad" data-ad-id="${escapeHtml(ad.id)}">
-                    ✏️ تعديل
-                  </button>
-                  <button type="button" class="btn-red" data-action="delete-ad" data-ad-id="${escapeHtml(ad.id)}">
-                    🗑️ حذف
-                  </button>
-                `}
+                  <button type="button" class="btn-blue" style="flex:1;" data-action="chat-user" data-username="${escapeHtml(ad.ownerUsername)}" data-ad-id="${escapeHtml(ad.id)}">✉️ محادثة</button>
+                ` : ''}
               </div>
             </div>
           `;
         }).join('');
       }
 
-      async function openProfileModal(defaultTab = 'info') {
-        if (!ensureLoggedIn()) return;
-        document.getElementById('profileHeading').textContent = `ملف ${currentUser.username} الشخصي`;
-        document.getElementById('profUsernameDisplay').value = currentUser.username;
-        document.getElementById('profCityInput').value = currentUser.city || 'دمشق';
-        document.getElementById('profPhoneInput').value = currentUser.phone || '';
-        document.getElementById('profBioInput').value = currentUser.bio || '';
-        document.getElementById('profNewPassInput').value = '';
+      async function openProfile(username) {
+        try {
+          const res = await fetch(`/api/users/${encodeURIComponent(username)}`, { cache: 'no-store' });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.message || 'تعذر جلب بيانات المستخدم');
+          const isMe = currentUser && currentUser.username.toLowerCase() === data.username.toLowerCase();
 
-        switchProfileTab(defaultTab);
-        openModal('profileModal');
+          const container = document.getElementById('targetProfileContent');
+          container.innerHTML = `
+            <div class="profile-header">
+              <div class="profile-avatar">${escapeHtml((data.username || 'م')[0].toUpperCase())}</div>
+              <div class="profile-info">
+                <h3>${escapeHtml(data.username)}</h3>
+                <p>المدينة: ${escapeHtml(data.city)} | عضو منذ: ${escapeHtml(data.joinedAt)}</p>
+                ${data.phone ? `<p>📞 ${escapeHtml(data.phone)}</p>` : ''}
+              </div>
+            </div>
+            <div>
+              <strong>النبذة:</strong>
+              <p style="margin-top:4px; color:var(--text);">${escapeHtml(data.bio || 'لا توجد نبذة.')}</p>
+            </div>
+            ${!isMe && currentUser ? `
+              <button type="button" class="btn-blue" data-action="chat-user" data-username="${escapeHtml(data.username)}" style="width:100%; margin-top:10px;">إرسال رسالة مباشرة</button>
+            ` : ''}
+            ${isMe ? `
+              <div style="border-top:1px solid var(--border); padding-top:14px; margin-top:14px;">
+                <h4>تعديل بيانات الحساب</h4>
+                <form id="profileUpdateForm" style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
+                  <div class="field"><label for="upCity">المدينة</label><input type="text" id="upCity" value="${escapeHtml(currentUser.city)}" /></div>
+                  <div class="field"><label for="upPhone">رقم الهاتف</label><input type="text" id="upPhone" value="${escapeHtml(currentUser.phone || '')}" /></div>
+                  <div class="field"><label for="upBio">النبذة</label><textarea id="upBio">${escapeHtml(currentUser.bio || '')}</textarea></div>
+                  <button type="submit" class="btn-green">حفظ التغييرات</button>
+                </form>
+              </div>
+            ` : ''}
+          `;
+          openModal('profileModal');
+        } catch (err) {
+          showToast(err.message || 'تعذر جلب بيانات المستخدم', 'error');
+        }
       }
 
-      function switchProfileTab(tab) {
-        const infoSec = document.getElementById('profSectionInfo');
-        const favsSec = document.getElementById('profSectionFavs');
-        const mineSec = document.getElementById('profSectionMine');
-
-        document.getElementById('profTabInfo').className = tab === 'info' ? 'btn-blue' : 'btn-outline';
-        document.getElementById('profTabFavs').className = tab === 'favs' ? 'btn-blue' : 'btn-outline';
-        document.getElementById('profTabMine').className = tab === 'mine' ? 'btn-blue' : 'btn-outline';
-
-        infoSec.style.display = tab === 'info' ? 'block' : 'none';
-        favsSec.style.display = tab === 'favs' ? 'block' : 'none';
-        mineSec.style.display = tab === 'mine' ? 'block' : 'none';
-
-        const favIds = (currentUser && currentUser.favorites) || [];
-        const favAds = allFetchedAds.filter(a => favIds.includes(a.id));
-        favsSec.innerHTML = favAds.length
-          ? favAds.map(a => `
-              <div class="msg-row" style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
-                <div>
-                  <strong>${escapeHtml(a.title)}</strong> — <span style="color:#15803d; font-weight:700;">${escapeHtml(a.price)}</span>
-                  <div style="font-size:0.78rem; color:var(--muted);">${escapeHtml(a.city)} • ${escapeHtml(a.ownerUsername)}</div>
-                </div>
-                <button type="button" class="btn-red" data-action="toggle-fav" data-ad-id="${escapeHtml(a.id)}">إزالة ❤️</button>
-              </div>
-            `).join('')
-          : '<div class="empty-msg">لا توجد إعلانات محفوظة في المفضلة بعد.</div>';
-
-        const myAds = allFetchedAds.filter(
-          a => (a.ownerUsername || '').toLowerCase() === (currentUser.username || '').toLowerCase()
-        );
-        mineSec.innerHTML = myAds.length
-          ? myAds.map(a => `
-              <div class="msg-row" style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
-                <div>
-                  <strong>${escapeHtml(a.title)}</strong> — <span style="color:#15803d; font-weight:700;">${escapeHtml(a.price)}</span>
-                  <div style="font-size:0.78rem; color:var(--muted);">${escapeHtml(a.city)} • مشاهدات: ${Number(a.views) || 0}</div>
-                </div>
-                <div style="display:flex; gap:5px;">
-                  <button type="button" class="btn-green" data-action="edit-ad" data-ad-id="${escapeHtml(a.id)}">تعديل</button>
-                  <button type="button" class="btn-red" data-action="delete-ad" data-ad-id="${escapeHtml(a.id)}">حذف</button>
-                </div>
-              </div>
-            `).join('')
-          : '<div class="empty-msg">لم تنشر أي إعلانات بعد.</div>';
-      }
-
-      function openCreateAdModal() {
-        if (!ensureLoggedIn()) return;
+      function openEditAd(adId) {
+        const ad = allAds.find(a => a.id === adId);
+        if (!ad) {
+          showToast('الإعلان غير موجود', 'error');
+          return;
+        }
         document.getElementById('adForm').reset();
-        document.getElementById('adEditId').value = '';
-        document.getElementById('adCityInput').value = currentUser.city || 'دمشق';
-        document.getElementById('adFormTitle').textContent = 'نشر إعلان جديد';
-        document.getElementById('adSubmitBtn').textContent = 'نشر الإعلان';
-        selectedImageData = '';
-        const preview = document.getElementById('adImgPreview');
-        preview.style.display = 'none';
-        preview.src = '';
-        openModal('adFormModal');
-      }
-
-      function openEditAdModal(adId) {
-        if (!ensureLoggedIn()) return;
-        const ad = allFetchedAds.find(item => item.id === adId) || displayedAds.find(item => item.id === adId);
-        if (!ad) return alert('لم يتم العثور على الإعلان');
-
-        closeModal('profileModal');
         document.getElementById('adEditId').value = ad.id;
         document.getElementById('adFormTitle').textContent = 'تعديل الإعلان';
         document.getElementById('adSubmitBtn').textContent = 'حفظ التعديلات';
@@ -1160,7 +1118,6 @@
         document.getElementById('adNegotiableInput').checked = Boolean(ad.negotiable);
         document.getElementById('adDescInput').value = ad.description || '';
         selectedImageData = ad.image || '';
-
         const preview = document.getElementById('adImgPreview');
         if (ad.image) {
           preview.src = ad.image;
@@ -1171,57 +1128,99 @@
         openModal('adFormModal');
       }
 
-      async function deleteAdById(adId) {
-        if (!ensureLoggedIn()) return;
-        if (!confirm('هل تريد حذف هذا الإعلان نهائياً؟')) return;
+      async function openStandaloneInbox(targetPartner = null, contextAdId = null) {
+        if (!currentUser) {
+          showToast('سجل دخولك أولاً لاستخدام المحادثات', 'error');
+          openModal('authModal');
+          return;
+        }
+        activePartner = targetPartner;
+        activeAdContext = contextAdId ? (allAds.find(a => a.id === contextAdId) || null) : null;
+        openModal('chatModal');
+        await refreshMessages();
+      }
+
+      async function refreshMessages() {
+        const sidebar = document.getElementById('partnersSidebar');
+        const msgArea = document.getElementById('chatMessagesArea');
+        const contextArea = document.getElementById('activeAdContextArea');
+
+        if (!currentUser) return;
+
+        if (activeAdContext) {
+          contextArea.innerHTML = `
+            <div class="ad-context-card">
+              <strong>الإعلان المستهدف:</strong> ${escapeHtml(activeAdContext.title)} (${escapeHtml(activeAdContext.price)}) • ${escapeHtml(activeAdContext.city)}
+            </div>
+          `;
+        } else {
+          contextArea.innerHTML = '';
+        }
 
         try {
-          const res = await fetch(`/api/ads/${encodeURIComponent(adId)}`, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ownerUsername: currentUser.username })
+          const res = await fetch(`/api/messages?username=${encodeURIComponent(currentUser.username)}`, { cache: 'no-store' });
+          if (!res.ok) throw new Error('خطأ في تحميل الرسائل');
+          const msgs = await res.json();
+
+          const myName = currentUser.username.toLowerCase();
+          const partnerSet = new Set();
+          msgs.forEach(m => {
+            const peer = m.from.toLowerCase() === myName ? m.to : m.from;
+            if (peer) partnerSet.add(peer);
           });
-          const data = await res.json().catch(() => ({}));
-          if (!res.ok) throw new Error(data.message || 'فشل الحذف');
-          await loadAds();
-          if (document.getElementById('profileModal').classList.contains('open')) {
-            switchProfileTab('mine');
+          if (activePartner) partnerSet.add(activePartner);
+
+          const partners = Array.from(partnerSet);
+          if (!activePartner && partners.length > 0) {
+            activePartner = partners[0];
+          }
+
+          sidebar.innerHTML = partners.length > 0
+            ? partners.map(p => `
+                <div class="partner-item ${p.toLowerCase() === activePartner?.toLowerCase() ? 'active' : ''}" data-action="select-partner" data-partner="${escapeHtml(p)}">
+                  <span>${escapeHtml(p)}</span>
+                </div>
+              `).join('')
+            : '<div style="padding:10px; text-align:center; color:var(--muted); font-size:0.8rem;">لا توجد محادثات.</div>';
+
+          if (!activePartner) {
+            msgArea.innerHTML = '<div style="text-align:center; color:var(--muted); padding:20px;">اختر محادثة للبدء.</div>';
+            return;
+          }
+
+          const thread = msgs.filter(m => {
+            const f = m.from.toLowerCase();
+            const t = m.to.toLowerCase();
+            const p = activePartner.toLowerCase();
+            return (f === myName && t === p) || (t === myName && f === p);
+          });
+
+          if (!thread.length) {
+            msgArea.innerHTML = '<div style="text-align:center; color:var(--muted); padding:20px;">لا توجد رسائل في هذا السجل.</div>';
+          } else {
+            msgArea.innerHTML = thread.map(m => {
+              const isMine = m.from.toLowerCase() === myName;
+              return `
+                <div class="msg-bubble ${isMine ? 'mine' : ''}">
+                  ${m.adTitle ? `<div style="font-size:0.75rem; border-bottom:1px solid #ddd; margin-bottom:4px; padding-bottom:2px;">إعلان: <strong>${escapeHtml(m.adTitle)}</strong> ${m.adPrice ? `(${escapeHtml(m.adPrice)})` : ''}</div>` : ''}
+                  <div>${escapeHtml(m.text)}</div>
+                  <div style="font-size:0.65rem; color:#888; text-align:left; margin-top:4px;">${new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                </div>
+              `;
+            }).join('');
+            msgArea.scrollTop = msgArea.scrollHeight;
           }
         } catch (err) {
-          alert(err.message);
+          msgArea.innerHTML = '<div style="text-align:center; color:red;">خطأ في تحميل الرسائل.</div>';
+          showToast(err.message || 'خطأ في تحميل الرسائل', 'error');
         }
       }
 
-      async function toggleFavorite(adId) {
-        if (!ensureLoggedIn()) return;
-        try {
-          const res = await fetch('/api/favorites/toggle', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: currentUser.username, adId })
-          });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.message || 'تعذر تحديث المفضلة');
-          currentUser.favorites = data.favorites || [];
-          saveUser();
-          await loadAds();
-          if (document.getElementById('profileModal').classList.contains('open')) {
-            switchProfileTab('favs');
-          }
-        } catch (err) {
-          alert(err.message);
-        }
-      }
-
-      // إرسال رسالة سريعة جاهزة أو مخصصة مباشرة دون فتح الدردشة تلقائياً
-      async function sendDirectQuickMessage(adId, presetText, cardEl) {
-        if (!ensureLoggedIn()) return;
-        const ad = displayedAds.find(item => item.id === adId) || allFetchedAds.find(item => item.id === adId);
-        if (!ad) return;
-
-        const inputEl = cardEl ? cardEl.querySelector('.quick-msg-input') : null;
-        const text = (presetText || (inputEl ? inputEl.value.trim() : '')).trim();
-        if (!text) return showToast('اكتب رسالة أو اختر رسالة جاهزة');
+      async function sendChatMessage(textOverride = null) {
+        if (!currentUser || !activePartner) return;
+        const input = document.getElementById('standaloneMsgInput');
+        const text = textOverride || input.value.trim();
+        if (!text) return;
 
         try {
           const res = await fetch('/api/messages', {
@@ -1229,214 +1228,22 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               from: currentUser.username,
-              to: ad.ownerUsername,
-              adId: ad.id,
-              adTitle: ad.title,
-              text
+              to: activePartner,
+              text,
+              adId: activeAdContext ? activeAdContext.id : null,
+              adTitle: activeAdContext ? activeAdContext.title : null,
+              adPrice: activeAdContext ? activeAdContext.price : null
             })
           });
-          if (!res.ok) throw new Error('فشل إرسال الرسالة');
-          if (!presetText && inputEl) inputEl.value = '';
-          showToast(`تم إرسال رسالتك إلى ${ad.ownerUsername}`);
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.message || 'فشل إرسال الرسالة');
+          if (!textOverride) input.value = '';
+          activeAdContext = null;
+          await refreshMessages();
         } catch (err) {
-          alert(err.message);
+          showToast(err.message || 'فشل إرسال الرسالة', 'error');
         }
       }
-
-      async function openChatWithPartner(partnerName, adId = '', adTitle = '') {
-        if (!ensureLoggedIn()) return;
-        activeChatPartner = partnerName || '';
-        document.getElementById('chatPartnerInput').value = activeChatPartner;
-        document.getElementById('chatAdIdInput').value = adId;
-        document.getElementById('chatAdTitleInput').value = adTitle;
-        document.getElementById('chatHeading').textContent = activeChatPartner
-          ? `محادثة مع: ${activeChatPartner}`
-          : 'المحادثات';
-
-        await refreshChatView();
-        openModal('chatModal');
-      }
-
-      async function refreshChatView() {
-        const partnersEl = document.getElementById('partnersList');
-        const boxEl = document.getElementById('chatBox');
-        boxEl.innerHTML = 'جاري التحميل...';
-
-        try {
-          const res = await fetch(`/api/messages?username=${encodeURIComponent(currentUser.username)}`);
-          const msgs = await res.json();
-
-          const me = currentUser.username.toLowerCase();
-          const partnerSet = new Set();
-          msgs.forEach(m => {
-            const other = (m.from || '').toLowerCase() === me ? m.to : m.from;
-            if (other) partnerSet.add(other);
-          });
-          if (activeChatPartner) partnerSet.add(activeChatPartner);
-
-          const partners = Array.from(partnerSet);
-          if (!activeChatPartner && partners.length) {
-            activeChatPartner = partners[0];
-            document.getElementById('chatPartnerInput').value = activeChatPartner;
-          }
-
-          partnersEl.innerHTML = partners.map(p => `
-            <span class="partner-pill ${p.toLowerCase() === (activeChatPartner || '').toLowerCase() ? 'active' : ''}" data-action="select-partner" data-partner="${escapeHtml(p)}">
-              ${escapeHtml(p)}
-            </span>
-          `).join('');
-
-          const thread = activeChatPartner
-            ? msgs.filter(m =>
-                ((m.from || '').toLowerCase() === me && (m.to || '').toLowerCase() === activeChatPartner.toLowerCase()) ||
-                ((m.to || '').toLowerCase() === me && (m.from || '').toLowerCase() === activeChatPartner.toLowerCase())
-              )
-            : msgs;
-
-          if (!thread.length) {
-            boxEl.innerHTML = '<div style="text-align:center; color:var(--muted);">لا توجد رسائل في هذه المحادثة بعد.</div>';
-            return;
-          }
-
-          boxEl.innerHTML = thread.map(m => `
-            <div class="msg-row">
-              <div style="font-size:0.78rem; color:var(--muted);">
-                <strong>${escapeHtml(m.from)}</strong> → <strong>${escapeHtml(m.to)}</strong>
-                ${m.adTitle ? `• <span>${escapeHtml(m.adTitle)}</span>` : ''}
-              </div>
-              <div>${escapeHtml(m.text)}</div>
-            </div>
-          `).join('');
-          boxEl.scrollTop = boxEl.scrollHeight;
-        } catch (err) {
-          boxEl.innerHTML = 'تعذر تحميل المحادثات.';
-        }
-      }
-
-      function openCommentsForAd(adId) {
-        const ad = displayedAds.find(item => item.id === adId) || allFetchedAds.find(item => item.id === adId);
-        if (!ad) return;
-        document.getElementById('commentAdIdInput').value = ad.id;
-        document.getElementById('commentsHeading').textContent = `تعليقات: ${ad.title}`;
-        const box = document.getElementById('commentsBox');
-        const comments = Array.isArray(ad.comments) ? ad.comments : [];
-        box.innerHTML = comments.length
-          ? comments.map(c => `
-              <div class="msg-row">
-                <strong>${escapeHtml(c.username)}:</strong> ${escapeHtml(c.text)}
-              </div>
-            `).join('')
-          : '<div style="text-align:center; color:var(--muted);">لا توجد تعليقات بعد.</div>';
-        openModal('commentsModal');
-      }
-
-      document.addEventListener('click', async (e) => {
-        const closeBtn = e.target.closest('[data-close]');
-        if (closeBtn && (e.target === closeBtn || closeBtn.classList.contains('close-x'))) {
-          closeModal(closeBtn.getAttribute('data-close'));
-          return;
-        }
-
-        if (e.target.classList.contains('modal-backdrop')) {
-          e.target.classList.remove('open');
-          return;
-        }
-
-        const catPill = e.target.closest('.cat-pill');
-        if (catPill) {
-          document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
-          catPill.classList.add('active');
-          document.getElementById('filterCategory').value = catPill.dataset.cat;
-          currentMode = 'all';
-          document.getElementById('listHeading').textContent =
-            catPill.dataset.cat === 'all' ? 'أحدث الإعلانات' : `قسم: ${catPill.dataset.cat}`;
-          loadAds();
-          return;
-        }
-
-        const actionEl = e.target.closest('[data-action]');
-        if (!actionEl) return;
-
-        const action = actionEl.dataset.action;
-        const adId = actionEl.dataset.adId;
-        const cardEl = actionEl.closest('.ad-card');
-
-        if (action === 'open-login') {
-          setAuthTab('login');
-          openModal('authModal');
-        } else if (action === 'open-register') {
-          setAuthTab('register');
-          openModal('authModal');
-        } else if (action === 'switch-auth-tab') {
-          setAuthTab(actionEl.dataset.tab);
-        } else if (action === 'logout') {
-          currentUser = null;
-          currentMode = 'all';
-          saveUser();
-          document.getElementById('listHeading').textContent = 'أحدث الإعلانات';
-          loadAds();
-        } else if (action === 'open-create-ad') {
-          openCreateAdModal();
-        } else if (action === 'edit-ad') {
-          openEditAdModal(adId);
-        } else if (action === 'delete-ad') {
-          await deleteAdById(adId);
-        } else if (action === 'toggle-fav') {
-          await toggleFavorite(adId);
-        } else if (action === 'preset-send') {
-          await sendDirectQuickMessage(adId, actionEl.dataset.preset || '', cardEl);
-        } else if (action === 'quick-send') {
-          await sendDirectQuickMessage(adId, '', cardEl);
-        } else if (action === 'open-ad-chat') {
-          const ad = displayedAds.find(item => item.id === adId) || allFetchedAds.find(item => item.id === adId);
-          if (ad) {
-            await openChatWithPartner(ad.ownerUsername, ad.id, ad.title);
-          }
-        } else if (action === 'open-inbox') {
-          await openChatWithPartner('', '', '');
-        } else if (action === 'open-profile') {
-          await openProfileModal('info');
-        } else if (action === 'switch-prof-tab') {
-          switchProfileTab(actionEl.dataset.tab);
-        } else if (action === 'select-partner') {
-          activeChatPartner = actionEl.dataset.partner || '';
-          document.getElementById('chatPartnerInput').value = activeChatPartner;
-          document.getElementById('chatHeading').textContent = `محادثة مع: ${activeChatPartner}`;
-          await refreshChatView();
-        } else if (action === 'open-comments') {
-          openCommentsForAd(adId);
-        } else if (action === 'my-favorites') {
-          if (!ensureLoggedIn()) return;
-          currentMode = 'favorites';
-          document.getElementById('listHeading').textContent = '❤️ الإعلانات المفضلة';
-          loadAds();
-        } else if (action === 'apply-filters') {
-          currentMode = 'all';
-          document.getElementById('listHeading').textContent = 'نتائج البحث';
-          loadAds();
-        } else if (action === 'reset-all') {
-          currentMode = 'all';
-          document.getElementById('searchQ').value = '';
-          document.getElementById('filterCity').value = 'all';
-          document.getElementById('filterCategory').value = 'all';
-          document.getElementById('filterCondition').value = 'all';
-          document.getElementById('sortAds').value = 'newest';
-          document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
-          document.querySelector('.cat-pill[data-cat="all"]').classList.add('active');
-          document.getElementById('listHeading').textContent = 'أحدث الإعلانات';
-          loadAds();
-        } else if (action === 'zoom') {
-          document.getElementById('lightboxTarget').src = actionEl.src;
-          openModal('lightboxModal');
-          if (adId) {
-            fetch(`/api/ads/${encodeURIComponent(adId)}/view`, { method: 'POST' })
-              .then(() => loadAds())
-              .catch(() => {});
-          }
-        }
-      });
-
-      document.getElementById('sortAds').addEventListener('change', loadAds);
 
       document.getElementById('adImgFile').addEventListener('change', function () {
         const file = this.files && this.files[0];
@@ -1451,164 +1258,311 @@
         reader.readAsDataURL(file);
       });
 
-      // إنشاء حساب جديد أو تسجيل الدخول بالاسم وكلمة المرور فقط
-      document.getElementById('authForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const username = document.getElementById('authUsername').value.trim();
-        const password = document.getElementById('authPassword').value.trim();
-        const endpoint = authMode === 'register' ? '/api/auth/register' : '/api/auth/login';
+      document.getElementById('sortAds').addEventListener('change', fetchAds);
 
-        try {
-          const res = await fetch(endpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
-          });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.message || 'تعذرت العملية');
+      document.addEventListener('click', async (e) => {
+        const target = e.target.closest('[data-action]');
+        if (!target) return;
 
-          if (authMode === 'register') {
-            showToast(data.message || 'تم إنشاء الحساب، سجل دخولك الآن');
-            setAuthTab('login');
-            document.getElementById('authPassword').value = '';
+        const action = target.dataset.action;
+
+        if (action === 'open-auth') {
+          switchAuthTab(target.dataset.type);
+          openModal('authModal');
+        } else if (action === 'switch-auth-tab') {
+          switchAuthTab(target.dataset.tab);
+        } else if (action === 'logout') {
+          currentUser = null;
+          currentMode = 'all';
+          saveUser();
+          showToast('تم تسجيل الخروج', 'info');
+          fetchAds();
+        } else if (action === 'open-create-ad') {
+          if (!currentUser) {
+            showToast('يرجى تسجيل الدخول لنشر إعلان', 'error');
+            openModal('authModal');
             return;
           }
-
-          currentUser = data.user;
-          saveUser();
-          closeModal('authModal');
-          showToast(`أهلاً بك يا ${currentUser.username}`);
-          loadAds();
-        } catch (err) {
-          alert(err.message);
+          document.getElementById('adForm').reset();
+          document.getElementById('adEditId').value = '';
+          document.getElementById('adFormTitle').textContent = 'نشر إعلان جديد';
+          document.getElementById('adSubmitBtn').textContent = 'نشر الإعلان';
+          selectedImageData = '';
+          document.getElementById('adImgPreview').style.display = 'none';
+          openModal('adFormModal');
+        } else if (action === 'open-edit') {
+          openEditAd(target.dataset.id);
+        } else if (action === 'delete-ad') {
+          if (!currentUser) return;
+          try {
+            const res = await fetch(`/api/ads/${encodeURIComponent(target.dataset.id)}`, {
+              method: 'DELETE',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ ownerUsername: currentUser.username })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.message || 'فشل حذف الإعلان');
+            await fetchAds();
+            showToast('تم حذف الإعلان', 'success');
+          } catch (err) {
+            showToast(err.message || 'فشل حذف الإعلان', 'error');
+          }
+        } else if (action === 'toggle-fav') {
+          if (!currentUser) {
+            showToast('سجل دخولك لحفظ الإعلانات في المفضلة', 'error');
+            openModal('authModal');
+            return;
+          }
+          const id = target.dataset.id;
+          try {
+            const res = await fetch('/api/favorites/toggle', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ username: currentUser.username, adId: id })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.message || 'فشل تحديث المفضلة');
+            currentUser.favorites = data.favorites;
+            saveUser();
+            filterAndRenderAds();
+          } catch (err) {
+            showToast(err.message || 'فشل تحديث المفضلة', 'error');
+          }
+        } else if (action === 'send-preset') {
+          if (!currentUser) {
+            showToast('سجل دخولك لإرسال رسالة لصاحب الإعلان', 'error');
+            openModal('authModal');
+            return;
+          }
+          const adId = target.dataset.id;
+          const text = target.dataset.text;
+          const ad = allAds.find(a => a.id === adId);
+          if (!ad) return;
+          await openStandaloneInbox(ad.ownerUsername, adId);
+          await sendChatMessage(text);
+          showToast('تم إرسال الرسالة مع تفاصيل الإعلان', 'success');
+        } else if (action === 'chat-user') {
+          if (!currentUser) {
+            showToast('سجل دخولك لفتح المحادثة', 'error');
+            openModal('authModal');
+            return;
+          }
+          const partner = target.dataset.username;
+          const adId = target.dataset.adId || null;
+          closeModal('profileModal');
+          await openStandaloneInbox(partner, adId);
+        } else if (action === 'select-partner') {
+          activePartner = target.dataset.partner;
+          activeAdContext = null;
+          await refreshMessages();
+        } else if (action === 'open-inbox') {
+          if (!currentUser) {
+            showToast('سجل دخولك لعرض المحادثات', 'error');
+            openModal('authModal');
+            return;
+          }
+          await openStandaloneInbox(null, null);
+        } else if (action === 'view-profile') {
+          await openProfile(target.dataset.username);
+        } else if (action === 'open-my-profile') {
+          if (!currentUser) {
+            showToast('سجل دخولك لعرض ملفك الشخصي', 'error');
+            openModal('authModal');
+            return;
+          }
+          await openProfile(currentUser.username);
+        } else if (action === 'my-favorites') {
+          if (!currentUser) {
+            showToast('سجل دخولك لعرض المفضلة', 'error');
+            openModal('authModal');
+            return;
+          }
+          currentMode = 'favorites';
+          document.getElementById('listHeading').textContent = '❤️ المفضلة';
+          filterAndRenderAds();
+        } else if (action === 'apply-filters' || action === 'reset-all') {
+          if (action === 'reset-all') {
+            document.getElementById('searchQ').value = '';
+            document.getElementById('filterCity').value = 'all';
+            document.getElementById('filterCategory').value = 'all';
+            document.getElementById('filterCondition').value = 'all';
+            document.getElementById('sortAds').value = 'newest';
+            document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+            document.querySelector('.cat-pill[data-cat="all"]').classList.add('active');
+          }
+          currentMode = 'all';
+          document.getElementById('listHeading').textContent = 'أحدث الإعلانات';
+          await fetchAds();
+        } else if (action === 'zoom') {
+          const src = target.dataset.src;
+          if (src) {
+            document.getElementById('lightboxTarget').src = src;
+            openModal('lightboxModal');
+          }
+          if (target.dataset.id) {
+            fetch(`/api/ads/${encodeURIComponent(target.dataset.id)}/view`, { method: 'POST' })
+              .then(() => fetchAds())
+              .catch(() => {});
+          }
+        } else if (action === 'open-comments') {
+          const adId = target.dataset.id;
+          const ad = allAds.find(a => a.id === adId);
+          if (!ad) return;
+          document.getElementById('commentAdIdInput').value = ad.id;
+          document.getElementById('commentsHeading').textContent = `تعليقات: ${ad.title}`;
+          const box = document.getElementById('commentsBox');
+          const comments = ad.comments || [];
+          box.innerHTML = comments.length
+            ? comments.map(c => `
+                <div class="msg-bubble">
+                  <strong>${escapeHtml(c.username)}:</strong> ${escapeHtml(c.text)}
+                </div>
+              `).join('')
+            : '<div style="text-align:center; color:var(--muted);">لا توجد تعليقات.</div>';
+          openModal('commentsModal');
         }
       });
 
-      // حفظ إعدادات الملف الشخصي
-      document.getElementById('profileSettingsForm').addEventListener('submit', async (e) => {
+      document.addEventListener('submit', async (e) => {
         e.preventDefault();
-        if (!ensureLoggedIn()) return;
+        const id = e.target.id;
 
-        const payload = {
-          username: currentUser.username,
-          city: document.getElementById('profCityInput').value,
-          phone: document.getElementById('profPhoneInput').value.trim(),
-          bio: document.getElementById('profBioInput').value.trim(),
-          newPassword: document.getElementById('profNewPassInput').value.trim()
-        };
-
-        try {
-          const res = await fetch('/api/profile/settings', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.message || 'فشل حفظ الإعدادات');
-
-          currentUser = data.user;
-          saveUser();
-          document.getElementById('profNewPassInput').value = '';
-          showToast('تم حفظ إعدادات ملفك الشخصي');
-        } catch (err) {
-          alert(err.message);
+        if (id === 'authForm') {
+          const u = document.getElementById('authUsername').value.trim();
+          const p = document.getElementById('authPassword').value.trim();
+          const endpoint = authMode === 'register' ? '/api/auth/register' : '/api/auth/login';
+          try {
+            const res = await fetch(endpoint, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ username: u, password: p })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.message || 'تعذرت العملية');
+            if (authMode === 'register') {
+              showToast('تم إنشاء الحساب، سجل دخولك الآن', 'success');
+              switchAuthTab('login');
+              document.getElementById('authPassword').value = '';
+            } else {
+              currentUser = data.user;
+              saveUser();
+              closeModal('authModal');
+              showToast(`أهلاً بك يا ${currentUser.username}`, 'success');
+              await fetchAds();
+            }
+          } catch (err) {
+            showToast(err.message || 'حدث خطأ أثناء المصادقة', 'error');
+          }
+        } else if (id === 'adForm') {
+          if (!currentUser) {
+            showToast('سجل دخولك أولاً', 'error');
+            openModal('authModal');
+            return;
+          }
+          const editId = document.getElementById('adEditId').value.trim();
+          const payload = {
+            title: document.getElementById('adTitleInput').value.trim(),
+            price: document.getElementById('adPriceInput').value.trim(),
+            city: document.getElementById('adCityInput').value,
+            category: document.getElementById('adCategoryInput').value,
+            condition: document.getElementById('adConditionInput').value,
+            negotiable: document.getElementById('adNegotiableInput').checked,
+            description: document.getElementById('adDescInput').value.trim(),
+            image: selectedImageData,
+            ownerUsername: currentUser.username
+          };
+          const url = editId ? `/api/ads/${encodeURIComponent(editId)}` : '/api/ads';
+          const method = editId ? 'PUT' : 'POST';
+          try {
+            const res = await fetch(url, {
+              method,
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.message || 'فشل حفظ الإعلان');
+            closeModal('adFormModal');
+            currentMode = 'all';
+            document.getElementById('listHeading').textContent = 'أحدث الإعلانات';
+            await fetchAds();
+            showToast(editId ? 'تم تحديث الإعلان' : 'تم نشر الإعلان بنجاح', 'success');
+          } catch (err) {
+            showToast(err.message || 'فشل حفظ الإعلان', 'error');
+          }
+        } else if (id === 'profileUpdateForm') {
+          if (!currentUser) return;
+          try {
+            const res = await fetch('/api/profile/settings', {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                username: currentUser.username,
+                city: document.getElementById('upCity').value.trim(),
+                phone: document.getElementById('upPhone').value.trim(),
+                bio: document.getElementById('upBio').value.trim()
+              })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.message || 'فشل التحديث');
+            currentUser = data.user;
+            saveUser();
+            showToast('تم تحديث الملف الشخصي', 'success');
+            await openProfile(currentUser.username);
+            await fetchAds();
+          } catch (err) {
+            showToast(err.message || 'فشل التحديث', 'error');
+          }
+        } else if (id === 'standaloneMsgForm') {
+          await sendChatMessage();
+        } else if (id === 'commentSendForm') {
+          if (!currentUser) {
+            showToast('سجل دخولك لإضافة تعليق', 'error');
+            openModal('authModal');
+            return;
+          }
+          const adId = document.getElementById('commentAdIdInput').value;
+          const text = document.getElementById('commentTextInput').value.trim();
+          if (!text) return;
+          try {
+            const res = await fetch(`/api/ads/${encodeURIComponent(adId)}/comments`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ text, username: currentUser.username })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.message || 'فشل إضافة التعليق');
+            document.getElementById('commentTextInput').value = '';
+            await fetchAds();
+            const updatedAd = allAds.find(a => a.id === adId);
+            if (updatedAd) {
+              document.getElementById('commentsBox').innerHTML = (updatedAd.comments || []).map(c => `
+                <div class="msg-bubble">
+                  <strong>${escapeHtml(c.username)}:</strong> ${escapeHtml(c.text)}
+                </div>
+              `).join('');
+            }
+          } catch (err) {
+            showToast(err.message || 'فشل إضافة التعليق', 'error');
+          }
         }
       });
 
-      // حفظ / تعديل الإعلان
-      document.getElementById('adForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (!ensureLoggedIn()) return;
-
-        const editId = document.getElementById('adEditId').value.trim();
-        const payload = {
-          title: document.getElementById('adTitleInput').value.trim(),
-          price: document.getElementById('adPriceInput').value.trim(),
-          city: document.getElementById('adCityInput').value,
-          category: document.getElementById('adCategoryInput').value,
-          condition: document.getElementById('adConditionInput').value,
-          negotiable: document.getElementById('adNegotiableInput').checked,
-          description: document.getElementById('adDescInput').value.trim(),
-          image: selectedImageData,
-          ownerUsername: currentUser.username
-        };
-
-        const url = editId ? `/api/ads/${encodeURIComponent(editId)}` : '/api/ads';
-        const method = editId ? 'PUT' : 'POST';
-
-        try {
-          const res = await fetch(url, {
-            method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.message || 'فشل حفظ الإعلان');
-
-          closeModal('adFormModal');
-          await loadAds();
-        } catch (err) {
-          alert(err.message);
-        }
+      document.querySelectorAll('[data-close]').forEach(btn => {
+        btn.addEventListener('click', () => closeModal(btn.dataset.close));
       });
 
-      document.getElementById('chatSendForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (!ensureLoggedIn()) return;
-
-        const to = document.getElementById('chatPartnerInput').value.trim() || activeChatPartner;
-        const adId = document.getElementById('chatAdIdInput').value;
-        const adTitle = document.getElementById('chatAdTitleInput').value;
-        const text = document.getElementById('chatMsgInput').value.trim();
-
-        if (!to) return alert('اختر مستخدماً للمراسلة');
-        if (!text) return;
-
-        try {
-          const res = await fetch('/api/messages', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              from: currentUser.username,
-              to,
-              adId,
-              adTitle,
-              text
-            })
-          });
-          if (!res.ok) throw new Error('فشل إرسال الرسالة');
-          document.getElementById('chatMsgInput').value = '';
-          await refreshChatView();
-        } catch (err) {
-          alert(err.message);
-        }
-      });
-
-      document.getElementById('commentSendForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (!ensureLoggedIn()) return;
-
-        const adId = document.getElementById('commentAdIdInput').value;
-        const text = document.getElementById('commentTextInput').value.trim();
-        if (!text) return;
-
-        try {
-          const res = await fetch(`/api/ads/${encodeURIComponent(adId)}/comments`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text, username: currentUser.username })
-          });
-          if (!res.ok) throw new Error('فشل إضافة التعليق');
-          document.getElementById('commentTextInput').value = '';
-          await loadAds();
-          openCommentsForAd(adId);
-        } catch (err) {
-          alert(err.message);
-        }
+      document.querySelectorAll('.cat-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+          document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          document.getElementById('filterCategory').value = pill.dataset.cat;
+          currentMode = 'all';
+          fetchAds();
+        });
       });
 
       loadUser();
-      loadAds();
+      fetchAds();
     })();
   </script>
 </body>

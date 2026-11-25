@@ -3,473 +3,749 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>رخيص - سوق الإعلانات</title>
+  <title>رخيص - السوق الشامل للإعلانات في سوريا</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
 
     :root {
-      --bg-dark: #070b14;
-      --bg-mid: #0f172a;
-      --surface: rgba(19, 29, 49, 0.96);
-      --surface-soft: rgba(30, 41, 59, 0.88);
-      --cyan: #38bdf8;
-      --rose: #fb7185;
-      --gold: #facc15;
-      --purple: #c084fc;
-      --green: #22c55e;
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --border: rgba(148, 163, 184, 0.25);
+      --bg-body: #090d16;
+      --bg-surface: #111827;
+      --bg-card: #162033;
+      --bg-input: #0b111e;
+      --primary: #0ea5e9;
+      --primary-hover: #0284c7;
+      --primary-soft: rgba(14, 165, 233, 0.14);
+      --accent: #f59e0b;
+      --success: #10b981;
+      --danger: #ef4444;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: rgba(148, 163, 184, 0.18);
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+      --shadow-md: 0 10px 28px rgba(0, 0, 0, 0.42);
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+    }
 
     body {
-      background: radial-gradient(circle at 12% 8%, rgba(56, 189, 248, 0.12), transparent 36%),
-                  linear-gradient(150deg, var(--bg-dark) 0%, var(--bg-mid) 60%, #111c33 100%);
-      color: var(--text);
+      background-color: var(--bg-body);
+      color: var(--text-main);
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 72px;
     }
 
+    /* Header & Location Bar */
     header {
       position: sticky;
       top: 0;
-      z-index: 300;
-      padding: 10px 14px;
-      background: rgba(7, 11, 20, 0.96);
-      backdrop-filter: blur(12px);
+      z-index: 500;
+      background: rgba(9, 13, 22, 0.94);
+      backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--border);
+      padding: 10px 18px;
+    }
+
+    .header-inner {
+      max-width: 1380px;
+      margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      overflow-x: auto;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
-    .brand-box {
-      font-size: 1.45rem;
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo {
+      font-size: 1.55rem;
       font-weight: 900;
-      background: linear-gradient(95deg, #fff 0%, var(--gold) 40%, var(--cyan) 80%, var(--rose) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      cursor: pointer;
+      color: var(--primary);
       display: flex;
       align-items: center;
-      gap: 6px;
-      flex-shrink: 0;
-    }
-
-    .icon-nav-bar {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: nowrap;
-      flex-shrink: 0;
-    }
-
-    button, .btn-link {
+      gap: 8px;
       cursor: pointer;
-      border: none;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-logo span.badge-dot {
+      background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+      color: #090d16;
+      padding: 2px 9px;
       border-radius: 10px;
+      font-size: 1.15rem;
+    }
+
+    .location-selector {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
       padding: 6px 12px;
-      font-size: 0.8rem;
-      font-weight: 800;
-      text-decoration: none;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .location-selector select {
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      font-weight: 700;
+      font-size: 0.84rem;
+      padding: 0 4px;
+      cursor: pointer;
+      width: auto;
+    }
+
+    .location-selector select option {
+      background: var(--bg-surface);
+      color: var(--text-main);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 8px 15px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 5px;
+      gap: 6px;
+      transition: all 0.2s ease;
       white-space: nowrap;
-      transition: all 0.18s ease;
     }
 
-    button:active, .btn-link:active { transform: scale(0.96); }
+    .btn:active {
+      transform: scale(0.97);
+    }
 
-    .btn-primary { background: var(--cyan); color: #070b14; }
-    .btn-primary:hover { background: #7dd3fc; }
-    .btn-danger { background: var(--rose); color: #fff; }
-    .btn-danger:hover { background: #f43f5e; }
-    .btn-success { background: var(--green); color: #070b14; }
-    .btn-success:hover { background: #4ade80; }
-    .btn-gold { background: var(--gold); color: #070b14; }
-    .btn-secondary { background: var(--surface-soft); color: #fff; border: 1px solid var(--border); }
-    .btn-secondary:hover { background: rgba(51, 65, 85, 0.95); }
+    .btn-primary {
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(14, 165, 233, 0.28);
+    }
 
-    .user-pill {
-      background: rgba(56, 189, 248, 0.14);
-      border: 1px solid var(--cyan);
-      color: var(--cyan);
-      padding: 4px 9px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 800;
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+    }
+
+    .btn-surface {
+      background: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+    }
+
+    .btn-surface:hover {
+      border-color: var(--primary);
+      background: #1c283f;
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: #06281e;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: #ffffff;
+    }
+
+    .user-chip {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+      background: var(--primary-soft);
+      border: 1px solid rgba(14, 165, 233, 0.4);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 800;
+      color: #7dd3fc;
       cursor: pointer;
-      flex-shrink: 0;
     }
 
-    .user-avatar-mini {
+    .user-chip img {
       width: 24px;
       height: 24px;
       border-radius: 50%;
       object-fit: cover;
-      border: 1px solid var(--text);
     }
 
-    .container {
-      max-width: 1440px;
-      margin: 0 auto;
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .promo-strip {
-      background: linear-gradient(90deg, rgba(56, 189, 248, 0.14), rgba(250, 204, 21, 0.12), rgba(192, 132, 252, 0.14));
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 8px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      overflow-x: auto;
-      font-size: 0.8rem;
-      font-weight: 700;
-    }
-
-    .categories-horizontal {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      padding-bottom: 6px;
-    }
-
-    .cat-cluster {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 10px;
-      min-width: 240px;
-      flex: 1 0 240px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .cat-title {
-      font-weight: 800;
-      font-size: 0.88rem;
-      color: var(--cyan);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .sub-cat-title {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--gold);
-      margin-top: 2px;
-    }
-
-    .chip-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
-
-    .mini-chip {
-      background: rgba(30, 41, 59, 0.9);
-      color: #e2e8f0;
-      border: 1px solid var(--border);
-      padding: 2px 8px;
-      border-radius: 15px;
-      font-size: 0.72rem;
-      cursor: pointer;
-    }
-
-    .mini-chip:hover { background: var(--cyan); color: var(--bg-dark); font-weight: 800; }
-
-    .filter-panel {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px;
-    }
-
-    .filter-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
-      gap: 8px;
-      align-items: center;
-    }
-
-    input, select, textarea {
-      padding: 8px 11px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--bg-dark);
-      color: var(--text);
-      font-size: 0.84rem;
+    /* Main Layout */
+    .main-wrapper {
+      max-width: 1380px;
       width: 100%;
-    }
-
-    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--cyan); }
-
-    .ads-section-head {
+      margin: 0 auto;
+      padding: 16px 18px;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 20px;
     }
 
-    .ads-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+    /* Search & Filter Hero */
+    .search-panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
       gap: 12px;
     }
 
-    @media (max-width: 1200px) { .ads-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-    @media (max-width: 900px) { .ads-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-    @media (max-width: 600px) {
-      header { padding: 8px 10px; gap: 6px; }
-      .brand-box { font-size: 1.2rem; }
-      button, .btn-link { padding: 5px 8px; font-size: 0.72rem; }
-      .ads-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
-      .ad-card { border-radius: 8px; }
-      .ad-img { height: 78px !important; }
-      .ad-body { padding: 6px !important; gap: 2px !important; }
-      .ad-title { font-size: 0.72rem !important; }
-      .ad-price { font-size: 0.74rem !important; }
-      .ad-meta, .badges-container, .ad-description { display: none !important; }
-      .quick-action-btns { padding: 4px !important; gap: 3px !important; }
-      .quick-action-btns button, .quick-action-btns a { padding: 3px 4px !important; font-size: 0.62rem !important; }
+    .search-bar-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .search-input-box {
+      position: relative;
+      flex-grow: 1;
+    }
+
+    .search-input-box input {
+      width: 100%;
+      padding: 11px 40px 11px 14px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-main);
+      font-size: 0.92rem;
+    }
+
+    .search-input-box input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .search-input-box .search-ico {
+      position: absolute;
+      right: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+
+    .filters-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+    }
+
+    input, select, textarea {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-main);
+      padding: 9px 12px;
+      font-size: 0.86rem;
+      width: 100%;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    /* Categories Carousel & Subcategory Drilldown */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: 1.08rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .categories-rail {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scrollbar-width: thin;
+    }
+
+    .cat-tile {
+      min-width: 118px;
+      flex: 0 0 118px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 14px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .cat-tile:hover, .cat-tile.active {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      transform: translateY(-2px);
+    }
+
+    .cat-tile .cat-emoji {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: var(--bg-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.55rem;
+    }
+
+    .cat-tile .cat-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--text-main);
+    }
+
+    /* Subcategories Chips Bar (Dynamic on Category Click) */
+    .subcat-panel {
+      display: none;
+      background: var(--bg-surface);
+      border: 1px solid rgba(14, 165, 233, 0.35);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .subcat-panel.visible {
+      display: flex;
+    }
+
+    .subcat-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .sub-chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 6px 13px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .sub-chip:hover, .sub-chip.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    /* Ads Grid (4 cols desktop, 3 cols mobile) */
+    .ads-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    @media (max-width: 1150px) {
+      .ads-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 680px) {
+      header {
+        padding: 8px 12px;
+      }
+      .main-wrapper {
+        padding: 12px;
+        gap: 14px;
+      }
+      .ads-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 7px;
+      }
+      .ad-card {
+        border-radius: 10px;
+      }
+      .ad-media {
+        height: 86px !important;
+      }
+      .ad-info {
+        padding: 7px !important;
+        gap: 3px !important;
+      }
+      .ad-price-tag {
+        font-size: 0.76rem !important;
+      }
+      .ad-card-title {
+        font-size: 0.72rem !important;
+        -webkit-line-clamp: 1 !important;
+      }
+      .ad-loc-line {
+        font-size: 0.64rem !important;
+      }
+      .ad-seller-row, .ad-cat-pill {
+        display: none !important;
+      }
+      .ad-card-footer {
+        padding: 5px !important;
+        gap: 4px !important;
+      }
+      .ad-card-footer .btn {
+        padding: 4px 5px !important;
+        font-size: 0.64rem !important;
+      }
     }
 
     .ad-card {
-      background: var(--surface);
+      background: var(--bg-surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: var(--radius-lg);
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      transition: transform 0.12s ease, border-color 0.12s ease;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .ad-card:hover { border-color: rgba(56, 189, 248, 0.55); transform: translateY(-1px); }
+    .ad-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(14, 165, 233, 0.55);
+      box-shadow: var(--shadow-md);
+    }
 
-    .ad-img-wrapper {
+    .ad-media {
       position: relative;
       width: 100%;
-      background: var(--bg-dark);
+      height: 165px;
+      background: #0b111e;
       display: none;
     }
 
-    .ad-img-wrapper.has-image { display: block; }
+    .ad-media.has-img {
+      display: block;
+    }
 
-    .ad-img {
+    .ad-media img {
       width: 100%;
-      height: 135px;
+      height: 100%;
       object-fit: cover;
       display: block;
       cursor: pointer;
     }
 
-    .fav-toggle {
+    .fav-btn {
       position: absolute;
-      top: 6px;
-      right: 6px;
-      background: rgba(7, 11, 20, 0.82);
+      top: 8px;
+      right: 8px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(9, 13, 22, 0.78);
       border: 1px solid var(--border);
       color: #fff;
-      border-radius: 50%;
-      width: 26px;
-      height: 26px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
     }
 
-    .ad-body { padding: 10px; display: flex; flex-direction: column; gap: 4px; flex-grow: 1; }
-
-    .badges-container { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 2px; }
-
-    .badge {
-      background: var(--bg-mid);
-      color: var(--muted);
-      font-size: 0.66rem;
-      padding: 2px 6px;
-      border-radius: 4px;
-      border: 1px solid var(--border);
+    .ad-info {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-grow: 1;
     }
 
-    .badge-highlight { border-color: var(--cyan); color: var(--cyan); }
-    .badge-gold { border-color: var(--gold); color: var(--gold); }
+    .ad-price-tag {
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: var(--success);
+    }
 
-    .ad-title { font-size: 0.88rem; font-weight: 800; color: #fff; line-height: 1.3; cursor: pointer; }
-
-    .ad-price { font-size: 0.92rem; font-weight: 900; color: var(--green); }
-
-    .ad-meta { font-size: 0.74rem; color: var(--muted); display: flex; align-items: center; justify-content: space-between; gap: 4px; }
-
-    .owner-link { color: var(--cyan); text-decoration: underline; cursor: pointer; font-weight: 700; }
-
-    .ad-description {
-      font-size: 0.76rem;
-      color: #cbd5e1;
+    .ad-card-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.35;
+      cursor: pointer;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      margin-top: 2px;
     }
 
-    .quick-action-btns {
-      padding: 8px 10px;
-      background: rgba(7, 11, 20, 0.65);
-      border-top: 1px dashed var(--border);
+    .ad-loc-line {
+      font-size: 0.76rem;
+      color: var(--text-muted);
       display: flex;
-      gap: 5px;
+      align-items: center;
+      gap: 4px;
     }
 
-    .action-btn { flex: 1; padding: 6px; font-size: 0.74rem; }
-
-    /* واجهة الدردشة الكاملة داخل التطبيق */
-    #appChatSection {
-      display: none;
-      background: var(--surface);
+    .ad-cat-pill {
+      display: inline-block;
+      align-self: flex-start;
+      background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      color: #7dd3fc;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .ad-seller-row {
+      margin-top: auto;
+      padding-top: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    .seller-trigger {
+      color: var(--primary);
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .ad-card-footer {
+      padding: 8px 12px;
+      background: rgba(11, 17, 30, 0.65);
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 6px;
+    }
+
+    .ad-card-footer .btn {
+      flex: 1;
+      padding: 6px 8px;
+      font-size: 0.76rem;
+    }
+
+    /* Native Full-Page In-App Chat View */
+    #appChatView {
+      display: none;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
       overflow: hidden;
       flex-direction: column;
-      min-height: 520px;
+      min-height: 560px;
+      box-shadow: var(--shadow-md);
     }
 
-    #appChatSection.active {
+    #appChatView.active {
       display: flex;
     }
 
-    .app-chat-topbar {
+    .chat-header-bar {
       padding: 12px 16px;
-      background: rgba(7, 11, 20, 0.92);
+      background: var(--bg-card);
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      flex-wrap: wrap;
     }
 
-    .app-chat-body {
+    .chat-workspace {
       display: grid;
-      grid-template-columns: 280px 1fr;
-      min-height: 460px;
-      max-height: 70vh;
+      grid-template-columns: 290px 1fr;
+      min-height: 500px;
+      max-height: 74vh;
     }
 
-    .app-chat-peers {
+    .chat-sidebar {
       border-left: 1px solid var(--border);
-      background: rgba(15, 23, 42, 0.85);
+      background: #0d1422;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
     }
 
-    .app-peer-row {
-      padding: 12px 14px;
+    .chat-peer-card {
+      padding: 13px 15px;
       border-bottom: 1px solid var(--border);
       cursor: pointer;
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 4px;
+      transition: background 0.15s ease;
     }
 
-    .app-peer-row:hover,
-    .app-peer-row.active {
-      background: rgba(56, 189, 248, 0.14);
+    .chat-peer-card:hover,
+    .chat-peer-card.active {
+      background: var(--primary-soft);
     }
 
-    .app-chat-thread-pane {
+    .chat-conversation-area {
       display: flex;
       flex-direction: column;
       min-height: 0;
     }
 
-    .app-chat-peer-header {
-      padding: 10px 14px;
+    .chat-active-banner {
+      padding: 11px 16px;
       border-bottom: 1px solid var(--border);
-      background: rgba(15, 23, 42, 0.65);
+      background: rgba(17, 24, 39, 0.9);
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
     }
 
-    .app-chat-messages {
+    .chat-messages-stream {
       flex-grow: 1;
       overflow-y: auto;
-      padding: 14px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      min-height: 280px;
+      gap: 10px;
+      min-height: 320px;
     }
 
-    .chat-msg-item {
-      max-width: 78%;
-      padding: 9px 13px;
-      border-radius: 12px;
-      font-size: 0.86rem;
-      line-height: 1.4;
+    .msg-bubble {
+      max-width: 76%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 0.88rem;
+      line-height: 1.45;
       word-break: break-word;
     }
 
-    .chat-msg-me {
+    .msg-outgoing {
       align-self: flex-end;
-      background: var(--cyan);
-      color: #070b14;
-      font-weight: 700;
+      background: var(--primary);
+      color: #ffffff;
+      border-bottom-left-radius: 4px;
     }
 
-    .chat-msg-other {
+    .msg-incoming {
       align-self: flex-start;
-      background: var(--surface-soft);
+      background: var(--bg-card);
       border: 1px solid var(--border);
-      color: var(--text);
+      color: var(--text-main);
+      border-bottom-right-radius: 4px;
     }
 
-    .app-chat-input-bar {
-      padding: 10px 12px;
+    .chat-compose-bar {
+      padding: 12px 14px;
       border-top: 1px solid var(--border);
-      background: rgba(7, 11, 20, 0.92);
+      background: var(--bg-card);
       display: flex;
       gap: 8px;
     }
 
     @media (max-width: 768px) {
-      .app-chat-body {
+      .chat-workspace {
         grid-template-columns: 1fr;
         max-height: none;
       }
-      .app-chat-peers {
-        max-height: 165px;
+      .chat-sidebar {
+        max-height: 170px;
         border-left: none;
         border-bottom: 1px solid var(--border);
       }
     }
 
-    .modal-overlay {
+    /* Bottom Navigation Bar (App Style) */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 450;
+      background: rgba(11, 17, 30, 0.96);
+      backdrop-filter: blur(14px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 7px 10px;
+    }
+
+    .bnav-item {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 4px 10px;
+    }
+
+    .bnav-item.active, .bnav-item:hover {
+      color: var(--primary);
+    }
+
+    .bnav-item .bnav-ico {
+      font-size: 1.2rem;
+    }
+
+    .bnav-post-btn {
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      color: #ffffff;
+      border-radius: 14px;
+      padding: 8px 16px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
+    }
+
+    /* Modals */
+    .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(2, 6, 23, 0.82);
+      background: rgba(3, 7, 18, 0.82);
       backdrop-filter: blur(8px);
       display: none;
       align-items: center;
@@ -478,37 +754,39 @@
       padding: 14px;
     }
 
-    .modal-overlay.open { display: flex; }
+    .modal-backdrop.open {
+      display: flex;
+    }
 
-    .modal-card {
-      background: var(--surface);
+    .modal-box {
+      background: var(--bg-surface);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: var(--radius-lg);
       width: 100%;
-      max-width: 640px;
+      max-width: 620px;
       max-height: 90vh;
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      box-shadow: var(--shadow-md);
     }
 
-    .modal-header {
-      padding: 14px 16px;
+    .modal-head {
+      padding: 14px 18px;
+      background: var(--bg-card);
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
-    .modal-body { padding: 16px; overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 10px; }
-
-    .close-modal {
-      width: 30px;
-      height: 30px;
+    .modal-close {
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
-      background: var(--bg-mid);
+      background: var(--bg-input);
       border: 1px solid var(--border);
-      color: #fff;
+      color: var(--text-main);
       font-size: 1.15rem;
       display: flex;
       align-items: center;
@@ -516,175 +794,104 @@
       cursor: pointer;
     }
 
-    .profile-card-header {
+    .modal-content {
+      padding: 16px 18px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .profile-hero {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
       text-align: center;
-      border-bottom: 1px solid var(--border);
+      gap: 8px;
       padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
     }
 
-    .profile-avatar-large {
-      width: 92px;
-      height: 92px;
+    .profile-avatar-xl {
+      width: 88px;
+      height: 88px;
       border-radius: 50%;
       object-fit: cover;
-      border: 3px solid var(--cyan);
-      background: var(--bg-mid);
+      border: 3px solid var(--primary);
+      background: var(--bg-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 900;
     }
 
-    .stats-row { display: flex; gap: 12px; width: 100%; justify-content: center; flex-wrap: wrap; }
+    .profile-stats {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
 
-    .stat-box {
-      background: var(--bg-mid);
-      padding: 8px 14px;
-      border-radius: 10px;
+    .p-stat {
+      background: var(--bg-card);
       border: 1px solid var(--border);
-      text-align: center;
-      min-width: 110px;
+      border-radius: var(--radius-md);
+      padding: 7px 14px;
+      min-width: 105px;
     }
 
-    .stat-value { font-size: 1.1rem; font-weight: 900; color: var(--cyan); }
-    .stat-label { font-size: 0.72rem; color: var(--muted); }
+    .p-stat strong {
+      display: block;
+      font-size: 1.05rem;
+      color: var(--primary);
+    }
 
-    .profile-tabs {
+    .p-stat span {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .tab-strip {
       display: flex;
       gap: 6px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 8px;
+      justify-content: center;
       flex-wrap: wrap;
+      margin-top: 6px;
     }
 
-    #toast {
+    #toastAlert {
       position: fixed;
-      bottom: 18px;
+      bottom: 76px;
       left: 18px;
-      background: var(--bg-mid);
-      color: #fff;
+      background: var(--bg-card);
+      color: var(--text-main);
       padding: 10px 18px;
-      border-radius: 10px;
-      border-right: 4px solid var(--cyan);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
+      border-radius: var(--radius-md);
+      border-right: 4px solid var(--primary);
+      box-shadow: var(--shadow-md);
       z-index: 2000;
       display: none;
-      font-weight: 800;
       font-size: 0.84rem;
+      font-weight: 700;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="brand-box" onclick="returnToMarket()">
-      <span>⚡</span>
-      <span>رخيص</span>
-    </div>
-
-    <div class="icon-nav-bar">
-      <button type="button" class="btn-danger" onclick="openAdModal()">+ نشر</button>
-      <button type="button" class="btn-primary" onclick="openAppChat()">💬 دردشة</button>
-      <button type="button" class="btn-success" onclick="viewMyProfile()">👤 ملفي</button>
-      <button type="button" class="btn-gold" onclick="openCartModal()">🛒 السلة (<span id="cartCountSpan">0</span>)</button>
-      <div id="authContainer"></div>
-    </div>
-  </header>
-
-  <div class="container">
-    <!-- قسم الدردشة الكامل داخل التطبيق -->
-    <section id="appChatSection">
-      <div class="app-chat-topbar">
-        <div style="display:flex; align-items:center; gap:8px;">
-          <button type="button" class="btn-secondary" onclick="returnToMarket()">⬅️ العودة للإعلانات</button>
-          <strong style="color:var(--cyan);">💬 قسم المحادثات</strong>
-        </div>
-        <span id="chatCurrentUserLabel" style="font-size:0.82rem; color:var(--muted);"></span>
-      </div>
-
-      <div class="app-chat-body">
-        <aside class="app-chat-peers" id="appChatPeersList"></aside>
-        <div class="app-chat-thread-pane">
-          <div class="app-chat-peer-header">
-            <strong id="chatActivePeerTitle" style="color:var(--cyan);">اختر شخصاً للمراسلة</strong>
-            <span id="chatAdContextText" style="font-size:0.78rem; color:var(--green);"></span>
-          </div>
-          <div class="app-chat-messages" id="appChatMessagesBox"></div>
-          <div class="app-chat-input-bar">
-            <input type="text" id="appChatInput" placeholder="اكتب رسالتك هنا..." onkeydown="if(event.key==='Enter') sendAppMessage()">
-            <button type="button" class="btn-primary" onclick="sendAppMessage()">إرسال</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- واجهة السوق والإعلانات -->
-    <div id="marketMainSection">
-      <div class="promo-strip">
-        <span>🔥 عروض فورية وأسعار مباشرة بالليرة السورية (ل.س)</span>
-        <span style="color: var(--cyan);">⭐ تقييمات البائعين • 🛒 سلة اهتمام • 💬 مراسلة مباشرة</span>
-      </div>
-
-      <div class="categories-horizontal">
-        <div class="cat-cluster">
-          <div class="cat-title" onclick="filterByCategory('سيارات ومركبات')">
-            <span>🚗 السيارات والمركبات</span>
-            <span>الكل ➔</span>
-          </div>
-          <div class="sub-cat-title">الماركات الشهيرة:</div>
-          <div class="chip-group">
-            <span class="mini-chip" onclick="filterByKeyword('تويوتا')">تويوتا</span>
-            <span class="mini-chip" onclick="filterByKeyword('هيونداي')">هيونداي</span>
-            <span class="mini-chip" onclick="filterByKeyword('كيا')">كيا</span>
-            <span class="mini-chip" onclick="filterByKeyword('مرسيدس')">مرسيدس</span>
-          </div>
+    <div class="header-inner">
+      <div class="brand-group">
+        <div class="brand-logo" onclick="showMarketView()">
+          <span class="badge-dot">رخيص</span>
+          <span>السوق الشامل</span>
         </div>
 
-        <div class="cat-cluster">
-          <div class="cat-title" onclick="filterByCategory('تكنولوجيا وإلكترونيات')">
-            <span>📱 الإلكترونيات</span>
-            <span>الكل ➔</span>
-          </div>
-          <div class="sub-cat-title">الأقسام:</div>
-          <div class="chip-group">
-            <span class="mini-chip" onclick="filterByKeyword('هواتف')">هواتف</span>
-            <span class="mini-chip" onclick="filterByKeyword('شاشات')">شاشات</span>
-            <span class="mini-chip" onclick="filterByKeyword('لابتوب')">لابتوب</span>
-          </div>
-        </div>
-
-        <div class="cat-cluster">
-          <div class="cat-title" onclick="filterByCategory('عقارات')">
-            <span>🏠 العقارات</span>
-            <span>الكل ➔</span>
-          </div>
-          <div class="sub-cat-title">النوع:</div>
-          <div class="chip-group">
-            <span class="mini-chip" onclick="filterByKeyword('شقق للبيع')">شقق للبيع</span>
-            <span class="mini-chip" onclick="filterByKeyword('منازل للإيجار')">منازل للإيجار</span>
-            <span class="mini-chip" onclick="filterByKeyword('محلات')">محلات</span>
-          </div>
-        </div>
-
-        <div class="cat-cluster">
-          <div class="cat-title" onclick="filterByCategory('أثاث ومنزل')">
-            <span>🛋️ الأثاث والمنزل</span>
-            <span>الكل ➔</span>
-          </div>
-          <div class="sub-cat-title">المتجر السريع:</div>
-          <div class="chip-group">
-            <span class="mini-chip" onclick="filterByKeyword('غرف')">غرف</span>
-            <span class="mini-chip" onclick="filterByKeyword('أدوات منزلية')">أدوات منزلية</span>
-            <span class="mini-chip" onclick="filterByKeyword('مكيفات')">مكيفات</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="filter-panel">
-        <div class="filter-grid">
-          <input type="text" id="searchKeyword" placeholder="ابحث عن إعلان، ماركة، أو مدينة..." oninput="executeSearch()">
-          <select id="filterCitySelect" onchange="executeSearch()">
-            <option value="">كل المدن السورية</option>
+        <div class="location-selector" title="اختر المحافظة أو المنطقة">
+          <span>📍</span>
+          <select id="headerCitySelect" onchange="syncCityFromHeader()">
+            <option value="">كل سوريا</option>
             <option value="دمشق">دمشق</option>
             <option value="ريف دمشق">ريف دمشق</option>
             <option value="حلب">حلب</option>
@@ -692,171 +899,482 @@
             <option value="حماة">حماة</option>
             <option value="اللاذقية">اللاذقية</option>
             <option value="طرطوس">طرطوس</option>
+            <option value="إدلب">إدلب</option>
+            <option value="درعا">درعا</option>
+            <option value="السويداء">السويداء</option>
+            <option value="القنيطرة">القنيطرة</option>
+            <option value="دير الزور">دير الزور</option>
+            <option value="الرقة">الرقة</option>
+            <option value="الحسكة">الحسكة</option>
           </select>
-          <select id="filterConditionSelect" onchange="executeSearch()">
-            <option value="">كل الحالات</option>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button type="button" class="btn btn-primary" onclick="openPublishModal()">+ أضف إعلانك</button>
+        <button type="button" class="btn btn-surface" onclick="openCartModal()">🛒 السلة (<span id="cartCountBadge">0</span>)</button>
+        <div id="headerAuthSlot"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-wrapper">
+
+    <!-- واجهة الدردشة الكاملة داخل التطبيق -->
+    <section id="appChatView">
+      <div class="chat-header-bar">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button type="button" class="btn btn-surface" onclick="showMarketView()">⬅️ العودة للسوق</button>
+          <strong style="color:var(--primary); font-size:1rem;">💬 المراسلات المباشرة</strong>
+        </div>
+        <span id="chatUserTag" style="font-size:0.82rem; color:var(--text-muted);"></span>
+      </div>
+
+      <div class="chat-workspace">
+        <aside class="chat-sidebar" id="chatPeersSidebar"></aside>
+
+        <div class="chat-conversation-area">
+          <div class="chat-active-banner">
+            <strong id="chatActivePeerName" style="color:var(--primary);">اختر محادثة من القائمة</strong>
+            <span id="chatLinkedAdBadge" style="font-size:0.78rem; color:var(--success); font-weight:700;"></span>
+          </div>
+          <div class="chat-messages-stream" id="chatMessagesStream"></div>
+          <div class="chat-compose-bar">
+            <input type="text" id="chatMessageInput" placeholder="اكتب رسالتك هنا..." onkeydown="if(event.key==='Enter') sendMessage()">
+            <button type="button" class="btn btn-primary" onclick="sendMessage()">إرسال</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- الواجهة الرئيسية للسوق -->
+    <div id="marketMainView">
+
+      <!-- شريط البحث والفلاتر -->
+      <section class="search-panel">
+        <div class="search-bar-row">
+          <div class="search-input-box">
+            <span class="search-ico">🔍</span>
+            <input type="text" id="searchInput" placeholder="ابحث عن سيارات، هواتف سامسونج أو آيفون، عقارات، حيوانات أليفة..." oninput="applyFilters()">
+          </div>
+          <button type="button" class="btn btn-surface" onclick="resetAllFilters()">إعادة ضبط</button>
+        </div>
+
+        <div class="filters-row">
+          <select id="filterMainCat" onchange="handleMainCategoryDropdown()">
+            <option value="">جميع الأقسام الرئيسية</option>
+          </select>
+
+          <select id="filterSubCat" onchange="applyFilters()">
+            <option value="">جميع الفروع والماركات</option>
+          </select>
+
+          <select id="filterCity" onchange="syncCityFromFilter()">
+            <option value="">كل المحافظات السورية</option>
+            <option value="دمشق">دمشق</option>
+            <option value="ريف دمشق">ريف دمشق</option>
+            <option value="حلب">حلب</option>
+            <option value="حمص">حمص</option>
+            <option value="حماة">حماة</option>
+            <option value="اللاذقية">اللاذقية</option>
+            <option value="طرطوس">طرطوس</option>
+            <option value="إدلب">إدلب</option>
+            <option value="درعا">درعا</option>
+            <option value="السويداء">السويداء</option>
+            <option value="القنيطرة">القنيطرة</option>
+            <option value="دير الزور">دير الزور</option>
+            <option value="الرقة">الرقة</option>
+            <option value="الحسكة">الحسكة</option>
+          </select>
+
+          <select id="filterCondition" onchange="applyFilters()">
+            <option value="">الحالة (الكل)</option>
             <option value="جديد">جديد</option>
             <option value="مستعمل">مستعمل</option>
           </select>
-          <select id="sortSelect" onchange="executeSearch()">
-            <option value="newest">الأحدث أولاً</option>
+
+          <select id="filterSort" onchange="applyFilters()">
+            <option value="newest">الأحدث نشرًا</option>
             <option value="price_asc">السعر: من الأقل للأعلى</option>
             <option value="price_desc">السعر: من الأعلى للأقل</option>
           </select>
-          <button type="button" class="btn-link btn-secondary" onclick="resetFilters()">إعادة الضبط</button>
         </div>
-      </div>
+      </section>
 
-      <div class="ads-section-head">
-        <h2 style="font-size: 1.05rem;">أحدث الإعلانات</h2>
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <button type="button" class="btn-link btn-secondary" onclick="filterOnlyMine()">إعلاناتي</button>
-          <span id="adCountBadge" class="badge badge-highlight">0 إعلان</span>
+      <!-- شريط الأقسام الرئيسية مع التفرع الفوري -->
+      <section>
+        <div class="section-header">
+          <h2 class="section-title">📂 تصفح الأقسام</h2>
+          <span style="font-size:0.78rem; color:var(--text-muted);">اضغط على أي قسم لعرض فروعه</span>
         </div>
-      </div>
 
-      <div class="ads-grid" id="adsGridContainer"></div>
+        <div class="categories-rail" id="categoriesRail"></div>
+
+        <!-- لوحة التفرعات والماركات الفرعية عند اختيار قسم -->
+        <div class="subcat-panel" id="subcatPanel" style="margin-top:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong id="subcatPanelTitle" style="color:var(--primary); font-size:0.9rem;">التفرعات:</strong>
+            <button type="button" class="btn btn-surface" style="padding:4px 10px; font-size:0.74rem;" onclick="clearCategorySelection()">عرض كل الأقسام ✕</button>
+          </div>
+          <div class="subcat-chips" id="subcatChipsContainer"></div>
+        </div>
+      </section>
+
+      <!-- شبكة الإعلانات -->
+      <section>
+        <div class="section-header">
+          <h2 class="section-title">🔥 أحدث الإعلانات</h2>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <button type="button" class="btn btn-surface" style="padding:5px 11px; font-size:0.78rem;" onclick="showOnlyMyAds()">إعلاناتي</button>
+            <span id="adsTotalCount" style="background:var(--primary-soft); color:#7dd3fc; border:1px solid rgba(14,165,233,0.35); padding:4px 12px; border-radius:999px; font-size:0.78rem; font-weight:800;">0 إعلان</span>
+          </div>
+        </div>
+
+        <div class="ads-grid" id="adsGrid"></div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- شريط التنقل السفلي مثل التطبيقات الحديثة -->
+  <nav class="bottom-nav">
+    <button type="button" class="bnav-item active" onclick="showMarketView()">
+      <span class="bnav-ico">🏠</span>
+      <span>الرئيسية</span>
+    </button>
+    <button type="button" class="bnav-item" onclick="openAppChat()">
+      <span class="bnav-ico">💬</span>
+      <span>المراسلات</span>
+    </button>
+    <button type="button" class="bnav-post-btn" onclick="openPublishModal()">+ نشر إعلان</button>
+    <button type="button" class="bnav-item" onclick="showOnlyMyAds()">
+      <span class="bnav-ico">📋</span>
+      <span>إعلاناتي</span>
+    </button>
+    <button type="button" class="bnav-item" onclick="openMyProfile()">
+      <span class="bnav-ico">👤</span>
+      <span>ملفي</span>
+    </button>
+  </nav>
+
+  <div id="toastAlert"></div>
+
+  <!-- نافذة تسجيل الدخول / إنشاء حساب -->
+  <div class="modal-backdrop" id="authModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="authModalHeading">تسجيل الدخول إلى رخيص</h3>
+        <button type="button" class="modal-close" onclick="closeModal('authModal')">&times;</button>
+      </div>
+      <div class="modal-content">
+        <input type="text" id="authUserField" placeholder="اسم المستخدم">
+        <input type="password" id="authPassField" placeholder="كلمة المرور">
+        <button type="button" class="btn btn-primary" style="width:100%; padding:11px;" onclick="submitAuth()">متابعة</button>
+      </div>
     </div>
   </div>
 
-  <div id="toast"></div>
+  <!-- نافذة نشر إعلان جديد مع الموقع والقسم والفرع -->
+  <div class="modal-backdrop" id="publishModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>نشر إعلان جديد</h3>
+        <button type="button" class="modal-close" onclick="closeModal('publishModal')">&times;</button>
+      </div>
+      <div class="modal-content">
+        <input type="text" id="pubTitle" placeholder="عنوان الإعلان (مثال: سامسونج S24 الترا نظيف جداً)">
+        <input type="number" id="pubPrice" placeholder="السعر بالليرة السورية (أرقام فقط - ل.س)" min="0">
 
-  <div class="modal-overlay" id="authModal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 id="authModalTitle">الدخول إلى المنصة</h3>
-        <div class="close-modal" onclick="closeModal('authModal')">&times;</div>
-      </div>
-      <div class="modal-body">
-        <input type="text" id="authUsername" placeholder="اسم المستخدم الفريد">
-        <input type="password" id="authPassword" placeholder="كلمة المرور">
-        <button type="button" class="btn-link btn-primary" style="width: 100%; padding: 11px;" onclick="handleAuthSubmit()">متابعة</button>
-      </div>
-    </div>
-  </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <select id="pubMainCat" onchange="populatePublishSubCats()"></select>
+          <select id="pubSubCat"></select>
+        </div>
 
-  <div class="modal-overlay" id="profileModal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 id="profileModalTitle">الملف الشخصي</h3>
-        <div class="close-modal" onclick="closeModal('profileModal')">&times;</div>
-      </div>
-      <div class="modal-body" id="profileModalContent"></div>
-    </div>
-  </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <select id="pubCity">
+            <option value="دمشق">دمشق</option>
+            <option value="ريف دمشق">ريف دمشق</option>
+            <option value="حلب">حلب</option>
+            <option value="حمص">حمص</option>
+            <option value="حماة">حماة</option>
+            <option value="اللاذقية">اللاذقية</option>
+            <option value="طرطوس">طرطوس</option>
+            <option value="إدلب">إدلب</option>
+            <option value="درعا">درعا</option>
+            <option value="السويداء">السويداء</option>
+            <option value="القنيطرة">القنيطرة</option>
+            <option value="دير الزور">دير الزور</option>
+            <option value="الرقة">الرقة</option>
+            <option value="الحسكة">الحسكة</option>
+          </select>
+          <input type="text" id="pubNeighborhood" placeholder="الحي أو المنطقة (مثال: المزة، الشهباء...)">
+        </div>
 
-  <div class="modal-overlay" id="adModal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 id="adModalTitle">نشر إعلان جديد</h3>
-        <div class="close-modal" onclick="closeModal('adModal')">&times;</div>
-      </div>
-      <div class="modal-body">
-        <input type="text" id="adTitle" placeholder="عنوان الإعلان">
-        <input type="number" id="adPrice" placeholder="السعر بالليرة السورية (أرقام فقط - ل.س)" min="0">
-        <select id="adCategory">
-          <option value="سيارات ومركبات">سيارات ومركبات</option>
-          <option value="تكنولوجيا وإلكترونيات">تكنولوجيا وإلكترونيات</option>
-          <option value="عقارات">عقارات</option>
-          <option value="أثاث ومنزل">أثاث ومنزل</option>
-        </select>
-        <select id="adCondition">
+        <select id="pubCondition">
           <option value="مستعمل">مستعمل</option>
           <option value="جديد">جديد</option>
         </select>
-        <input type="text" id="adCity" placeholder="المدينة (مثال: دمشق)">
-        <textarea id="adDesc" placeholder="تفاصيل الإعلان ومواصفاته..." rows="3"></textarea>
+
+        <textarea id="pubDesc" rows="3" placeholder="اكتب مواصفات الإعلان بالتفصيل..."></textarea>
+
         <div>
-          <label style="font-size: 0.8rem; color: var(--muted);">صورة الإعلان (اختياري - إذا تركت فارغة لن يظهر مربع صورة):</label>
-          <input type="file" id="adImageInput" accept="image/*" onchange="previewAdImage(event)">
+          <label style="font-size:0.8rem; color:var(--text-muted); display:block; margin-bottom:4px;">صورة الإعلان (اختياري):</label>
+          <input type="file" id="pubImageFile" accept="image/*" onchange="handleAdImageUpload(event)">
         </div>
-        <img id="adImagePreview" style="max-height: 140px; border-radius: 8px; display: none; object-fit: cover;">
-        <button type="button" class="btn-link btn-success" style="width: 100%; padding: 11px;" onclick="saveAd()">حفظ ونشر الإعلان</button>
+        <img id="pubImagePreview" style="max-height:150px; border-radius:10px; display:none; object-fit:cover;">
+
+        <button type="button" class="btn btn-primary" style="width:100%; padding:11px;" onclick="submitNewAd()">نشر الإعلان الآن</button>
       </div>
     </div>
   </div>
 
-  <div class="modal-overlay" id="detailsModal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 id="detailsModalTitle">تفاصيل الإعلان والتقييمات</h3>
-        <div class="close-modal" onclick="closeModal('detailsModal')">&times;</div>
+  <!-- نافذة الملف الشخصي والمراسلات -->
+  <div class="modal-backdrop" id="profileModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="profileModalHeading">الملف الشخصي</h3>
+        <button type="button" class="modal-close" onclick="closeModal('profileModal')">&times;</button>
       </div>
-      <div class="modal-body" id="detailsModalContent"></div>
+      <div class="modal-content" id="profileModalBody"></div>
     </div>
   </div>
 
-  <div class="modal-overlay" id="cartModal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3>سلة الاهتمام / الطلبات</h3>
-        <div class="close-modal" onclick="closeModal('cartModal')">&times;</div>
+  <!-- نافذة تفاصيل الإعلان والتقييمات -->
+  <div class="modal-backdrop" id="detailsModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="detailsModalHeading">تفاصيل الإعلان</h3>
+        <button type="button" class="modal-close" onclick="closeModal('detailsModal')">&times;</button>
       </div>
-      <div class="modal-body" id="cartModalContent"></div>
+      <div class="modal-content" id="detailsModalBody"></div>
     </div>
   </div>
 
-  <script>
-    let appState = {
+  <!-- نافذة السلة -->
+  <div class="modal-backdrop" id="cartModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>سلة الاهتمام</h3>
+        <button type="button" class="modal-close" onclick="closeModal('cartModal')">&times;</button>
+      </div>
+      <div class="modal-content" id="cartModalBody"></div>
+    </div>
+  </div><script>
+    const CATEGORY_TREE = [
+      {
+        id: 'cars',
+        name: 'سيارات ومركبات',
+        icon: '🚗',
+        subs: ['تويوتا', 'هيونداي', 'كيا', 'مرسيدس', 'بي إم دبليو', 'شيفروليه', 'نيسان', 'سيارات نقل وبيك أب', 'دراجات نارية', 'قطع غيار وإكسسوارات']
+      },
+      {
+        id: 'phones',
+        name: 'هواتف وأجهزة ذكية',
+        icon: '📱',
+        subs: ['سامسونج جالاكسي (Samsung)', 'آيفون (Apple iPhone)', 'شاومي وريدمي (Xiaomi)', 'هواوي وهونر (Huawei)', 'أوبو وريلمي (Oppo)', 'أجهزة لوحية وآيباد', 'ساعات ذكية وإكسسوارات']
+      },
+      {
+        id: 'realestate',
+        name: 'عقارات',
+        icon: '🏠',
+        subs: ['شقق للبيع', 'شقق ومنازل للإيجار', 'فيلات ومزارع', 'أراضي سكنية وزراعية', 'محلات ومكاتب تجارية']
+      },
+      {
+        id: 'electronics',
+        name: 'إلكترونيات وكمبيوتر',
+        icon: '💻',
+        subs: ['لابتوب وكمبيوتر مكتبي', 'شاشات وتلفزيونات', 'بلايستيشن وألعاب فيديو', 'كاميرات وصوتيات', 'طاقة شمسية وبطاريات']
+      },
+      {
+        id: 'furniture',
+        name: 'أثاث ومفروشات',
+        icon: '🛋️',
+        subs: ['غرف نوم', 'صالونات وكنب', 'أدوات كهربائية منزلية', 'مكيفات وتدفئة', 'سجاد وتحف وديكور']
+      },
+      {
+        id: 'animals',
+        name: 'حيوانات أليفة وطيور',
+        icon: '🐾',
+        subs: ['قطط', 'كلاب', 'طيور زينة وببغاوات', 'حمام ودواجن', 'أغنام ومواشي', 'مستلزمات وأعلاف']
+      },
+      {
+        id: 'fashion',
+        name: 'أزياء وموضة',
+        icon: '👕',
+        subs: ['ملابس رجالية', 'ملابس نسائية', 'ملابس أطفال', 'ساعات وعطور', 'أحذية وحقائب']
+      }
+    ];
+
+    let state = {
       currentUser: null,
       ads: [],
       filteredAds: [],
+      selectedCategory: '',
+      selectedSubCategory: '',
       favorites: [],
       cart: [],
       messages: [],
-      chatActivePeer: '',
-      chatActiveAdId: '',
-      selectedAdImageBase64: '',
-      selectedAvatarBase64: '',
-      chatPollTimer: null
+      activeChatPeer: '',
+      activeChatAdId: '',
+      adImageBase64: '',
+      avatarBase64: ''
     };
 
     window.onload = async () => {
-      const savedUser = localStorage.getItem('rakhis_user');
-      if (savedUser) {
-        try { appState.currentUser = JSON.parse(savedUser); } catch (e) { appState.currentUser = null; }
-      }
       try {
-        appState.favorites = JSON.parse(localStorage.getItem('rakhis_favs') || '[]');
-        appState.cart = JSON.parse(localStorage.getItem('rakhis_cart') || '[]');
+        const savedUser = localStorage.getItem('rakhis_user');
+        if (savedUser) state.currentUser = JSON.parse(savedUser);
+        state.favorites = JSON.parse(localStorage.getItem('rakhis_favs') || '[]');
+        state.cart = JSON.parse(localStorage.getItem('rakhis_cart') || '[]');
       } catch (e) {}
 
-      renderAuthUI();
+      initCategoryControls();
+      renderAuthHeader();
       updateCartBadge();
-      await fetchAllAds();
-      await loadMessagesData();
-      appState.chatPollTimer = setInterval(loadMessagesData, 3500);
+      await loadAds();
+      await loadMessages();
+      setInterval(loadMessages, 4000);
     };
 
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      toast.textContent = msg;
-      toast.style.display = 'block';
-      clearTimeout(window.__toastTimer);
-      window.__toastTimer = setTimeout(() => { toast.style.display = 'none'; }, 2800);
+    function toast(msg) {
+      const el = document.getElementById('toastAlert');
+      el.textContent = msg;
+      el.style.display = 'block';
+      clearTimeout(window.__tTimer);
+      window.__tTimer = setTimeout(() => { el.style.display = 'none'; }, 2800);
     }
 
-    function escapeHtml(text) {
-      return String(text || '')
+    function esc(str) {
+      return String(str || '')
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;');
     }
 
-    function formatPriceSYP(raw) {
-      const digits = String(raw || '').replace(/[^\d]/g, '');
+    function formatSYP(val) {
+      const digits = String(val || '').replace(/[^\d]/g, '');
       return digits ? `${Number(digits).toLocaleString('en-US')} ل.س` : '0 ل.س';
     }
 
-    function returnToMarket() {
-      document.getElementById('appChatSection').classList.remove('active');
-      document.getElementById('marketMainSection').style.display = 'block';
+    function openModal(id) {
+      document.getElementById(id).classList.add('open');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    /* تهيئة الأقسام والتفرعات */
+    function initCategoryControls() {
+      const rail = document.getElementById('categoriesRail');
+      const filterMain = document.getElementById('filterMainCat');
+      const pubMain = document.getElementById('pubMainCat');
+
+      rail.innerHTML = CATEGORY_TREE.map(cat => `
+        <div class="cat-tile" id="catTile_${cat.id}" onclick="selectMainCategory('${esc(cat.name)}')">
+          <div class="cat-emoji">${cat.icon}</div>
+          <div class="cat-label">${esc(cat.name)}</div>
+        </div>
+      `).join('');
+
+      const optionsHtml = CATEGORY_TREE.map(cat => `<option value="${esc(cat.name)}">${cat.icon} ${esc(cat.name)}</option>`).join('');
+      filterMain.innerHTML = `<option value="">جميع الأقسام الرئيسية</option>${optionsHtml}`;
+      pubMain.innerHTML = optionsHtml;
+      populatePublishSubCats();
+    }
+
+    function selectMainCategory(catName) {
+      state.selectedCategory = catName;
+      state.selectedSubCategory = '';
+
+      document.getElementById('filterMainCat').value = catName;
+      updateCategoryUI();
+      applyFilters();
+    }
+
+    function handleMainCategoryDropdown() {
+      state.selectedCategory = document.getElementById('filterMainCat').value;
+      state.selectedSubCategory = '';
+      updateCategoryUI();
+      applyFilters();
+    }
+
+    function updateCategoryUI() {
+      const catObj = CATEGORY_TREE.find(c => c.name === state.selectedCategory);
+      CATEGORY_TREE.forEach(c => {
+        const tile = document.getElementById(`catTile_${c.id}`);
+        if (tile) tile.classList.toggle('active', c.name === state.selectedCategory);
+      });
+
+      const subPanel = document.getElementById('subcatPanel');
+      const subChips = document.getElementById('subcatChipsContainer');
+      const subDropdown = document.getElementById('filterSubCat');
+
+      if (!catObj) {
+        subPanel.classList.remove('visible');
+        subDropdown.innerHTML = '<option value="">جميع الفروع والماركات</option>';
+        return;
+      }
+
+      document.getElementById('subcatPanelTitle').textContent = `${catObj.icon} تفرعات ${catObj.name}:`;
+      subPanel.classList.add('visible');
+
+      subChips.innerHTML = `
+        <span class="sub-chip ${state.selectedSubCategory === '' ? 'active' : ''}" onclick="selectSubCategory('')">الكل في ${esc(catObj.name)}</span>
+        ${catObj.subs.map(sub => `
+          <span class="sub-chip ${state.selectedSubCategory === sub ? 'active' : ''}" onclick="selectSubCategory('${esc(sub)}')">${esc(sub)}</span>
+        `).join('')}
+      `;
+
+      subDropdown.innerHTML = `<option value="">كل فروع ${esc(catObj.name)}</option>` +
+        catObj.subs.map(sub => `<option value="${esc(sub)}" ${state.selectedSubCategory === sub ? 'selected' : ''}>${esc(sub)}</option>`).join('');
+    }
+
+    function selectSubCategory(subName) {
+      state.selectedSubCategory = subName;
+      document.getElementById('filterSubCat').value = subName;
+      updateCategoryUI();
+      applyFilters();
+    }
+
+    function clearCategorySelection() {
+      state.selectedCategory = '';
+      state.selectedSubCategory = '';
+      document.getElementById('filterMainCat').value = '';
+      document.getElementById('filterSubCat').value = '';
+      updateCategoryUI();
+      applyFilters();
+    }
+
+    function populatePublishSubCats() {
+      const mainVal = document.getElementById('pubMainCat').value;
+      const catObj = CATEGORY_TREE.find(c => c.name === mainVal) || CATEGORY_TREE[0];
+      const pubSub = document.getElementById('pubSubCat');
+      pubSub.innerHTML = catObj.subs.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
+    }
+
+    function syncCityFromHeader() {
+      const val = document.getElementById('headerCitySelect').value;
+      document.getElementById('filterCity').value = val;
+      applyFilters();
+    }
+
+    function syncCityFromFilter() {
+      const val = document.getElementById('filterCity').value;
+      document.getElementById('headerCitySelect').value = val;
+      applyFilters();
+    }
+
+    /* التبديل بين السوق والدردشة داخل التطبيق */
+    function showMarketView() {
+      document.getElementById('appChatView').classList.remove('active');
+      document.getElementById('marketMainView').style.display = 'block';
     }
 
     function openAppChat(peerUsername = '', adId = '') {
-      if (!appState.currentUser) {
-        showToast('يرجى تسجيل الدخول أولاً لفتح الدردشة');
+      if (!state.currentUser) {
+        toast('يرجى تسجيل الدخول أولاً لفتح المراسلات');
         openAuthModal('login');
         return;
       }
@@ -864,59 +1382,59 @@
       closeModal('detailsModal');
       closeModal('cartModal');
 
-      if (peerUsername && peerUsername.toLowerCase() !== appState.currentUser.username.toLowerCase()) {
-        appState.chatActivePeer = peerUsername;
+      if (peerUsername && peerUsername.toLowerCase() !== state.currentUser.username.toLowerCase()) {
+        state.activeChatPeer = peerUsername;
       }
-      appState.chatActiveAdId = adId || '';
+      state.activeChatAdId = adId || '';
 
-      document.getElementById('marketMainSection').style.display = 'none';
-      document.getElementById('appChatSection').classList.add('active');
-      document.getElementById('chatCurrentUserLabel').textContent = `حسابك: ${appState.currentUser.username}`;
+      document.getElementById('marketMainView').style.display = 'none';
+      document.getElementById('appChatView').classList.add('active');
+      document.getElementById('chatUserTag').textContent = `حسابك: ${state.currentUser.username}`;
 
-      loadMessagesData().then(() => {
-        renderAppChatView();
+      loadMessages().then(() => {
+        renderChatUI();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     }
 
-    function localMsgsStorageKey() {
-      const u = appState.currentUser && appState.currentUser.username ? appState.currentUser.username : 'guest';
-      return `rakhis_msgs_${u}`;
+    /* إدارة الرسائل */
+    function msgCacheKey() {
+      const u = state.currentUser && state.currentUser.username ? state.currentUser.username : 'guest';
+      return `rakhis_chat_${u}`;
     }
 
-    function getLocalMsgs() {
+    function getCachedMessages() {
       try {
-        return JSON.parse(localStorage.getItem(localMsgsStorageKey()) || '[]');
+        return JSON.parse(localStorage.getItem(msgCacheKey()) || '[]');
       } catch (e) {
         return [];
       }
     }
 
-    function saveLocalMsgs(list) {
+    function setCachedMessages(arr) {
       try {
-        localStorage.setItem(localMsgsStorageKey(), JSON.stringify(list));
+        localStorage.setItem(msgCacheKey(), JSON.stringify(arr));
       } catch (e) {}
     }
 
-    async function loadMessagesData() {
-      if (!appState.currentUser || !appState.currentUser.username) return;
-      const me = appState.currentUser.username;
-      let serverList = [];
+    async function loadMessages() {
+      if (!state.currentUser || !state.currentUser.username) return;
+      const me = state.currentUser.username;
+      let serverMsgs = [];
 
       try {
         const res = await fetch(`/api/messages?user=${encodeURIComponent(me)}`, { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
-          if (Array.isArray(data)) serverList = data;
-          else if (data && Array.isArray(data.messages)) serverList = data.messages;
+          serverMsgs = Array.isArray(data) ? data : (Array.isArray(data.messages) ? data.messages : []);
         }
       } catch (e) {}
 
-      const localList = getLocalMsgs();
-      const map = new Map();
-      [...serverList, ...localList].forEach((m, idx) => {
-        const key = m.id || `${m.from || m.sender}_${m.to || m.receiver}_${m.timestamp || idx}_${m.text || m.message || ''}`;
-        map.set(key, {
+      const localMsgs = getCachedMessages();
+      const merged = new Map();
+      [...serverMsgs, ...localMsgs].forEach((m, i) => {
+        const key = m.id || `${m.from || m.sender}_${m.to || m.receiver}_${m.timestamp || i}_${m.text || m.message || ''}`;
+        merged.set(key, {
           id: m.id || key,
           from: m.from || m.sender || '',
           to: m.to || m.receiver || '',
@@ -926,698 +1444,169 @@
         });
       });
 
-      appState.messages = Array.from(map.values()).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-      if (document.getElementById('appChatSection').classList.contains('active')) {
-        renderAppChatView();
+      state.messages = Array.from(merged.values()).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+      if (document.getElementById('appChatView').classList.contains('active')) {
+        renderChatUI();
       }
     }
 
-    function getConversationsList() {
-      if (!appState.currentUser) return [];
-      const me = appState.currentUser.username.toLowerCase();
-      const peers = new Map();
+    function getPeerThreads() {
+      if (!state.currentUser) return [];
+      const me = state.currentUser.username.toLowerCase();
+      const map = new Map();
 
-      appState.messages.forEach(m => {
+      state.messages.forEach(m => {
         const f = String(m.from || '').trim();
         const t = String(m.to || '').trim();
-        const isFromMe = f.toLowerCase() === me;
+        const isMine = f.toLowerCase() === me;
         const isToMe = t.toLowerCase() === me;
-        if (!isFromMe && !isToMe) return;
-        const peer = isFromMe ? t : f;
+        if (!isMine && !isToMe) return;
+        const peer = isMine ? t : f;
         if (!peer || peer.toLowerCase() === me) return;
-        peers.set(peer.toLowerCase(), {
+        map.set(peer.toLowerCase(), {
           username: peer,
-          lastMessage: m.text || ''
+          lastText: m.text || ''
         });
       });
 
-      if (appState.chatActivePeer && appState.chatActivePeer.toLowerCase() !== me) {
-        const k = appState.chatActivePeer.toLowerCase();
-        if (!peers.has(k)) {
-          peers.set(k, { username: appState.chatActivePeer, lastMessage: 'ابدأ المراسلة الآن' });
+      if (state.activeChatPeer && state.activeChatPeer.toLowerCase() !== me) {
+        const k = state.activeChatPeer.toLowerCase();
+        if (!map.has(k)) {
+          map.set(k, { username: state.activeChatPeer, lastText: 'ابدأ المحادثة الآن' });
         }
       }
 
-      const list = Array.from(peers.values());
-      if (!appState.chatActivePeer && list.length > 0) {
-        appState.chatActivePeer = list[0].username;
+      const list = Array.from(map.values());
+      if (!state.activeChatPeer && list.length > 0) {
+        state.activeChatPeer = list[0].username;
       }
       return list;
     }
 
-    function renderAppChatView() {
-      if (!appState.currentUser) return;
-      const peers = getConversationsList();
-      const peersBox = document.getElementById('appChatPeersList');
-      const activeTitle = document.getElementById('chatActivePeerTitle');
-      const adContextEl = document.getElementById('chatAdContextText');
-      const msgBox = document.getElementById('appChatMessagesBox');
+    function renderChatUI() {
+      const threads = getPeerThreads();
+      const sidebar = document.getElementById('chatPeersSidebar');
+      const peerTitle = document.getElementById('chatActivePeerName');
+      const adBadge = document.getElementById('chatLinkedAdBadge');
+      const stream = document.getElementById('chatMessagesStream');
 
-      if (peers.length === 0) {
-        peersBox.innerHTML = '<div style="padding:16px; color:var(--muted); font-size:0.82rem;">لا توجد مراسلات بعد. افتح أي ملف شخصي أو إعلان واضغط دردشة.</div>';
+      if (threads.length === 0) {
+        sidebar.innerHTML = '<div style="padding:18px; color:var(--text-muted); font-size:0.82rem;">لا توجد مراسلات بعد. ادخل إلى ملف أي بائع واضغط "دردشة".</div>';
       } else {
-        peersBox.innerHTML = peers.map(p => {
-          const isActive = p.username.toLowerCase() === String(appState.chatActivePeer || '').toLowerCase();
+        sidebar.innerHTML = threads.map(th => {
+          const active = th.username.toLowerCase() === String(state.activeChatPeer || '').toLowerCase();
           return `
-            <div class="app-peer-row ${isActive ? 'active' : ''}" onclick="selectChatPeer('${escapeHtml(p.username)}')">
-              <div style="font-weight:800; font-size:0.88rem; color:var(--text);">${escapeHtml(p.username)}</div>
-              <div style="font-size:0.74rem; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(p.lastMessage || '')}</div>
+            <div class="chat-peer-card ${active ? 'active' : ''}" onclick="switchChatPeer('${esc(th.username)}')">
+              <strong style="font-size:0.88rem;">${esc(th.username)}</strong>
+              <span style="font-size:0.75rem; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${esc(th.lastText)}</span>
             </div>
           `;
         }).join('');
       }
 
-      if (!appState.chatActivePeer) {
-        activeTitle.textContent = 'اختر شخصاً للمراسلة';
-        adContextEl.textContent = '';
-        msgBox.innerHTML = '<div style="text-align:center; color:var(--muted); margin-top:36px;">اختر شخصاً من قائمة المراسلات لفتح المحادثة معه.</div>';
+      if (!state.activeChatPeer) {
+        peerTitle.textContent = 'اختر شخصاً للمراسلة';
+        adBadge.textContent = '';
+        stream.innerHTML = '<div style="text-align:center; color:var(--text-muted); margin-top:40px;">اختر محادثة من القائمة لبدء التواصل.</div>';
         return;
       }
 
-      activeTitle.textContent = `💬 ${appState.chatActivePeer}`;
-      const linkedAd = appState.chatActiveAdId ? appState.ads.find(a => String(a.id) === String(appState.chatActiveAdId)) : null;
-      adContextEl.textContent = linkedAd ? `إعلان: ${linkedAd.title} (${formatPriceSYP(linkedAd.price)})` : '';
+      peerTitle.textContent = `💬 ${state.activeChatPeer}`;
+      const linkedAd = state.activeChatAdId ? state.ads.find(a => String(a.id) === String(state.activeChatAdId)) : null;
+      adBadge.textContent = linkedAd ? `بخصوص: ${linkedAd.title} (${formatSYP(linkedAd.price)})` : '';
 
-      const me = appState.currentUser.username.toLowerCase();
-      const peer = appState.chatActivePeer.toLowerCase();
-      const thread = appState.messages.filter(m => {
+      const me = state.currentUser.username.toLowerCase();
+      const peer = state.activeChatPeer.toLowerCase();
+      const msgs = state.messages.filter(m => {
         const f = String(m.from || '').toLowerCase();
         const t = String(m.to || '').toLowerCase();
         return (f === me && t === peer) || (f === peer && t === me);
       });
 
-      if (thread.length === 0) {
-        msgBox.innerHTML = `<div style="text-align:center; color:var(--muted); margin-top:36px;">ابدأ المحادثة مع ${escapeHtml(appState.chatActivePeer)} الآن.</div>`;
+      if (msgs.length === 0) {
+        stream.innerHTML = `<div style="text-align:center; color:var(--text-muted); margin-top:40px;">اكتب أول رسالة إلى ${esc(state.activeChatPeer)}</div>`;
       } else {
-        msgBox.innerHTML = thread.map(m => {
-          const isMe = String(m.from || '').toLowerCase() === me;
-          return `<div class="chat-msg-item ${isMe ? 'chat-msg-me' : 'chat-msg-other'}">${escapeHtml(m.text)}</div>`;
+        stream.innerHTML = msgs.map(m => {
+          const outgoing = String(m.from || '').toLowerCase() === me;
+          return `<div class="msg-bubble ${outgoing ? 'msg-outgoing' : 'msg-incoming'}">${esc(m.text)}</div>`;
         }).join('');
-        msgBox.scrollTop = msgBox.scrollHeight;
+        stream.scrollTop = stream.scrollHeight;
       }
     }
 
-    function selectChatPeer(username) {
-      appState.chatActivePeer = username;
-      appState.chatActiveAdId = '';
-      renderAppChatView();
+    function switchChatPeer(username) {
+      state.activeChatPeer = username;
+      state.activeChatAdId = '';
+      renderChatUI();
     }
 
-    async function sendAppMessage() {
-      if (!appState.currentUser || !appState.chatActivePeer) return;
-      const input = document.getElementById('appChatInput');
+    async function sendMessage() {
+      if (!state.currentUser || !state.activeChatPeer) return;
+      const input = document.getElementById('chatMessageInput');
       const text = (input.value || '').trim();
       if (!text) return;
 
-      const msgObj = {
+      const payload = {
         id: `${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
-        from: appState.currentUser.username,
-        to: appState.chatActivePeer,
-        sender: appState.currentUser.username,
-        receiver: appState.chatActivePeer,
+        from: state.currentUser.username,
+        to: state.activeChatPeer,
+        sender: state.currentUser.username,
+        receiver: state.activeChatPeer,
         text,
         message: text,
-        adId: appState.chatActiveAdId || '',
+        adId: state.activeChatAdId || '',
         timestamp: new Date().toISOString()
       };
 
-      const localList = getLocalMsgs();
-      localList.push(msgObj);
-      saveLocalMsgs(localList);
+      const cached = getCachedMessages();
+      cached.push(payload);
+      setCachedMessages(cached);
 
       input.value = '';
-      await loadMessagesData();
-      renderAppChatView();
+      await loadMessages();
+      renderChatUI();
 
       try {
         await fetch('/api/messages', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(msgObj)
+          body: JSON.stringify(payload)
         });
       } catch (e) {}
     }
 
-    function renderAuthUI() {
-      const container = document.getElementById('authContainer');
-      if (appState.currentUser && appState.currentUser.username) {
-        const avatarSrc = appState.currentUser.avatar || '';
-        const avatarTag = avatarSrc
-          ? `<img src="${escapeHtml(avatarSrc)}" class="user-avatar-mini" alt="صورة الحساب">`
+    /* المصادقة */
+    function renderAuthHeader() {
+      const slot = document.getElementById('headerAuthSlot');
+      if (state.currentUser && state.currentUser.username) {
+        const av = state.currentUser.avatar
+          ? `<img src="${esc(state.currentUser.avatar)}" alt="صورة">`
           : `<span>👤</span>`;
-        container.innerHTML = `
-          <div class="user-pill" onclick="viewMyProfile()">
-            ${avatarTag}
-            <span>${escapeHtml(appState.currentUser.username)}</span>
+        slot.innerHTML = `
+          <div class="user-chip" onclick="openMyProfile()">
+            ${av}
+            <span>${esc(state.currentUser.username)}</span>
           </div>
-          <button type="button" class="btn-link btn-danger" onclick="logout()">خروج</button>
+          <button type="button" class="btn btn-danger" onclick="logoutUser()">خروج</button>
         `;
       } else {
-        container.innerHTML = `
-          <button type="button" class="btn-link btn-secondary" onclick="openAuthModal('login')">دخول</button>
-          <button type="button" class="btn-link btn-primary" onclick="openAuthModal('register')">تسجيل</button>
+        slot.innerHTML = `
+          <button type="button" class="btn btn-surface" onclick="openAuthModal('login')">دخول</button>
+          <button type="button" class="btn btn-primary" onclick="openAuthModal('register')">حساب جديد</button>
         `;
       }
     }
 
-    function logout() {
-      localStorage.removeItem('rakhis_user');
-      appState.currentUser = null;
-      returnToMarket();
-      renderAuthUI();
-      showToast('تم تسجيل الخروج');
-    }
-
-    function openModal(id) { document.getElementById(id).classList.add('open'); }
-    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-
     function openAuthModal(mode) {
-      document.getElementById('authModalTitle').textContent = mode === 'register' ? 'إنشاء حساب جديد' : 'تسجيل الدخول';
+      document.getElementById('authModalHeading').textContent = mode === 'register' ? 'إنشاء حساب جديد' : 'تسجيل الدخول';
       openModal('authModal');
     }
 
-    function openAdModal() {
-      if (!appState.currentUser) {
-        showToast('يرجى تسجيل الدخول أولاً لنشر إعلان');
-        openAuthModal('login');
-        return;
-      }
-      document.getElementById('adModalTitle').textContent = 'نشر إعلان جديد';
-      document.getElementById('adTitle').value = '';
-      document.getElementById('adPrice').value = '';
-      document.getElementById('adCity').value = appState.currentUser.city || 'دمشق';
-      document.getElementById('adDesc').value = '';
-      document.getElementById('adImageInput').value = '';
-      appState.selectedAdImageBase64 = '';
-      document.getElementById('adImagePreview').style.display = 'none';
-      openModal('adModal');
-    }
-
-    async function fetchAllAds() {
-      try {
-        const res = await fetch('/api/ads', { cache: 'no-store' });
-        appState.ads = res.ok ? await res.json() : [];
-      } catch (e) {
-        appState.ads = [
-          { id: '1', title: 'سيارة تويوتا كورولا', price: '55000000', city: 'دمشق', category: 'سيارات ومركبات', condition: 'مستعمل', description: 'بحالة ممتازة، جاهزة للفحص.', ownerUsername: 'ahmad_cars', image: '', reviews: [] },
-          { id: '2', title: 'هاتف آيفون 13 برو', price: '12000000', city: 'حلب', category: 'تكنولوجيا وإلكترونيات', condition: 'جديد', description: 'مكفول وبكامل أغراضه.', ownerUsername: 'tech_store', image: '', reviews: [] },
-          { id: '3', title: 'شقة للبيع في المزة', price: '280000000', city: 'دمشق', category: 'عقارات', condition: 'جديد', description: 'إطلالة جميلة وطابو أخضر.', ownerUsername: 'syria_realty', image: '', reviews: [] },
-          { id: '4', title: 'غرفة نوم حديثة', price: '18500000', city: 'حمص', category: 'أثاث ومنزل', condition: 'جديد', description: 'خشب زان مع خزانة جرارة.', ownerUsername: 'home_style', image: '', reviews: [] }
-        ];
-      }
-      executeSearch();
-    }
-
-    function previewAdImage(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        appState.selectedAdImageBase64 = e.target.result;
-        const preview = document.getElementById('adImagePreview');
-        preview.src = e.target.result;
-        preview.style.display = 'block';
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function toggleFavorite(adId, ev) {
-      if (ev) ev.stopPropagation();
-      const idx = appState.favorites.indexOf(adId);
-      if (idx >= 0) {
-        appState.favorites.splice(idx, 1);
-        showToast('تمت الإزالة من المفضلة');
-      } else {
-        appState.favorites.push(adId);
-        showToast('تمت الإضافة إلى المفضلة');
-      }
-      localStorage.setItem('rakhis_favs', JSON.stringify(appState.favorites));
-      renderAds();
-    }
-
-    function addToCart(adId, ev) {
-      if (ev) ev.stopPropagation();
-      const ad = appState.ads.find(a => String(a.id) === String(adId));
-      if (!ad) return;
-      if (!appState.cart.some(item => String(item.id) === String(adId))) {
-        appState.cart.push(ad);
-        localStorage.setItem('rakhis_cart', JSON.stringify(appState.cart));
-        updateCartBadge();
-        showToast('تمت إضافة الإعلان إلى السلة');
-      } else {
-        showToast('الإعلان موجود مسبقاً في السلة');
-      }
-    }
-
-    function removeFromCart(adId) {
-      appState.cart = appState.cart.filter(item => String(item.id) !== String(adId));
-      localStorage.setItem('rakhis_cart', JSON.stringify(appState.cart));
-      updateCartBadge();
-      openCartModal();
-    }
-
-    function updateCartBadge() {
-      const el = document.getElementById('cartCountSpan');
-      if (el) el.textContent = String(appState.cart.length);
-    }
-
-    function openCartModal() {
-      const content = document.getElementById('cartModalContent');
-      if (appState.cart.length === 0) {
-        content.innerHTML = '<p style="color: var(--muted); text-align: center; padding: 24px;">السلة فارغة حالياً.</p>';
-        openModal('cartModal');
-        return;
-      }
-
-      const totalNum = appState.cart.reduce((sum, item) => {
-        const d = String(item.price || '').replace(/[^\d]/g, '');
-        return sum + (d ? Number(d) : 0);
-      }, 0);
-
-      content.innerHTML = `
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-          ${appState.cart.map(item => `
-            <div style="background: var(--bg-mid); border: 1px solid var(--border); border-radius: 10px; padding: 10px; display: flex; justify-content: space-between; align-items: center; gap: 8px;">
-              <div>
-                <div style="font-weight: 800;">${escapeHtml(item.title)}</div>
-                <div style="font-size: 0.76rem; color: var(--muted);">البائع: ${escapeHtml(item.ownerUsername)} • ${escapeHtml(item.city || 'دمشق')}</div>
-                <div style="color: var(--green); font-weight: 900; font-size: 0.85rem;">${formatPriceSYP(item.price)}</div>
-              </div>
-              <div style="display: flex; gap: 6px;">
-                <button type="button" class="btn-link btn-primary" onclick="openAppChat('${escapeHtml(item.ownerUsername)}', '${escapeHtml(item.id)}')">💬 راسل</button>
-                <button type="button" class="btn-link btn-danger" onclick="removeFromCart('${escapeHtml(item.id)}')">حذف</button>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-        <div style="margin-top: 8px; padding-top: 12px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
-          <strong>الإجمالي التقديري:</strong>
-          <span style="color: var(--gold); font-weight: 900; font-size: 1rem;">${totalNum.toLocaleString('en-US')} ل.س</span>
-        </div>
-      `;
-      openModal('cartModal');
-    }
-
-    function renderAds() {
-      const grid = document.getElementById('adsGridContainer');
-      document.getElementById('adCountBadge').textContent = `${appState.filteredAds.length} إعلان`;
-
-      if (appState.filteredAds.length === 0) {
-        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 36px; color: var(--muted);">لا توجد إعلانات مطابقة لمعايير البحث.</div>';
-        return;
-      }
-
-      grid.innerHTML = appState.filteredAds.map(ad => {
-        const formattedPrice = formatPriceSYP(ad.price);
-        const hasValidImage = typeof ad.image === 'string' && (
-          ad.image.startsWith('data:image/') ||
-          ad.image.startsWith('http://') ||
-          ad.image.startsWith('https://')
-        );
-        const isFav = appState.favorites.includes(ad.id);
-        const revCount = Array.isArray(ad.reviews) ? ad.reviews.length : 0;
-
-        return `
-          <div class="ad-card">
-            <div class="ad-img-wrapper ${hasValidImage ? 'has-image' : ''}">
-              ${hasValidImage ? `<img src="${escapeHtml(ad.image)}" class="ad-img" alt="${escapeHtml(ad.title)}" onclick="openAdDetails('${escapeHtml(ad.id)}')">` : ''}
-              <div class="fav-toggle" onclick="toggleFavorite('${escapeHtml(ad.id)}', event)">${isFav ? '❤️' : '🤍'}</div>
-            </div>
-            <div class="ad-body">
-              <div class="badges-container">
-                <span class="badge">${escapeHtml(ad.city || 'دمشق')}</span>
-                <span class="badge">${escapeHtml(ad.condition || 'مستعمل')}</span>
-                ${revCount > 0 ? `<span class="badge badge-gold">⭐ ${revCount}</span>` : ''}
-              </div>
-              <div class="ad-title" onclick="openAdDetails('${escapeHtml(ad.id)}')">${escapeHtml(ad.title)}</div>
-              <div class="ad-price">${formattedPrice}</div>
-              <div class="ad-meta">
-                <span>بواسطة: <span class="owner-link" onclick="viewUserProfile('${escapeHtml(ad.ownerUsername)}')">${escapeHtml(ad.ownerUsername)}</span></span>
-                <span style="cursor:pointer; color:var(--gold);" onclick="openAdDetails('${escapeHtml(ad.id)}')">تفاصيل</span>
-              </div>
-              <div class="ad-description">${escapeHtml(ad.description || 'لا يوجد وصف.')}</div>
-            </div>
-            <div class="quick-action-btns">
-              <button type="button" class="btn-link btn-primary action-btn" onclick="viewUserProfile('${escapeHtml(ad.ownerUsername)}', '${escapeHtml(ad.id)}')">👤 الملف</button>
-              <button type="button" class="btn-link btn-secondary action-btn" onclick="addToCart('${escapeHtml(ad.id)}', event)">🛒 سلة</button>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    async function openAdDetails(adId) {
-      const ad = appState.ads.find(a => String(a.id) === String(adId));
-      if (!ad) return;
-      const reviews = Array.isArray(ad.reviews) ? ad.reviews : [];
-      const hasValidImage = typeof ad.image === 'string' && (
-        ad.image.startsWith('data:image/') ||
-        ad.image.startsWith('http://') ||
-        ad.image.startsWith('https://')
-      );
-
-      document.getElementById('detailsModalTitle').textContent = ad.title;
-      document.getElementById('detailsModalContent').innerHTML = `
-        ${hasValidImage ? `<img src="${escapeHtml(ad.image)}" style="width:100%; max-height:220px; object-fit:cover; border-radius:10px;" alt="${escapeHtml(ad.title)}">` : ''}
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-          <span style="color:var(--green); font-size:1.1rem; font-weight:900;">${formatPriceSYP(ad.price)}</span>
-          <span class="badge badge-highlight">${escapeHtml(ad.category || 'عام')} • ${escapeHtml(ad.city || 'دمشق')}</span>
-        </div>
-        <p style="font-size:0.86rem; color:#e2e8f0; line-height:1.5;">${escapeHtml(ad.description || 'لا يوجد وصف إضافي.')}</p>
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <button type="button" class="btn-link btn-primary" style="flex:1;" onclick="viewUserProfile('${escapeHtml(ad.ownerUsername)}', '${escapeHtml(ad.id)}')">👤 ملف المعلن ودردشة</button>
-          <button type="button" class="btn-link btn-gold" onclick="addToCart('${escapeHtml(ad.id)}')">🛒 أضف للسلة</button>
-        </div>
-
-        <div style="border-top:1px solid var(--border); padding-top:12px; margin-top:4px;">
-          <h4 style="margin-bottom:8px; color:var(--gold);">⭐ التقييمات والآراء (${reviews.length})</h4>
-          <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:10px;">
-            ${reviews.length > 0 ? reviews.map(r => `
-              <div style="background:var(--bg-mid); padding:8px 10px; border-radius:8px; border:1px solid var(--border);">
-                <div style="font-size:0.78rem; font-weight:800; color:var(--cyan);">${escapeHtml(r.author || 'مستخدم')} • ⭐ ${escapeHtml(r.rating || 5)}/5</div>
-                <div style="font-size:0.8rem; color:#e2e8f0;">${escapeHtml(r.comment || '')}</div>
-              </div>
-            `).join('') : '<p style="font-size:0.8rem; color:var(--muted);">لا توجد تقييمات بعد.</p>'}
-          </div>
-          <div style="display:flex; flex-direction:column; gap:6px;">
-            <select id="reviewRatingInput">
-              <option value="5">⭐⭐⭐⭐⭐ (5/5 ممتاز)</option>
-              <option value="4">⭐⭐⭐⭐ (4/5 جيد جداً)</option>
-              <option value="3">⭐⭐⭐ (3/5 مقبول)</option>
-              <option value="2">⭐⭐ (2/5 ضعيف)</option>
-              <option value="1">⭐ (1/5 سيء)</option>
-            </select>
-            <input type="text" id="reviewCommentInput" placeholder="اكتب رأيك أو سؤالك حول هذا الإعلان...">
-            <button type="button" class="btn-link btn-success" onclick="submitAdReview('${escapeHtml(ad.id)}')">إرسال التقييم</button>
-          </div>
-        </div>
-      `;
-      openModal('detailsModal');
-    }
-
-    async function submitAdReview(adId) {
-      const rating = document.getElementById('reviewRatingInput').value;
-      const comment = document.getElementById('reviewCommentInput').value.trim();
-      if (!comment) {
-        showToast('اكتب تعليقاً أو تقييمك أولاً');
-        return;
-      }
-      const author = appState.currentUser ? appState.currentUser.username : 'زائر';
-
-      try {
-        const res = await fetch(`/api/ads/${encodeURIComponent(adId)}/reviews`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ author, rating, comment })
-        });
-        if (res.ok) {
-          const updatedAd = await res.json();
-          appState.ads = appState.ads.map(a => String(a.id) === String(adId) ? updatedAd : a);
-          executeSearch();
-          openAdDetails(adId);
-          showToast('تم إضافة التقييم');
-          return;
-        }
-      } catch (e) {}
-
-      const target = appState.ads.find(a => String(a.id) === String(adId));
-      if (target) {
-        if (!Array.isArray(target.reviews)) target.reviews = [];
-        target.reviews.push({ author, rating, comment, createdAt: new Date().toISOString() });
-        executeSearch();
-        openAdDetails(adId);
-        showToast('تم إضافة التقييم');
-      }
-    }
-
-    function executeSearch() {
-      const keyword = (document.getElementById('searchKeyword').value || '').trim().toLowerCase();
-      const city = document.getElementById('filterCitySelect').value;
-      const condition = document.getElementById('filterConditionSelect').value;
-      const sort = document.getElementById('sortSelect').value;
-
-      let list = appState.ads.filter(ad => {
-        const hay = `${ad.title || ''} ${ad.description || ''} ${ad.category || ''} ${ad.city || ''} ${ad.ownerUsername || ''}`.toLowerCase();
-        const matchesKeyword = !keyword || hay.includes(keyword);
-        const matchesCity = !city || ad.city === city;
-        const matchesCondition = !condition || ad.condition === condition;
-        return matchesKeyword && matchesCity && matchesCondition;
-      });
-
-      if (sort === 'price_asc') {
-        list.sort((a, b) => Number(String(a.price || 0).replace(/[^\d]/g, '')) - Number(String(b.price || 0).replace(/[^\d]/g, '')));
-      } else if (sort === 'price_desc') {
-        list.sort((a, b) => Number(String(b.price || 0).replace(/[^\d]/g, '')) - Number(String(a.price || 0).replace(/[^\d]/g, '')));
-      }
-
-      appState.filteredAds = list;
-      renderAds();
-    }
-
-    function filterByCategory(cat) {
-      document.getElementById('searchKeyword').value = '';
-      appState.filteredAds = appState.ads.filter(ad => ad.category === cat);
-      renderAds();
-    }
-
-    function filterByKeyword(kw) {
-      document.getElementById('searchKeyword').value = kw;
-      executeSearch();
-    }
-
-    function filterOnlyMine() {
-      if (!appState.currentUser) {
-        openAuthModal('login');
-        return;
-      }
-      const me = appState.currentUser.username.toLowerCase();
-      appState.filteredAds = appState.ads.filter(ad => (ad.ownerUsername || '').toLowerCase() === me);
-      renderAds();
-    }
-
-    function resetFilters() {
-      returnToMarket();
-      document.getElementById('searchKeyword').value = '';
-      document.getElementById('filterCitySelect').value = '';
-      document.getElementById('filterConditionSelect').value = '';
-      document.getElementById('sortSelect').value = 'newest';
-      appState.filteredAds = [...appState.ads];
-      renderAds();
-    }
-
-    async function viewMyProfile() {
-      if (!appState.currentUser) {
-        openAuthModal('login');
-        return;
-      }
-      await loadMessagesData();
-      await viewUserProfile(appState.currentUser.username, '', 'info');
-    }
-
-    async function viewUserProfile(username, contextAdId = '', activeTab = 'info') {
-      closeModal('detailsModal');
-      try {
-        const res = await fetch(`/api/users/${encodeURIComponent(username)}`, { cache: 'no-store' });
-        const userData = res.ok ? await res.json() : { username, city: 'دمشق', phone: '', bio: '', avatar: '', adsCount: 0, ads: [] };
-        const isMe = appState.currentUser && appState.currentUser.username.toLowerCase() === username.toLowerCase();
-        appState.selectedAvatarBase64 = userData.avatar || '';
-        const convList = isMe ? getConversationsList() : [];
-
-        document.getElementById('profileModalTitle').textContent = isMe ? 'ملفي الشخصي' : `ملف ${username}`;
-        const content = document.getElementById('profileModalContent');
-
-        content.innerHTML = `
-          <div class="profile-card-header">
-            ${userData.avatar ? `<img src="${escapeHtml(userData.avatar)}" class="profile-avatar-large" alt="الصورة الشخصية">` : `<div class="profile-avatar-large" style="display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:900;">${escapeHtml((username || 'م')[0])}</div>`}
-            <h2>${escapeHtml(userData.username)}</h2>
-            <p>📍 المدينة: ${escapeHtml(userData.city || 'دمشق')}</p>
-            ${userData.phone ? `<p>📞 ${escapeHtml(userData.phone)}</p>` : ''}
-            ${userData.bio ? `<p style="color:var(--muted);font-size:0.82rem;">${escapeHtml(userData.bio)}</p>` : ''}
-            <div class="stats-row">
-              <div class="stat-box">
-                <div class="stat-value">${userData.adsCount || 0}</div>
-                <div class="stat-label">إعلان منشور</div>
-              </div>
-              ${isMe ? `
-                <div class="stat-box">
-                  <div class="stat-value">${convList.length}</div>
-                  <div class="stat-label">مراسلة</div>
-                </div>
-              ` : ''}
-            </div>
-
-            ${!isMe ? `
-              <button type="button" class="btn-link btn-primary" style="width:100%; padding:10px;" onclick="openAppChat('${escapeHtml(username)}', '${escapeHtml(contextAdId)}')">💬 دردشة مع ${escapeHtml(username)}</button>
-            ` : `
-              <div class="profile-tabs" style="width:100%; justify-content:center;">
-                <button type="button" class="btn-link ${activeTab === 'info' ? 'btn-primary' : 'btn-secondary'}" onclick="viewUserProfile('${escapeHtml(username)}', '', 'info')">معلوماتي وإعلاناتي</button>
-                <button type="button" class="btn-link ${activeTab === 'messages' ? 'btn-primary' : 'btn-secondary'}" onclick="viewUserProfile('${escapeHtml(username)}', '', 'messages')">المراسلات (${convList.length})</button>
-                <button type="button" class="btn-link ${activeTab === 'settings' ? 'btn-primary' : 'btn-secondary'}" onclick="viewUserProfile('${escapeHtml(username)}', '', 'settings')">الإعدادات</button>
-              </div>
-            `}
-          </div>
-
-          ${isMe && activeTab === 'messages' ? `
-            <div style="display:flex; flex-direction:column; gap:8px;">
-              <h4 style="color:var(--cyan);">الأشخاص الذين راسلتهم:</h4>
-              ${convList.length > 0 ? convList.map(c => `
-                <div style="background:var(--bg-mid); padding:10px 12px; border-radius:10px; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; gap:8px;">
-                  <div style="min-width:0;">
-                    <div style="font-weight:800;">${escapeHtml(c.username)}</div>
-                    <div style="font-size:0.76rem; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(c.lastMessage || '')}</div>
-                  </div>
-                  <button type="button" class="btn-link btn-primary" onclick="openAppChat('${escapeHtml(c.username)}')">فتح المحادثة</button>
-                </div>
-              `).join('') : '<p style="color:var(--muted); font-size:0.84rem;">لا توجد محادثات حتى الآن.</p>'}
-            </div>
-          ` : ''}
-
-          ${isMe && activeTab === 'settings' ? `
-            <div style="display:flex; flex-direction:column; gap:8px;">
-              <h4 style="color:var(--cyan);">⚙️ إعدادات الملف الشخصي</h4>
-              <div>
-                <label style="font-size:0.78rem; color:var(--muted);">صورة الملف الشخصي:</label>
-                <input type="file" id="profileAvatarInput" accept="image/*">
-              </div>
-              <input type="text" id="profileCityInput" value="${escapeHtml(userData.city || 'دمشق')}" placeholder="المدينة">
-              <input type="text" id="profilePhoneInput" value="${escapeHtml(userData.phone || '')}" placeholder="رقم الهاتف">
-              <textarea id="profileBioInput" rows="2" placeholder="نبذة تعريفية">${escapeHtml(userData.bio || '')}</textarea>
-              <button type="button" class="btn-link btn-success" style="width:100%;" onclick="saveProfileSettings()">حفظ الإعدادات</button>
-            </div>
-          ` : ''}
-
-          ${(!isMe || activeTab === 'info') ? `
-            <h3>الإعلانات المنشورة:</h3>
-            <div style="display: flex; flex-direction: column; gap: 6px;">
-              ${userData.ads && userData.ads.length > 0 ? userData.ads.map(ad => `
-                <div style="background: var(--bg-mid); padding: 9px 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; gap: 8px;">
-                  <span>${escapeHtml(ad.title)}</span>
-                  <div style="display:flex; align-items:center; gap:8px;">
-                    <span style="color: var(--green); font-weight: 700;">${formatPriceSYP(ad.price)}</span>
-                    ${isMe ? `<button type="button" class="btn-link btn-danger" style="padding:3px 8px; font-size:0.7rem;" onclick="deleteAd('${escapeHtml(ad.id)}')">حذف</button>` : ''}
-                  </div>
-                </div>
-              `).join('') : '<p style="color: var(--muted);">لا توجد إعلانات نشطة حالياً.</p>'}
-            </div>
-          ` : ''}
-        `;
-
-        const avatarInput = document.getElementById('profileAvatarInput');
-        if (avatarInput) {
-          avatarInput.addEventListener('change', (ev) => {
-            const file = ev.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (e) => { appState.selectedAvatarBase64 = e.target.result; };
-            reader.readAsDataURL(file);
-          });
-        }
-
-        openModal('profileModal');
-      } catch(e) {
-        showToast('تعذر جلب بيانات المستخدم');
-      }
-    }
-
-    async function deleteAd(adId) {
-      try {
-        const res = await fetch(`/api/ads/${encodeURIComponent(adId)}`, { method: 'DELETE' });
-        if (res.ok) {
-          appState.ads = appState.ads.filter(a => String(a.id) !== String(adId));
-          executeSearch();
-          if (appState.currentUser) await viewUserProfile(appState.currentUser.username, '', 'info');
-          showToast('تم حذف الإعلان');
-        }
-      } catch (e) {
-        showToast('تعذر حذف الإعلان');
-      }
-    }
-
-    async function saveProfileSettings() {
-      if (!appState.currentUser) return;
-      const city = document.getElementById('profileCityInput').value.trim();
-      const phone = document.getElementById('profilePhoneInput').value.trim();
-      const bio = document.getElementById('profileBioInput').value.trim();
-
-      try {
-        const res = await fetch('/api/profile/settings', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            username: appState.currentUser.username,
-            city,
-            phone,
-            bio,
-            avatar: appState.selectedAvatarBase64
-          })
-        });
-        if (res.ok) {
-          const data = await res.json();
-          appState.currentUser = data.user || { ...appState.currentUser, city, phone, bio, avatar: appState.selectedAvatarBase64 };
-          localStorage.setItem('rakhis_user', JSON.stringify(appState.currentUser));
-          renderAuthUI();
-          showToast('تم حفظ إعدادات الملف الشخصي');
-          await viewUserProfile(appState.currentUser.username, '', 'info');
-        } else {
-          showToast('تعذر حفظ الإعدادات');
-        }
-      } catch (e) {
-        showToast('حدث خطأ أثناء الحفظ');
-      }
-    }
-
-    async function saveAd() {
-      const title = document.getElementById('adTitle').value.trim();
-      const rawPrice = document.getElementById('adPrice').value.replace(/[^\d]/g, '');
-      const category = document.getElementById('adCategory').value;
-      const condition = document.getElementById('adCondition').value;
-      const city = document.getElementById('adCity').value.trim() || 'دمشق';
-      const description = document.getElementById('adDesc').value.trim();
-
-      if (!title || !rawPrice) {
-        showToast('يرجى تعبئة العنوان والسعر بالأرقام');
-        return;
-      }
-
-      const newAd = {
-        id: Date.now().toString(),
-        title,
-        price: rawPrice,
-        currency: 'ل.س',
-        category,
-        city,
-        condition,
-        description,
-        ownerUsername: appState.currentUser.username,
-        image: appState.selectedAdImageBase64,
-        reviews: []
-      };
-
-      try {
-        const res = await fetch('/api/ads', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(newAd)
-        });
-        if (res.ok) {
-          const saved = await res.json();
-          appState.ads.unshift(saved);
-          executeSearch();
-          closeModal('adModal');
-          showToast('تم نشر الإعلان بنجاح');
-        } else {
-          showToast('تعذر نشر الإعلان');
-        }
-      } catch(e) {
-        showToast('حدث خطأ أثناء نشر الإعلان');
-      }
-    }
-
-    async function handleAuthSubmit() {
-      const username = document.getElementById('authUsername').value.trim();
-      const password = document.getElementById('authPassword').value.trim();
+    async function submitAuth() {
+      const username = document.getElementById('authUserField').value.trim();
+      const password = document.getElementById('authPassField').value.trim();
       if (!username || !password) {
-        showToast('يرجى إدخال اسم المستخدم وكلمة المرور');
+        toast('أدخل اسم المستخدم وكلمة المرور');
         return;
       }
 
@@ -1635,20 +1624,549 @@
           });
         }
         const data = await res.json();
-        appState.currentUser = data.user || { username, avatar: '', city: 'دمشق' };
-        localStorage.setItem('rakhis_user', JSON.stringify(appState.currentUser));
-        renderAuthUI();
-        closeModal('authModal');
-        showToast('أهلاً بك يا ' + username);
-        await fetchAllAds();
-        await loadMessagesData();
+        state.currentUser = data.user || { username, city: 'دمشق', avatar: '' };
       } catch (e) {
-        appState.currentUser = { username, avatar: '', city: 'دمشق' };
-        localStorage.setItem('rakhis_user', JSON.stringify(appState.currentUser));
-        renderAuthUI();
-        closeModal('authModal');
-        showToast('أهلاً بك يا ' + username);
+        state.currentUser = { username, city: 'دمشق', avatar: '' };
       }
+
+      localStorage.setItem('rakhis_user', JSON.stringify(state.currentUser));
+      renderAuthHeader();
+      closeModal('authModal');
+      toast(`أهلاً بك يا ${username}`);
+      await loadMessages();
+    }
+
+    function logoutUser() {
+      localStorage.removeItem('rakhis_user');
+      state.currentUser = null;
+      showMarketView();
+      renderAuthHeader();
+      toast('تم تسجيل الخروج');
+    }
+
+    /* الإعلانات والبحث */
+    async function loadAds() {
+      try {
+        const res = await fetch('/api/ads', { cache: 'no-store' });
+        state.ads = res.ok ? await res.json() : [];
+      } catch (e) {
+        state.ads = [
+          { id: '1', title: 'سامسونج S24 الترا 512 جيجا', price: '18500000', category: 'هواتف وأجهزة ذكية', subCategory: 'سامسونج جالاكسي (Samsung)', city: 'دمشق', neighborhood: 'المزة', condition: 'جديد', description: 'جهاز جديد بالكرتونة مع كفالة.', ownerUsername: 'sham_mobile', image: '', reviews: [] },
+          { id: '2', title: 'سيارة كيا سيراتو 2016', price: '92000000', category: 'سيارات ومركبات', subCategory: 'كيا', city: 'حلب', neighborhood: 'الشهباء', condition: 'مستعمل', description: 'نظيفة جداً خالية البخ، جاهزة للفحص.', ownerUsername: 'aleppo_auto', image: '', reviews: [] },
+          { id: '3', title: 'شقة سكنية 140 متر طابو أخضر', price: '320000000', category: 'عقارات', subCategory: 'شقق للبيع', city: 'اللاذقية', neighborhood: 'الزراعة', condition: 'جديد', description: 'إكساء سوبر ديلوكس وإطلالة مفتوحة.', ownerUsername: 'coast_estate', image: '', reviews: [] },
+          { id: '4', title: 'قطط شيرازية بيضاء عمر شهرين', price: '1200000', category: 'حيوانات أليفة وطيور', subCategory: 'قطط', city: 'حمص', neighborhood: 'الحمراء', condition: 'جديد', description: 'بصحة ممتازة ومتعودة على الرمل.', ownerUsername: 'pets_syria', image: '', reviews: [] }
+        ];
+      }
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const q = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+      const cat = document.getElementById('filterMainCat').value;
+      const sub = document.getElementById('filterSubCat').value;
+      const city = document.getElementById('filterCity').value;
+      const cond = document.getElementById('filterCondition').value;
+      const sort = document.getElementById('filterSort').value;
+
+      let list = state.ads.filter(ad => {
+        const blob = `${ad.title || ''} ${ad.description || ''} ${ad.category || ''} ${ad.subCategory || ''} ${ad.city || ''} ${ad.neighborhood || ''} ${ad.ownerUsername || ''}`.toLowerCase();
+        const matchQ = !q || blob.includes(q);
+        const matchCat = !cat || ad.category === cat;
+        const matchSub = !sub || ad.subCategory === sub || blob.includes(sub.toLowerCase());
+        const matchCity = !city || ad.city === city;
+        const matchCond = !cond || ad.condition === cond;
+        return matchQ && matchCat && matchSub && matchCity && matchCond;
+      });
+
+      if (sort === 'price_asc') {
+        list.sort((a, b) => Number(String(a.price || 0).replace(/[^\d]/g, '')) - Number(String(b.price || 0).replace(/[^\d]/g, '')));
+      } else if (sort === 'price_desc') {
+        list.sort((a, b) => Number(String(b.price || 0).replace(/[^\d]/g, '')) - Number(String(a.price || 0).replace(/[^\d]/g, '')));
+      }
+
+      state.filteredAds = list;
+      renderAdsGrid();
+    }
+
+    function resetAllFilters() {
+      showMarketView();
+      document.getElementById('searchInput').value = '';
+      document.getElementById('filterMainCat').value = '';
+      document.getElementById('filterSubCat').value = '';
+      document.getElementById('filterCity').value = '';
+      document.getElementById('headerCitySelect').value = '';
+      document.getElementById('filterCondition').value = '';
+      document.getElementById('filterSort').value = 'newest';
+      state.selectedCategory = '';
+      state.selectedSubCategory = '';
+      updateCategoryUI();
+      applyFilters();
+    }
+
+    function showOnlyMyAds() {
+      if (!state.currentUser) {
+        openAuthModal('login');
+        return;
+      }
+      showMarketView();
+      const me = state.currentUser.username.toLowerCase();
+      state.filteredAds = state.ads.filter(ad => String(ad.ownerUsername || '').toLowerCase() === me);
+      renderAdsGrid();
+    }
+
+    function renderAdsGrid() {
+      const grid = document.getElementById('adsGrid');
+      document.getElementById('adsTotalCount').textContent = `${state.filteredAds.length} إعلان`;
+
+      if (state.filteredAds.length === 0) {
+        grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:42px; color:var(--text-muted);">لا توجد إعلانات مطابقة لخيارات البحث الحالية.</div>';
+        return;
+      }
+
+      grid.innerHTML = state.filteredAds.map(ad => {
+        const hasImg = typeof ad.image === 'string' && (
+          ad.image.startsWith('data:image/') ||
+          ad.image.startsWith('http://') ||
+          ad.image.startsWith('https://')
+        );
+        const isFav = state.favorites.includes(ad.id);
+        const locationText = ad.neighborhood ? `${ad.city} - ${ad.neighborhood}` : (ad.city || 'دمشق');
+        const subTag = ad.subCategory ? ` • ${ad.subCategory}` : '';
+
+        return `
+          <article class="ad-card">
+            <div class="ad-media ${hasImg ? 'has-img' : ''}">
+              ${hasImg ? `<img src="${esc(ad.image)}" alt="${esc(ad.title)}" onclick="openAdDetails('${esc(ad.id)}')">` : ''}
+              <button type="button" class="fav-btn" onclick="toggleFav('${esc(ad.id)}', event)">${isFav ? '❤️' : '🤍'}</button>
+            </div>
+            <div class="ad-info">
+              <div class="ad-price-tag">${formatSYP(ad.price)}</div>
+              <h3 class="ad-card-title" onclick="openAdDetails('${esc(ad.id)}')">${esc(ad.title)}</h3>
+              <div class="ad-loc-line">📍 ${esc(locationText)}</div>
+              <span class="ad-cat-pill">${esc(ad.category || 'عام')}${esc(subTag)}</span>
+              <div class="ad-seller-row">
+                <span>البائع: <span class="seller-trigger" onclick="openUserProfile('${esc(ad.ownerUsername)}', '${esc(ad.id)}')">${esc(ad.ownerUsername)}</span></span>
+                <span style="cursor:pointer; color:var(--accent); font-weight:700;" onclick="openAdDetails('${esc(ad.id)}')">التفاصيل</span>
+              </div>
+            </div>
+            <div class="ad-card-footer">
+              <button type="button" class="btn btn-primary" onclick="openUserProfile('${esc(ad.ownerUsername)}', '${esc(ad.id)}')">👤 البائع</button>
+              <button type="button" class="btn btn-surface" onclick="addToCart('${esc(ad.id)}')">🛒 سلة</button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    /* نشر إعلان */
+    function openPublishModal() {
+      if (!state.currentUser) {
+        toast('سجّل الدخول أولاً لنشر إعلانك');
+        openAuthModal('login');
+        return;
+      }
+      document.getElementById('pubTitle').value = '';
+      document.getElementById('pubPrice').value = '';
+      document.getElementById('pubNeighborhood').value = '';
+      document.getElementById('pubDesc').value = '';
+      document.getElementById('pubImageFile').value = '';
+      state.adImageBase64 = '';
+      document.getElementById('pubImagePreview').style.display = 'none';
+      populatePublishSubCats();
+      openModal('publishModal');
+    }
+
+    function handleAdImageUpload(ev) {
+      const file = ev.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        state.adImageBase64 = e.target.result;
+        const img = document.getElementById('pubImagePreview');
+        img.src = e.target.result;
+        img.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function submitNewAd() {
+      const title = document.getElementById('pubTitle').value.trim();
+      const rawPrice = document.getElementById('pubPrice').value.replace(/[^\d]/g, '');
+      const category = document.getElementById('pubMainCat').value;
+      const subCategory = document.getElementById('pubSubCat').value;
+      const city = document.getElementById('pubCity').value;
+      const neighborhood = document.getElementById('pubNeighborhood').value.trim();
+      const condition = document.getElementById('pubCondition').value;
+      const description = document.getElementById('pubDesc').value.trim();
+
+      if (!title || !rawPrice) {
+        toast('يرجى إدخال عنوان الإعلان والسعر بالأرقام');
+        return;
+      }
+
+      const adObj = {
+        id: Date.now().toString(),
+        title,
+        price: rawPrice,
+        currency: 'ل.س',
+        category,
+        subCategory,
+        city,
+        neighborhood,
+        condition,
+        description,
+        ownerUsername: state.currentUser.username,
+        image: state.adImageBase64,
+        reviews: [],
+        createdAt: new Date().toISOString()
+      };
+
+      try {
+        const res = await fetch('/api/ads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(adObj)
+        });
+        if (res.ok) {
+          const saved = await res.json();
+          state.ads.unshift(saved);
+        } else {
+          state.ads.unshift(adObj);
+        }
+      } catch (e) {
+        state.ads.unshift(adObj);
+      }
+
+      applyFilters();
+      closeModal('publishModal');
+      toast('تم نشر إعلانك بنجاح');
+    }
+
+    /* تفاصيل الإعلان والتقييمات */
+    function openAdDetails(adId) {
+      const ad = state.ads.find(a => String(a.id) === String(adId));
+      if (!ad) return;
+      const hasImg = typeof ad.image === 'string' && (ad.image.startsWith('data:image/') || ad.image.startsWith('http'));
+      const reviews = Array.isArray(ad.reviews) ? ad.reviews : [];
+      const loc = ad.neighborhood ? `${ad.city} - ${ad.neighborhood}` : (ad.city || 'دمشق');
+
+      document.getElementById('detailsModalHeading').textContent = ad.title;
+      document.getElementById('detailsModalBody').innerHTML = `
+        ${hasImg ? `<img src="${esc(ad.image)}" style="width:100%; max-height:240px; object-fit:cover; border-radius:12px;">` : ''}
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <strong style="font-size:1.3rem; color:var(--success);">${formatSYP(ad.price)}</strong>
+          <span class="ad-cat-pill">📍 ${esc(loc)}</span>
+        </div>
+        <div style="font-size:0.84rem; color:var(--text-muted);">
+          القسم: <strong>${esc(ad.category)}</strong> ${ad.subCategory ? `> <strong>${esc(ad.subCategory)}</strong>` : ''} • الحالة: <strong>${esc(ad.condition || 'مستعمل')}</strong>
+        </div>
+        <p style="font-size:0.9rem; line-height:1.55;">${esc(ad.description || 'لا يوجد وصف إضافي.')}</p>
+
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button type="button" class="btn btn-primary" style="flex:1;" onclick="openUserProfile('${esc(ad.ownerUsername)}', '${esc(ad.id)}')">👤 ملف البائع ودردشة</button>
+          <button type="button" class="btn btn-surface" onclick="addToCart('${esc(ad.id)}')">🛒 أضف للسلة</button>
+        </div>
+
+        <div style="border-top:1px solid var(--border); padding-top:12px; margin-top:4px;">
+          <h4 style="color:var(--accent); margin-bottom:8px;">⭐ التقييمات والآراء (${reviews.length})</h4>
+          <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:10px;">
+            ${reviews.length > 0 ? reviews.map(r => `
+              <div style="background:var(--bg-card); padding:8px 12px; border-radius:10px; border:1px solid var(--border);">
+                <div style="font-size:0.78rem; font-weight:800; color:var(--primary);">${esc(r.author)} • ⭐ ${esc(r.rating)}/5</div>
+                <div style="font-size:0.82rem;">${esc(r.comment)}</div>
+              </div>
+            `).join('') : '<p style="font-size:0.8rem; color:var(--text-muted);">لا توجد تقييمات بعد.</p>'}
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <select id="revStars">
+              <option value="5">⭐⭐⭐⭐⭐ (5/5 ممتاز)</option>
+              <option value="4">⭐⭐⭐⭐ (4/5 جيد جداً)</option>
+              <option value="3">⭐⭐⭐ (3/5 مقبول)</option>
+              <option value="2">⭐⭐ (2/5 ضعيف)</option>
+              <option value="1">⭐ (1/5 سيء)</option>
+            </select>
+            <input type="text" id="revText" placeholder="اكتب رأيك أو استفسارك...">
+            <button type="button" class="btn btn-success" onclick="postReview('${esc(ad.id)}')">إرسال التقييم</button>
+          </div>
+        </div>
+      `;
+      openModal('detailsModal');
+    }
+
+    async function postReview(adId) {
+      const rating = document.getElementById('revStars').value;
+      const comment = document.getElementById('revText').value.trim();
+      if (!comment) {
+        toast('اكتب تعليقك أولاً');
+        return;
+      }
+      const author = state.currentUser ? state.currentUser.username : 'زائر';
+
+      try {
+        const res = await fetch(`/api/ads/${encodeURIComponent(adId)}/reviews`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ author, rating, comment })
+        });
+        if (res.ok) {
+          const updated = await res.json();
+          state.ads = state.ads.map(a => String(a.id) === String(adId) ? updated : a);
+          applyFilters();
+          openAdDetails(adId);
+          toast('تمت إضافة تقييمك');
+          return;
+        }
+      } catch (e) {}
+
+      const ad = state.ads.find(a => String(a.id) === String(adId));
+      if (ad) {
+        if (!Array.isArray(ad.reviews)) ad.reviews = [];
+        ad.reviews.push({ author, rating, comment });
+        applyFilters();
+        openAdDetails(adId);
+        toast('تمت إضافة تقييمك');
+      }
+    }
+
+    /* الملف الشخصي والمراسلات داخله */
+    async function openMyProfile() {
+      if (!state.currentUser) {
+        openAuthModal('login');
+        return;
+      }
+      await loadMessages();
+      await openUserProfile(state.currentUser.username, '', 'info');
+    }
+
+    async function openUserProfile(username, contextAdId = '', activeTab = 'info') {
+      closeModal('detailsModal');
+      let userData = { username, city: 'دمشق', phone: '', bio: '', avatar: '', adsCount: 0, ads: [] };
+
+      try {
+        const res = await fetch(`/api/users/${encodeURIComponent(username)}`, { cache: 'no-store' });
+        if (res.ok) userData = await res.json();
+      } catch (e) {
+        const userAds = state.ads.filter(a => String(a.ownerUsername || '').toLowerCase() === username.toLowerCase());
+        userData.ads = userAds;
+        userData.adsCount = userAds.length;
+      }
+
+      const isMe = state.currentUser && state.currentUser.username.toLowerCase() === username.toLowerCase();
+      state.avatarBase64 = userData.avatar || '';
+      const threads = isMe ? getPeerThreads() : [];
+
+      document.getElementById('profileModalHeading').textContent = isMe ? 'ملفي الشخصي' : `ملف البائع: ${username}`;
+      const body = document.getElementById('profileModalBody');
+
+      body.innerHTML = `
+        <div class="profile-hero">
+          ${userData.avatar
+            ? `<img src="${esc(userData.avatar)}" class="profile-avatar-xl" alt="صورة">`
+            : `<div class="profile-avatar-xl">${esc((username || 'م')[0])}</div>`
+          }
+          <h2>${esc(userData.username)}</h2>
+          <p style="font-size:0.84rem; color:var(--text-muted);">📍 ${esc(userData.city || 'دمشق')} ${userData.phone ? `• 📞 ${esc(userData.phone)}` : ''}</p>
+          ${userData.bio ? `<p style="font-size:0.82rem; color:#cbd5e1;">${esc(userData.bio)}</p>` : ''}
+
+          <div class="profile-stats">
+            <div class="p-stat">
+              <strong>${userData.adsCount || 0}</strong>
+              <span>إعلان منشور</span>
+            </div>
+            ${isMe ? `
+              <div class="p-stat">
+                <strong>${threads.length}</strong>
+                <span>مراسلة</span>
+              </div>
+            ` : ''}
+          </div>
+
+          ${!isMe ? `
+            <button type="button" class="btn btn-primary" style="width:100%; padding:11px; margin-top:6px;" onclick="openAppChat('${esc(username)}', '${esc(contextAdId)}')">💬 دردشة مع ${esc(username)}</button>
+          ` : `
+            <div class="tab-strip">
+              <button type="button" class="btn ${activeTab === 'info' ? 'btn-primary' : 'btn-surface'}" onclick="openUserProfile('${esc(username)}', '', 'info')">إعلاناتي</button>
+              <button type="button" class="btn ${activeTab === 'messages' ? 'btn-primary' : 'btn-surface'}" onclick="openUserProfile('${esc(username)}', '', 'messages')">المراسلات (${threads.length})</button>
+              <button type="button" class="btn ${activeTab === 'settings' ? 'btn-primary' : 'btn-surface'}" onclick="openUserProfile('${esc(username)}', '', 'settings')">الإعدادات</button>
+            </div>
+          `}
+        </div>
+
+        ${isMe && activeTab === 'messages' ? `
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <h4 style="color:var(--primary);">الأشخاص الذين راسلتهم:</h4>
+            ${threads.length > 0 ? threads.map(th => `
+              <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                <div style="min-width:0;">
+                  <strong style="display:block;">${esc(th.username)}</strong>
+                  <span style="font-size:0.76rem; color:var(--text-muted); display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${esc(th.lastText)}</span>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="openAppChat('${esc(th.username)}')">فتح المحادثة</button>
+              </div>
+            `).join('') : '<p style="color:var(--text-muted); font-size:0.84rem;">لا توجد مراسلات حتى الآن.</p>'}
+          </div>
+        ` : ''}
+
+        ${isMe && activeTab === 'settings' ? `
+          <div style="display:flex; flex-direction:column; gap:9px;">
+            <h4 style="color:var(--primary);">⚙️ تعديل بيانات الحساب</h4>
+            <div>
+              <label style="font-size:0.78rem; color:var(--text-muted);">الصورة الشخصية:</label>
+              <input type="file" id="profAvatarInput" accept="image/*">
+            </div>
+            <input type="text" id="profCityInput" value="${esc(userData.city || 'دمشق')}" placeholder="المدينة">
+            <input type="text" id="profPhoneInput" value="${esc(userData.phone || '')}" placeholder="رقم الهاتف">
+            <textarea id="profBioInput" rows="2" placeholder="نبذة تعريفية عنك أو عن متجرك">${esc(userData.bio || '')}</textarea>
+            <button type="button" class="btn btn-success" style="width:100%;" onclick="saveProfileChanges()">حفظ التغييرات</button>
+          </div>
+        ` : ''}
+
+        ${(!isMe || activeTab === 'info') ? `
+          <h4 style="color:var(--text-main);">الإعلانات المنشورة:</h4>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            ${userData.ads && userData.ads.length > 0 ? userData.ads.map(ad => `
+              <div style="background:var(--bg-card); border:1px solid var(--border); padding:10px 12px; border-radius:10px; display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                <span style="font-weight:700;">${esc(ad.title)}</span>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="color:var(--success); font-weight:800;">${formatSYP(ad.price)}</span>
+                  ${isMe ? `<button type="button" class="btn btn-danger" style="padding:4px 8px; font-size:0.72rem;" onclick="removeAd('${esc(ad.id)}')">حذف</button>` : ''}
+                </div>
+              </div>
+            `).join('') : '<p style="color:var(--text-muted); font-size:0.84rem;">لا توجد إعلانات منشورة حالياً.</p>'}
+          </div>
+        ` : ''}
+      `;
+
+      const avInput = document.getElementById('profAvatarInput');
+      if (avInput) {
+        avInput.addEventListener('change', (ev) => {
+          const f = ev.target.files[0];
+          if (!f) return;
+          const r = new FileReader();
+          r.onload = (e) => { state.avatarBase64 = e.target.result; };
+          r.readAsDataURL(f);
+        });
+      }
+
+      openModal('profileModal');
+    }
+
+    async function saveProfileChanges() {
+      if (!state.currentUser) return;
+      const city = document.getElementById('profCityInput').value.trim();
+      const phone = document.getElementById('profPhoneInput').value.trim();
+      const bio = document.getElementById('profBioInput').value.trim();
+
+      try {
+        const res = await fetch('/api/profile/settings', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: state.currentUser.username,
+            city,
+            phone,
+            bio,
+            avatar: state.avatarBase64
+          })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          state.currentUser = data.user || { ...state.currentUser, city, phone, bio, avatar: state.avatarBase64 };
+          localStorage.setItem('rakhis_user', JSON.stringify(state.currentUser));
+          renderAuthHeader();
+          toast('تم حفظ إعدادات ملفك الشخصي');
+          await openUserProfile(state.currentUser.username, '', 'info');
+        }
+      } catch (e) {
+        toast('تعذر حفظ الإعدادات');
+      }
+    }
+
+    async function removeAd(adId) {
+      try {
+        await fetch(`/api/ads/${encodeURIComponent(adId)}`, { method: 'DELETE' });
+      } catch (e) {}
+      state.ads = state.ads.filter(a => String(a.id) !== String(adId));
+      applyFilters();
+      if (state.currentUser) await openUserProfile(state.currentUser.username, '', 'info');
+      toast('تم حذف الإعلان');
+    }
+
+    /* المفضلة والسلة */
+    function toggleFav(adId, ev) {
+      if (ev) ev.stopPropagation();
+      const idx = state.favorites.indexOf(adId);
+      if (idx >= 0) {
+        state.favorites.splice(idx, 1);
+        toast('تمت الإزالة من المفضلة');
+      } else {
+        state.favorites.push(adId);
+        toast('تمت الإضافة إلى المفضلة');
+      }
+      localStorage.setItem('rakhis_favs', JSON.stringify(state.favorites));
+      renderAdsGrid();
+    }
+
+    function addToCart(adId) {
+      const ad = state.ads.find(a => String(a.id) === String(adId));
+      if (!ad) return;
+      if (state.cart.some(i => String(i.id) === String(adId))) {
+        toast('الإعلان موجود مسبقاً في السلة');
+        return;
+      }
+      state.cart.push(ad);
+      localStorage.setItem('rakhis_cart', JSON.stringify(state.cart));
+      updateCartBadge();
+      toast('تمت الإضافة إلى السلة');
+    }
+
+    function removeFromCart(adId) {
+      state.cart = state.cart.filter(i => String(i.id) !== String(adId));
+      localStorage.setItem('rakhis_cart', JSON.stringify(state.cart));
+      updateCartBadge();
+      openCartModal();
+    }
+
+    function updateCartBadge() {
+      const el = document.getElementById('cartCountBadge');
+      if (el) el.textContent = String(state.cart.length);
+    }
+
+    function openCartModal() {
+      const body = document.getElementById('cartModalBody');
+      if (state.cart.length === 0) {
+        body.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:28px;">السلة فارغة حالياً.</p>';
+        openModal('cartModal');
+        return;
+      }
+
+      const total = state.cart.reduce((acc, item) => {
+        const d = String(item.price || '').replace(/[^\d]/g, '');
+        return acc + (d ? Number(d) : 0);
+      }, 0);
+
+      body.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          ${state.cart.map(item => `
+            <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:10px; display:flex; justify-content:space-between; align-items:center; gap:8px;">
+              <div>
+                <strong>${esc(item.title)}</strong>
+                <div style="font-size:0.75rem; color:var(--text-muted);">${esc(item.ownerUsername)} • ${esc(item.city || 'دمشق')}</div>
+                <div style="color:var(--success); font-weight:800;">${formatSYP(item.price)}</div>
+              </div>
+              <div style="display:flex; gap:6px;">
+                <button type="button" class="btn btn-primary" onclick="openAppChat('${esc(item.ownerUsername)}', '${esc(item.id)}')">💬 راسل</button>
+                <button type="button" class="btn btn-danger" onclick="removeFromCart('${esc(item.id)}')">حذف</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        <div style="border-top:1px solid var(--border); padding-top:12px; display:flex; justify-content:space-between; align-items:center;">
+          <strong>الإجمالي:</strong>
+          <span style="color:var(--accent); font-weight:900; font-size:1.05rem;">${total.toLocaleString('en-US')} ل.س</span>
+        </div>
+      `;
+      openModal('cartModal');
     }
   </script>
 </body>

@@ -4,16 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>رخيص - سوق الإعلانات</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
 
     :root {
       --bg-dark: #070b14;
       --bg-mid: #0f172a;
-      --surface: rgba(19, 29, 49, 0.92);
-      --surface-soft: rgba(30, 41, 59, 0.82);
-      --surface-hover: rgba(37, 53, 84, 0.96);
+      --surface: rgba(19, 29, 49, 0.95);
+      --surface-soft: rgba(30, 41, 59, 0.85);
       --cyan: #38bdf8;
       --rose: #fb7185;
       --gold: #facc15;
@@ -21,1757 +19,903 @@
       --green: #22c55e;
       --text: #f8fafc;
       --muted: #94a3b8;
-      --border: rgba(148, 163, 184, 0.22);
+      --border: rgba(148, 163, 184, 0.25);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Cairo', system-ui, sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
 
     body {
-      background:
-        radial-gradient(circle at 12% 8%, rgba(56, 189, 248, 0.14), transparent 36%),
-        radial-gradient(circle at 88% 12%, rgba(251, 113, 133, 0.14), transparent 36%),
-        linear-gradient(150deg, var(--bg-dark) 0%, var(--bg-mid) 55%, #111c33 100%);
+      background: radial-gradient(circle at 12% 8%, rgba(56, 189, 248, 0.12), transparent 36%),
+                  linear-gradient(150deg, var(--bg-dark) 0%, var(--bg-mid) 60%, #111c33 100%);
       color: var(--text);
       min-height: 100vh;
-      line-height: 1.4;
     }
 
     header {
       position: sticky;
       top: 0;
       z-index: 300;
-      padding: 8px 14px;
-      background: rgba(7, 11, 20, 0.94);
+      padding: 10px 16px;
+      background: rgba(7, 11, 20, 0.95);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 12px;
       overflow-x: auto;
     }
 
-    .brand-stage {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 5px 16px;
-      border-radius: 14px;
-      background: rgba(15, 23, 42, 0.95);
-      cursor: pointer;
-      user-select: none;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-
-    .snake-track {
-      position: absolute;
-      inset: -55%;
-      background: repeating-conic-gradient(
-        from 0deg,
-        var(--cyan) 0deg 20deg,
-        transparent 20deg 46deg,
-        var(--rose) 46deg 66deg,
-        transparent 66deg 92deg,
-        var(--gold) 92deg 112deg,
-        transparent 112deg 138deg,
-        var(--purple) 138deg 158deg,
-        transparent 158deg 184deg
-      );
-      animation: snakeOrbit 3.6s linear infinite;
-    }
-
-    .snake-mask {
-      position: absolute;
-      inset: 2.5px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #0b1222 0%, #171633 60%, #0d1d2e 100%);
-      z-index: 1;
-    }
-
-    .brand-title-ornate {
-      position: relative;
-      z-index: 2;
-      font-size: 1.45rem;
+    .brand-box {
+      font-size: 1.6rem;
       font-weight: 900;
-      background: linear-gradient(95deg, #ffffff 0%, #fde047 38%, #38bdf8 72%, #f472b6 100%);
+      background: linear-gradient(95deg, #fff 0%, var(--gold) 40%, var(--cyan) 80%, var(--rose) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      white-space: nowrap;
-    }
-
-    .brand-ornament {
-      font-size: 0.95rem;
-      -webkit-text-fill-color: initial;
-    }
-
-    @keyframes snakeOrbit {
-      to { transform: rotate(360deg); }
-    }
-
-    .header-actions {
+      cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .icon-nav-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       flex-wrap: nowrap;
       flex-shrink: 0;
     }
 
-    .user-chip {
-      background: rgba(56, 189, 248, 0.14);
-      border: 1px solid rgba(56, 189, 248, 0.5);
-      color: #e0f2fe;
-      padding: 4px 9px;
-      border-radius: 8px;
-      font-size: 0.76rem;
-      font-weight: 800;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      white-space: nowrap;
-    }
-
-    .chip-avatar {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 1px solid var(--cyan);
-    }
-
-    button,
-    .btn-link {
+    button, .btn-link {
       cursor: pointer;
       border: none;
-      border-radius: 8px;
-      padding: 5px 10px;
-      font-size: 0.76rem;
+      border-radius: 10px;
+      padding: 6px 14px;
+      font-size: 0.85rem;
       font-weight: 800;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 4px;
+      gap: 6px;
       white-space: nowrap;
-      transition: transform 0.12s ease, background 0.15s ease;
+      transition: all 0.2s ease;
     }
 
-    button:active,
-    .btn-link:active { transform: scale(0.97); }
+    button:active { transform: scale(0.96); }
 
-    .btn-green { background: #16a34a; color: #fff; }
-    .btn-green:hover { background: #15803d; }
-    .btn-red { background: #e11d48; color: #fff; }
-    .btn-red:hover { background: #be123c; }
-    .btn-blue { background: #0284c7; color: #fff; }
-    .btn-blue:hover { background: #0369a1; }
-    .btn-outline {
-      background: rgba(30, 41, 59, 0.9);
-      color: #f8fafc;
-      border: 1px solid var(--border);
+    .btn-primary { background: var(--cyan); color: #070b14; }
+    .btn-primary:hover { background: #7dd3fc; }
+    .btn-danger { background: var(--rose); color: #fff; }
+    .btn-danger:hover { background: #f43f5e; }
+    .btn-success { background: var(--green); color: #fff; }
+    .btn-success:hover { background: #15803d; }
+    .btn-secondary { background: var(--surface-soft); color: #fff; border: 1px solid var(--border); }
+    .btn-secondary:hover { background: rgba(51, 65, 85, 0.95); }
+
+    .user-pill {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
     }
-    .btn-outline:hover { background: var(--surface-hover); }
+
+    .user-avatar-mini {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--text);
+    }
 
     .container {
-      max-width: 1420px;
+      max-width: 1400px;
       margin: 0 auto;
-      padding: 10px 12px 40px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 16px;
     }
+
+    .categories-horizontal {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .cat-cluster {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      min-width: 240px;
+      flex: 1 0 240px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .cat-title {
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--cyan);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sub-cat-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-top: 4px;
+    }
+
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .mini-chip {
+      background: rgba(30, 41, 59, 0.9);
+      color: #e2e8f0;
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: 15px;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+
+    .mini-chip:hover { background: var(--cyan); color: var(--bg-dark); }
 
     .filter-panel {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 8px 10px;
+      border-radius: 14px;
+      padding: 12px;
     }
 
-    .filter-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px;
       align-items: center;
     }
 
-    .filter-row input,
-    .filter-row select {
-      padding: 5px 8px;
+    input, select, textarea {
+      padding: 8px 12px;
       border-radius: 8px;
       border: 1px solid var(--border);
-      background: rgba(7, 11, 20, 0.8);
+      background: var(--bg-dark);
       color: var(--text);
-      font-size: 0.76rem;
-      min-width: 96px;
-      flex: 1 1 110px;
+      font-size: 0.85rem;
+      width: 100%;
     }
 
-    .filter-row input {
-      flex: 2 1 160px;
-    }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--cyan); }
 
-    .filter-row input:focus,
-    .filter-row select:focus {
-      outline: none;
-      border-color: var(--cyan);
-    }
-
-    .taxonomy-box {
-      background: var(--surface-soft);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 8px 10px;
-    }
-
-    .taxonomy-top-title {
-      font-size: 0.82rem;
-      font-weight: 900;
-      color: var(--cyan);
-      margin-bottom: 6px;
+    .ads-section-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .cat-clusters {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 2px;
-    }
-
-    .cluster-card {
-      background: rgba(7, 11, 20, 0.72);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 6px 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      min-width: 215px;
-      flex: 1 0 215px;
-    }
-
-    .cluster-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-weight: 800;
-      font-size: 0.78rem;
-      color: #fff;
-      cursor: pointer;
-    }
-
-    .cluster-head:hover { color: var(--cyan); }
-
-    .sub-group-label {
-      font-size: 0.66rem;
-      font-weight: 800;
-      color: var(--gold);
-    }
-
-    .chip-wrap {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 3px;
-    }
-
-    .mini-chip {
-      padding: 2px 6px;
-      border-radius: 999px;
-      font-size: 0.68rem;
-      font-weight: 700;
-      background: rgba(30, 41, 59, 0.94);
-      color: #e2e8f0;
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      cursor: pointer;
-    }
-
-    .mini-chip:hover {
-      background: var(--cyan);
-      color: #070b14;
-      border-color: var(--cyan);
-    }
-
-    .list-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px;
     }
 
     .ads-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
     }
 
-    @media (max-width: 640px) {
-      .ads-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 5px;
-      }
-
-      .ad-img {
-        height: 78px;
-      }
-
-      .fav-btn {
-        width: 22px;
-        height: 22px;
-        font-size: 0.72rem;
-        top: 4px;
-        left: 4px;
-      }
-
-      .ad-body {
-        padding: 5px 6px;
-        gap: 2px;
-      }
-
-      .badges-row {
-        display: none;
-      }
-
-      .ad-title {
-        font-size: 0.72rem;
-      }
-
-      .ad-price {
-        font-size: 0.72rem;
-      }
-
-      .ad-meta {
-        font-size: 0.64rem;
-      }
-
-      .ad-desc {
-        display: none;
-      }
-
-      .preset-msgs {
-        padding: 4px;
-        gap: 3px;
-      }
-
-      .preset-btn {
-        font-size: 0.6rem;
-        padding: 2px 4px;
-      }
-
-      .ad-actions {
-        padding: 4px;
-        gap: 3px;
-      }
-
-      .ad-actions button,
-      .ad-actions .btn-link {
-        padding: 3px 4px;
-        font-size: 0.64rem;
-      }
+    @media (max-width: 1200px) { .ads-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (max-width: 900px) { .ads-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 600px) {
+      .ads-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+      .ad-card { border-radius: 8px; }
+      .ad-img { height: 85px !important; }
+      .ad-title { font-size: 0.75rem !important; }
+      .ad-price { font-size: 0.78rem !important; }
+      .ad-meta, .badges-container, .ad-description { display: none !important; }
+      .quick-action-btns { padding: 4px !important; gap: 4px !important; }
+      .quick-action-btns button, .quick-action-btns a { padding: 3px 6px !important; font-size: 0.65rem !important; }
     }
 
     .ad-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      min-width: 0;
+      transition: transform 0.1s ease;
     }
 
-    .ad-img-wrap { position: relative; }
+    .ad-img-wrapper {
+      position: relative;
+      width: 100%;
+      background: var(--bg-dark);
+      display: none;
+    }
+
+    .ad-img-wrapper.has-image {
+      display: block;
+    }
 
     .ad-img {
       width: 100%;
-      height: 120px;
+      height: 130px;
       object-fit: cover;
-      background: #1e293b;
       display: block;
-      cursor: zoom-in;
-    }
-
-    .fav-btn {
-      position: absolute;
-      top: 6px;
-      left: 6px;
-      width: 26px;
-      height: 26px;
-      padding: 0;
-      border-radius: 50%;
-      background: rgba(15, 23, 42, 0.88);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.82rem;
-    }
-
-    .ad-body {
-      padding: 7px 8px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
-    .badges-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 3px;
-    }
-
-    .badge {
-      font-size: 0.65rem;
-      font-weight: 700;
-      padding: 1px 5px;
-      border-radius: 5px;
-      background: rgba(30, 41, 59, 0.95);
-      color: #cbd5e1;
-      border: 1px solid rgba(148, 163, 184, 0.2);
-    }
-
-    .badge-neg {
-      background: rgba(250, 204, 21, 0.16);
-      color: #fde047;
-      border-color: rgba(250, 204, 21, 0.35);
-    }
-
-    .ad-title {
-      font-size: 0.86rem;
-      font-weight: 800;
-      color: #fff;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .ad-price {
-      font-size: 0.86rem;
-      font-weight: 900;
-      color: #4ade80;
-    }
-
-    .ad-meta {
-      font-size: 0.7rem;
-      color: var(--muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
       cursor: pointer;
     }
 
-    .ad-meta:hover {
-      color: var(--cyan);
-      text-decoration: underline;
+    .fav-toggle {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(7, 11, 20, 0.8);
+      border: 1px solid var(--border);
+      color: #fff;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.9rem;
     }
 
-    .ad-desc {
-      font-size: 0.72rem;
+    .ad-body { padding: 10px; display: flex; flex-direction: column; gap: 4px; flex-grow: 1; }
+
+    .badges-container { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 2px; }
+
+    .badge {
+      background: var(--bg-mid);
+      color: var(--muted);
+      font-size: 0.68rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+
+    .badge-highlight { border-color: var(--cyan); color: var(--cyan); }
+
+    .ad-title { font-size: 0.9rem; font-weight: 800; color: #fff; line-height: 1.3; }
+
+    .ad-price { font-size: 0.95rem; font-weight: 900; color: var(--green); }
+
+    .ad-meta { font-size: 0.75rem; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+
+    .owner-link { color: var(--cyan); text-decoration: underline; cursor: pointer; font-weight: 700; }
+
+    .ad-description {
+      font-size: 0.78rem;
       color: #cbd5e1;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
+      margin-top: 4px;
     }
 
-    .preset-msgs {
-      padding: 5px 7px;
-      background: rgba(7, 11, 20, 0.55);
+    .quick-action-btns {
+      padding: 8px 10px;
+      background: rgba(7, 11, 20, 0.6);
       border-top: 1px dashed var(--border);
       display: flex;
-      gap: 4px;
-      flex-wrap: wrap;
+      gap: 6px;
     }
 
-    .preset-btn {
-      font-size: 0.66rem;
-      padding: 2px 6px;
-      border-radius: 6px;
-      background: rgba(56, 189, 248, 0.16);
-      color: #7dd3fc;
-      border: 1px solid rgba(56, 189, 248, 0.3);
-    }
+    .action-btn { flex: 1; padding: 6px; font-size: 0.75rem; }
 
-    .preset-btn:hover { background: rgba(56, 189, 248, 0.28); }
-
-    .ad-actions {
-      padding: 6px 7px;
-      background: rgba(7, 11, 20, 0.75);
-      border-top: 1px solid var(--border);
-      display: flex;
-      gap: 4px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .ad-actions button,
-    .ad-actions .btn-link {
-      padding: 4px 6px;
-      font-size: 0.7rem;
-    }
-
-    .toast-banner {
-      position: fixed;
-      bottom: 16px;
-      left: 16px;
-      z-index: 10002;
-      display: none;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 14px;
-      border-radius: 11px;
-      background: #0f172a;
-      color: #f8fafc;
-      border: 1px solid rgba(56, 189, 248, 0.45);
-      border-right: 4px solid var(--cyan);
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
-      font-size: 0.82rem;
-      font-weight: 800;
-      max-width: 360px;
-    }
-
-    .toast-banner.error {
-      background: #3b0a12;
-      border-color: rgba(251, 113, 133, 0.5);
-      border-right-color: var(--rose);
-      color: #ffe4e6;
-    }
-
-    .toast-banner.success {
-      background: #062917;
-      border-color: rgba(74, 222, 128, 0.5);
-      border-right-color: var(--green);
-      color: #dcfce7;
-    }
-
-    .modal-backdrop {
+    .modal-overlay {
       position: fixed;
       inset: 0;
-      z-index: 9999;
-      background: rgba(2, 6, 23, 0.78);
-      backdrop-filter: blur(5px);
+      background: rgba(2, 6, 23, 0.8);
+      backdrop-filter: blur(8px);
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 14px;
+      z-index: 1000;
+      padding: 16px;
     }
 
-    .modal-backdrop.open { display: flex; }
+    .modal-overlay.open { display: flex; }
 
     .modal-card {
-      width: 100%;
-      max-width: 580px;
-      max-height: 90vh;
-      overflow-y: auto;
-      background: #131d31;
-      color: var(--text);
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 18px;
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
     }
 
-    .modal-head {
+    .modal-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-bottom: 10px;
-      margin-bottom: 12px;
-      border-bottom: 1px solid var(--border);
     }
 
-    .close-x {
-      width: 30px;
-      height: 30px;
-      padding: 0;
-      border-radius: 50%;
-      background: rgba(51, 65, 85, 0.9);
+    .modal-body { padding: 16px; overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 12px; }
+
+    .close-modal { width: 32px; height: 32px; border-radius: 50%; background: var(--bg-mid); border: 1px solid var(--border); color: #fff; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+
+    .profile-card-header { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
+
+    .profile-avatar-large { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--cyan); background: var(--bg-mid); }
+
+    .stats-row { display: flex; gap: 16px; width: 100%; justify-content: center; }
+
+    .stat-box { background: var(--bg-mid); padding: 8px 16px; border-radius: 10px; border: 1px solid var(--border); text-align: center; }
+
+    .stat-value { font-size: 1.2rem; font-weight: 900; color: var(--cyan); }
+
+    .stat-label { font-size: 0.75rem; color: var(--muted); }
+
+    #toast {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: var(--bg-mid);
       color: #fff;
-      font-size: 1.1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .field { margin-bottom: 10px; }
-
-    .field label {
-      display: block;
-      font-size: 0.82rem;
-      font-weight: 800;
-      margin-bottom: 4px;
-      color: #e2e8f0;
-    }
-
-    .field input,
-    .field select,
-    .field textarea {
-      width: 100%;
-      padding: 7px 10px;
-      border-radius: 9px;
-      border: 1px solid var(--border);
-      background: rgba(7, 11, 20, 0.78);
-      color: #fff;
-      font-size: 0.84rem;
-    }
-
-    .img-preview {
-      max-width: 100%;
-      max-height: 140px;
-      margin-top: 8px;
-      border-radius: 9px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      border-right: 4px solid var(--cyan);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      z-index: 2000;
       display: none;
-    }
-
-    .avatar-preview {
-      width: 62px;
-      height: 62px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid var(--cyan);
-      background: #1e293b;
-      display: block;
-    }
-
-    .tabs-bar {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 12px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .comments-list {
-      max-height: 240px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      padding: 10px;
-      border-radius: 10px;
-      background: rgba(7, 11, 20, 0.65);
-      border: 1px solid var(--border);
-    }
-
-    .comment-item {
-      background: rgba(30, 41, 59, 0.9);
-      padding: 8px 10px;
-      border-radius: 9px;
-      font-size: 0.82rem;
-    }
-
-    .profile-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 10px;
-    }
-
-    .profile-avatar-box {
-      width: 58px;
-      height: 58px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--cyan), var(--purple));
-      color: #070b14;
-      font-weight: 900;
-      font-size: 1.4rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-
-    .profile-avatar-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .lightbox-img {
-      max-width: 94vw;
-      max-height: 88vh;
-      border-radius: 12px;
-    }
-
-    .empty-msg {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 28px 12px;
-      color: var(--muted);
+      font-weight: 800;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="brand-stage" data-action="reset-all" title="رخيص">
-      <div class="snake-track"></div>
-      <div class="snake-mask"></div>
-      <div class="brand-title-ornate">
-        <span class="brand-ornament">✦</span>
-        <span>رخيص</span>
-        <span class="brand-ornament">⚡</span>
-      </div>
+    <div class="brand-box" onclick="window.location.href='/'">
+      <span>⚡</span>
+      <span>رخيص</span>
     </div>
 
-    <div class="header-actions">
-      <button type="button" class="btn-red" data-action="open-create-ad">+ نشر</button>
-      <a href="/chat" class="btn-blue btn-link">💬 دردشة</a>
-      <button type="button" class="btn-green" data-action="open-my-profile">👤 ملفي</button>
-      <button type="button" class="btn-outline" data-action="my-favorites">❤️ مفضلتي</button>
-      <span id="authBox" style="display:inline-flex; gap:6px; align-items:center;"></span>
+    <div class="icon-nav-bar">
+      <button class="btn-danger" onclick="openAdModal()">+ نشر</button>
+      <a href="/chat" class="btn-link btn-primary">💬 الدردشة</a>
+      <button class="btn-success" onclick="viewMyProfile()">👤 ملفي</button>
+      <div id="authContainer"></div>
     </div>
   </header>
 
-  <main class="container">
-    <section class="filter-panel">
-      <div class="filter-row">
-        <input type="text" id="searchQ" placeholder="ابحث عن إعلان، ماركة، أو مدينة..." />
+  <div class="container">
+    <div class="categories-horizontal">
+      <div class="cat-cluster">
+        <div class="cat-title" onclick="filterByCategory('سيارات ومركبات')">
+          <span>🚗 السيارات والمركبات</span>
+          <span>الكل ➔</span>
+        </div>
+        <div class="sub-cat-title">الماركات الشهيرة:</div>
+        <div class="chip-group">
+          <span class="mini-chip" onclick="filterByBrand('تويوتا')">تويوتا</span>
+          <span class="mini-chip" onclick="filterByBrand('هيونداي')">هيونداي</span>
+          <span class="mini-chip" onclick="filterByBrand('كيا')">كيا</span>
+        </div>
+      </div>
 
-        <select id="filterCity">
-          <option value="all">كل المدن</option>
+      <div class="cat-cluster">
+        <div class="cat-title" onclick="filterByCategory('تكنولوجيا وإلكترونيات')">
+          <span>📱 الإلكترونيات</span>
+          <span>الكل ➔</span>
+        </div>
+        <div class="sub-cat-title">الأقسام:</div>
+        <div class="chip-group">
+          <span class="mini-chip" onclick="filterBySubType('هواتف')">هواتف</span>
+          <span class="mini-chip" onclick="filterBySubType('شاشات')">شاشات</span>
+        </div>
+      </div>
+
+      <div class="cat-cluster">
+        <div class="cat-title" onclick="filterByCategory('عقارات')">
+          <span>🏠 العقارات</span>
+          <span>الكل ➔</span>
+        </div>
+        <div class="sub-cat-title">النوع:</div>
+        <div class="chip-group">
+          <span class="mini-chip" onclick="filterBySubType('شقق للبيع')">شقق للبيع</span>
+          <span class="mini-chip" onclick="filterBySubType('منازل للإيجار')">منازل للإيجار</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-panel">
+      <div class="filter-grid">
+        <input type="text" id="searchKeyword" placeholder="ابحث في العناوين..." onkeyup="executeSearch()">
+        <select id="filterCitySelect" onchange="executeSearch()">
+          <option value="">كل المدن السورية</option>
           <option value="دمشق">دمشق</option>
-          <option value="ريف دمشق">ريف دمشق</option>
           <option value="حلب">حلب</option>
           <option value="حمص">حمص</option>
-          <option value="حماة">حماة</option>
           <option value="اللاذقية">اللاذقية</option>
-          <option value="طرطوس">طرطوس</option>
-          <option value="إدلب">إدلب</option>
-          <option value="درعا">درعا</option>
-          <option value="دير الزور">دير الزور</option>
-          <option value="الحسكة">الحسكة</option>
-          <option value="الرقة">الرقة</option>
-          <option value="السويداء">السويداء</option>
-          <option value="القنيطرة">القنيطرة</option>
         </select>
-
-        <select id="filterCategory">
-          <option value="all">كل الأقسام</option>
-          <option value="سيارات ومركبات">سيارات ومركبات</option>
-          <option value="تكنولوجيا وإلكترونيات">تكنولوجيا وإلكترونيات</option>
-          <option value="عقارات">عقارات</option>
-          <option value="أثاث ومنزل">أثاث ومنزل</option>
-          <option value="أخرى">أخرى</option>
-        </select>
-
-        <select id="filterSubType">
-          <option value="all">كل الأنواع</option>
-        </select>
-
-        <select id="filterBrand">
-          <option value="all">كل الماركات</option>
-        </select>
-
-        <select id="filterCondition">
-          <option value="all">كل الحالات</option>
+        <select id="filterConditionSelect" onchange="executeSearch()">
+          <option value="">كل الحالات</option>
           <option value="جديد">جديد</option>
           <option value="مستعمل">مستعمل</option>
         </select>
-
-        <button type="button" class="btn-green" data-action="apply-filters">بحث</button>
-        <button type="button" class="btn-outline" data-action="reset-all">ضبط</button>
+        <button class="btn-link btn-secondary" onclick="resetFilters()">إعادة الضبط</button>
       </div>
-    </section>
+    </div>
 
-    <section class="taxonomy-box">
-      <div class="taxonomy-top-title">
-        <span>🗂️ الأقسام والأنواع والماركات</span>
-        <span style="font-size:0.74rem; color:var(--muted); font-weight:700;">الأسعار بالأرقام والليرة السورية (ل.س)</span>
+    <div class="ads-section-head">
+      <h2>أحدث الإعلانات</h2>
+      <span id="adCountBadge" class="badge badge-highlight">0 إعلان</span>
+    </div>
+
+    <div class="ads-grid" id="adsGridContainer"></div>
+  </div>
+
+  <div id="toast"></div>
+
+  <div class="modal-overlay" id="authModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="authModalTitle">الدخول إلى المنصة</h3>
+        <div class="close-modal" onclick="closeModal('authModal')">&times;</div>
       </div>
-
-      <div class="cat-clusters">
-        <div class="cluster-card">
-          <div class="cluster-head" data-quick-cat="سيارات ومركبات">
-            <span>🚗 السيارات والمركبات</span>
-            <span style="font-size:0.7rem; color:var(--cyan);">الكل</span>
-          </div>
-          <div class="sub-group-label">الماركات:</div>
-          <div class="chip-wrap">
-            <span class="mini-chip" data-quick-cat="سيارات ومركبات" data-quick-brand="تويوتا">تويوتا</span>
-            <span class="mini-chip" data-quick-cat="سيارات ومركبات" data-quick-brand="هيونداي">هيونداي</span>
-            <span class="mini-chip" data-quick-cat="سيارات ومركبات" data-quick-brand="كيا">كيا</span>
-            <span class="mini-chip" data-quick-cat="سيارات ومركبات" data-quick-brand="مرسيدس">مرسيدس</span>
-            <span class="mini-chip" data-quick-cat="سيارات ومركبات" data-quick-brand="بي إم دبليو">بي إم دبليو</span>
-          </div>
-        </div>
-
-        <div class="cluster-card">
-          <div class="cluster-head" data-quick-cat="تكنولوجيا وإلكترونيات">
-            <span>📱 التكنولوجيا والإلكترونيات</span>
-            <span style="font-size:0.7rem; color:var(--cyan);">الكل</span>
-          </div>
-          <div class="sub-group-label">هواتف:</div>
-          <div class="chip-wrap">
-            <span class="mini-chip" data-quick-cat="تكنولوجيا وإلكترونيات" data-quick-sub="هواتف" data-quick-brand="آيفون">آيفون</span>
-            <span class="mini-chip" data-quick-cat="تكنولوجيا وإلكترونيات" data-quick-sub="هواتف" data-quick-brand="سامسونج">سامسونج</span>
-            <span class="mini-chip" data-quick-cat="تكنولوجيا وإلكترونيات" data-quick-sub="هواتف" data-quick-brand="شاومي">شاومي</span>
-          </div>
-          <div class="sub-group-label">شاشات وحواسيب:</div>
-          <div class="chip-wrap">
-            <span class="mini-chip" data-quick-cat="تكنولوجيا وإلكترونيات" data-quick-sub="شاشات" data-quick-brand="توشيبا">توشيبا</span>
-            <span class="mini-chip" data-quick-cat="تكنولوجيا وإلكترونيات" data-quick-sub="شاشات" data-quick-brand="إل جي">إل جي</span>
-            <span class="mini-chip" data-quick-cat="تكنولوجيا وإلكترونيات" data-quick-sub="حواسيب" data-quick-brand="لينوفو">لينوفو</span>
-            <span class="mini-chip" data-quick-cat="تكنولوجيا وإلكترونيات" data-quick-sub="حواسيب" data-quick-brand="ديل">ديل</span>
-          </div>
-        </div>
-
-        <div class="cluster-card">
-          <div class="cluster-head" data-quick-cat="عقارات">
-            <span>🏠 العقارات</span>
-            <span style="font-size:0.7rem; color:var(--cyan);">الكل</span>
-          </div>
-          <div class="sub-group-label">الأنواع:</div>
-          <div class="chip-wrap">
-            <span class="mini-chip" data-quick-cat="عقارات" data-quick-sub="شقق للبيع">شقق للبيع</span>
-            <span class="mini-chip" data-quick-cat="عقارات" data-quick-sub="منازل للإيجار">منازل للإيجار</span>
-            <span class="mini-chip" data-quick-cat="عقارات" data-quick-sub="أراضي ومزارع">أراضي ومزارع</span>
-            <span class="mini-chip" data-quick-cat="عقارات" data-quick-sub="محلات تجارية">محلات تجارية</span>
-          </div>
-        </div>
-
-        <div class="cluster-card">
-          <div class="cluster-head" data-quick-cat="أثاث ومنزل">
-            <span>🛋️ أثاث ومنزل وأخرى</span>
-            <span style="font-size:0.7rem; color:var(--cyan);">الكل</span>
-          </div>
-          <div class="sub-group-label">الأنواع:</div>
-          <div class="chip-wrap">
-            <span class="mini-chip" data-quick-cat="أثاث ومنزل" data-quick-sub="غرف ومجالس">غرف ومجالس</span>
-            <span class="mini-chip" data-quick-cat="أثاث ومنزل" data-quick-sub="أدوات منزلية">أدوات منزلية</span>
-            <span class="mini-chip" data-quick-cat="أخرى" data-quick-sub="متنوعات">متنوعات</span>
-          </div>
-        </div>
+      <div class="modal-body">
+        <input type="text" id="authUsername" placeholder="اسم المستخدم الفريد">
+        <input type="password" id="authPassword" placeholder="كلمة المرور">
+        <button class="btn-link btn-primary" style="width: 100%; padding: 12px;" onclick="handleAuthSubmit()">متابعة</button>
       </div>
-    </section>
+    </div>
+  </div>
 
-    <div class="list-header">
-      <h2 id="listHeading" style="font-size:1rem; font-weight:900;">أحدث الإعلانات</h2>
-      <div style="display:flex; align-items:center; gap:6px;">
-        <span id="adsCounter" style="font-size:0.78rem; color:var(--muted);"></span>
-        <select id="sortAds" style="padding:4px 8px; border-radius:8px; border:1px solid var(--border); background:#0f172a; color:#fff; font-size:0.76rem;">
-          <option value="newest">الأحدث</option>
-          <option value="price_asc">السعر: الأقل</option>
-          <option value="price_desc">السعر: الأعلى</option>
-          <option value="views">الأكثر مشاهدة</option>
+  <div class="modal-overlay" id="profileModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>الملف الشخصي والإعدادات</h3>
+        <div class="close-modal" onclick="closeModal('profileModal')">&times;</div>
+      </div>
+      <div class="modal-body" id="profileModalContent"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="adModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="adModalTitle">نشر إعلان جديد</h3>
+        <div class="close-modal" onclick="closeModal('adModal')">&times;</div>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="adTitle" placeholder="عنوان الإعلان">
+        <input type="number" id="adPrice" placeholder="السعر بالليرة السورية (ل.س)">
+        <select id="adCategory">
+          <option value="سيارات ومركبات">سيارات ومركبات</option>
+          <option value="تكنولوجيا وإلكترونيات">تكنولوجيا وإلكترونيات</option>
+          <option value="عقارات">عقارات</option>
         </select>
+        <input type="text" id="adCity" placeholder="المدينة (مثال: دمشق)">
+        <textarea id="adDesc" placeholder="تفاصيل الإعلان ومواصفاته..." rows="4"></textarea>
+        <div>
+          <label style="font-size: 0.85rem; color: var(--muted);">صورة الإعلان (اختياري):</label>
+          <input type="file" id="adImageInput" accept="image/*" onchange="previewAdImage(event)">
+        </div>
+        <img id="adImagePreview" style="max-height: 150px; border-radius: 8px; display: none; object-fit: cover;">
+        <button class="btn-link btn-success" style="width: 100%; padding: 12px;" onclick="saveAd()">حفظ ونشر الإعلان</button>
       </div>
     </div>
-
-    <div class="ads-grid" id="adsGrid"></div>
-  </main>
-
-  <div class="toast-banner" id="toastBanner" role="status" aria-live="polite">
-    <span id="toastIcon">ℹ️</span>
-    <span id="toastText"></span>
-  </div>
-
-  <!-- Auth Modal -->
-  <div class="modal-backdrop" id="authModal">
-    <div class="modal-card">
-      <div class="modal-head">
-        <h3 id="authModalHeading">تسجيل الدخول إلى رخيص</h3>
-        <button type="button" class="close-x" data-close="authModal">&times;</button>
-      </div>
-      <div class="tabs-bar">
-        <button type="button" class="btn-green" id="tabLoginBtn" data-action="switch-auth-tab" data-tab="login">تسجيل الدخول</button>
-        <button type="button" class="btn-outline" id="tabRegisterBtn" data-action="switch-auth-tab" data-tab="register">إنشاء حساب جديد</button>
-      </div>
-      <form id="authForm">
-        <div class="field">
-          <label for="authUsername">اسم المستخدم</label>
-          <input type="text" id="authUsername" required placeholder="اكتب اسم المستخدم" />
-        </div>
-        <div class="field">
-          <label for="authPassword">كلمة المرور</label>
-          <input type="password" id="authPassword" required placeholder="اكتب كلمة المرور" />
-        </div>
-        <button type="submit" class="btn-green" id="authSubmitBtn" style="width:100%;">دخول</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Profile & Settings Modal -->
-  <div class="modal-backdrop" id="profileModal">
-    <div class="modal-card">
-      <div class="modal-head">
-        <h3>الملف الشخصي وإعدادات الحساب</h3>
-        <button type="button" class="close-x" data-close="profileModal">&times;</button>
-      </div>
-      <div id="targetProfileContent"></div>
-    </div>
-  </div>
-
-  <!-- Ad Create/Edit Modal -->
-  <div class="modal-backdrop" id="adFormModal">
-    <div class="modal-card">
-      <div class="modal-head">
-        <h3 id="adFormTitle">نشر إعلان جديد</h3>
-        <button type="button" class="close-x" data-close="adFormModal">&times;</button>
-      </div>
-      <form id="adForm">
-        <input type="hidden" id="adEditId" />
-        <div class="field">
-          <label for="adTitleInput">عنوان الإعلان *</label>
-          <input type="text" id="adTitleInput" required placeholder="مثال: شاومي نوت 13 أو تويوتا كورولا" />
-        </div>
-        <div class="field">
-          <label for="adPriceInput">السعر بالليرة السورية (أرقام فقط - ل.س) *</label>
-          <input
-            type="text"
-            id="adPriceInput"
-            inputmode="numeric"
-            required
-            placeholder="مثال: 500000 أو 100000"
-          />
-        </div>
-        <div class="field">
-          <label for="adCityInput">المدينة (سوريا)</label>
-          <select id="adCityInput">
-            <option value="دمشق">دمشق</option>
-            <option value="ريف دمشق">ريف دمشق</option>
-            <option value="حلب">حلب</option>
-            <option value="حمص">حمص</option>
-            <option value="حماة">حماة</option>
-            <option value="اللاذقية">اللاذقية</option>
-            <option value="طرطوس">طرطوس</option>
-            <option value="إدلب">إدلب</option>
-            <option value="درعا">درعا</option>
-            <option value="دير الزور">دير الزور</option>
-            <option value="الحسكة">الحسكة</option>
-            <option value="الرقة">الرقة</option>
-            <option value="السويداء">السويداء</option>
-            <option value="القنيطرة">القنيطرة</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="adCategoryInput">القسم الرئيسي</label>
-          <select id="adCategoryInput">
-            <option value="سيارات ومركبات">سيارات ومركبات</option>
-            <option value="تكنولوجيا وإلكترونيات">تكنولوجيا وإلكترونيات</option>
-            <option value="عقارات">عقارات</option>
-            <option value="أثاث ومنزل">أثاث ومنزل</option>
-            <option value="أخرى">أخرى</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="adSubTypeInput">النوع الفرعي</label>
-          <select id="adSubTypeInput"></select>
-        </div>
-        <div class="field">
-          <label for="adBrandInput">الماركة / التصنيف</label>
-          <select id="adBrandInput"></select>
-        </div>
-        <div class="field">
-          <label for="adConditionInput">حالة المنتج</label>
-          <select id="adConditionInput">
-            <option value="مستعمل">مستعمل</option>
-            <option value="جديد">جديد</option>
-          </select>
-        </div>
-        <div class="field">
-          <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-            <input type="checkbox" id="adNegotiableInput" style="width:auto;" />
-            <span>قابل للتفاوض</span>
-          </label>
-        </div>
-        <div class="field">
-          <label for="adDescInput">الوصف والتفاصيل</label>
-          <textarea id="adDescInput" rows="3" placeholder="اكتب التفاصيل الكاملة..."></textarea>
-        </div>
-        <div class="field">
-          <label for="adImgFile">صورة الإعلان</label>
-          <input type="file" id="adImgFile" accept="image/*" />
-          <img id="adImgPreview" class="img-preview" alt="معاينة" />
-        </div>
-        <div style="display:flex; gap:8px;">
-          <button type="submit" class="btn-green" id="adSubmitBtn" style="flex:1;">نشر الإعلان</button>
-          <button type="button" class="btn-outline" data-close="adFormModal">إلغاء</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Comments Modal -->
-  <div class="modal-backdrop" id="commentsModal">
-    <div class="modal-card">
-      <div class="modal-head">
-        <h3 id="commentsHeading">التعليقات</h3>
-        <button type="button" class="close-x" data-close="commentsModal">&times;</button>
-      </div>
-      <div class="comments-list" id="commentsBox"></div>
-      <form id="commentSendForm" style="display:flex; gap:8px; margin-top:10px;">
-        <input type="hidden" id="commentAdIdInput" />
-        <input type="text" id="commentTextInput" placeholder="اكتب تعليقاً..." required style="flex:1; padding:8px 10px; border-radius:9px; border:1px solid var(--border); background:rgba(7,11,20,0.75); color:#fff;" />
-        <button type="submit" class="btn-green">إرسال</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Lightbox -->
-  <div class="modal-backdrop" id="lightboxModal" data-close="lightboxModal">
-    <img id="lightboxTarget" class="lightbox-img" alt="صورة مكبرة" />
   </div>
 
   <script>
-    (function () {
-      'use strict';
+    let appState = {
+      currentUser: null,
+      ads: [],
+      filteredAds: [],
+      selectedAdImageBase64: '',
+      selectedAvatarBase64: ''
+    };
 
-      const TAXONOMY = {
-        'سيارات ومركبات': {
-          types: ['سيارات', 'دراجات ومركبات'],
-          brandsByType: {
-            'سيارات': ['تويوتا', 'هيونداي', 'كيا', 'مرسيدس', 'بي إم دبليو', 'أخرى'],
-            'دراجات ومركبات': ['عام', 'أخرى']
-          },
-          allBrands: ['تويوتا', 'هيونداي', 'كيا', 'مرسيدس', 'بي إم دبليو', 'عام', 'أخرى']
-        },
-        'تكنولوجيا وإلكترونيات': {
-          types: ['هواتف', 'شاشات', 'حواسيب'],
-          brandsByType: {
-            'هواتف': ['آيفون', 'سامسونج', 'شاومي', 'أخرى'],
-            'شاشات': ['توشيبا', 'إل جي', 'سامسونج', 'أخرى'],
-            'حواسيب': ['لينوفو', 'ديل', 'إتش بي', 'أبل', 'أخرى']
-          },
-          allBrands: ['آيفون', 'سامسونج', 'شاومي', 'توشيبا', 'إل جي', 'لينوفو', 'ديل', 'إتش بي', 'أبل', 'أخرى']
-        },
-        'عقارات': {
-          types: ['شقق للبيع', 'منازل للإيجار', 'أراضي ومزارع', 'محلات تجارية'],
-          brandsByType: {
-            'شقق للبيع': ['سكني'],
-            'منازل للإيجار': ['سكني'],
-            'أراضي ومزارع': ['عقاري'],
-            'محلات تجارية': ['تجاري']
-          },
-          allBrands: ['سكني', 'عقاري', 'تجاري']
-        },
-        'أثاث ومنزل': {
-          types: ['غرف ومجالس', 'أدوات منزلية'],
-          brandsByType: {
-            'غرف ومجالس': ['منزلي'],
-            'أدوات منزلية': ['منزلي']
-          },
-          allBrands: ['منزلي']
-        },
-        'أخرى': {
-          types: ['متنوعات'],
-          brandsByType: { 'متنوعات': ['عام'] },
-          allBrands: ['عام']
-        }
-      };
-
-      let currentUser = null;
-      let allAds = [];
-      let currentMode = 'all';
-      let authMode = 'login';
-      let selectedImageData = '';
-      let selectedAvatarData = '';
-      let toastTimer = null;
-
-      function showToast(msg, type = 'info') {
-        const el = document.getElementById('toastBanner');
-        const iconEl = document.getElementById('toastIcon');
-        const textEl = document.getElementById('toastText');
-        if (!el || !iconEl || !textEl) return;
-
-        el.classList.remove('error', 'success');
-        if (type === 'error') {
-          el.classList.add('error');
-          iconEl.textContent = '⚠️';
-        } else if (type === 'success') {
-          el.classList.add('success');
-          iconEl.textContent = '✅';
-        } else {
-          iconEl.textContent = 'ℹ️';
-        }
-
-        textEl.textContent = msg;
-        el.style.display = 'flex';
-        clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => {
-          el.style.display = 'none';
-        }, 3000);
-      }
-
-      function escapeHtml(text) {
-        return String(text || '')
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;');
-      }
-
-      function parseSypAmount(raw) {
-        const cleaned = String(raw || '').replace(/[^\d]/g, '');
-        if (!cleaned) return null;
-        return Number(cleaned);
-      }
-
-      function formatSypPrice(raw) {
-        const num = parseSypAmount(raw);
-        if (num === null || Number.isNaN(num)) return '0 ل.س';
-        return `${num.toLocaleString('en-US')} ل.س`;
-      }
-
-      function openModal(id) { document.getElementById(id)?.classList.add('open'); }
-      function closeModal(id) { document.getElementById(id)?.classList.remove('open'); }
-
-      function loadUser() {
+    window.onload = async () => {
+      const savedUser = localStorage.getItem('rakhis_user');
+      if (savedUser) {
         try {
-          currentUser = JSON.parse(localStorage.getItem('rakhis_user') || 'null');
+          appState.currentUser = JSON.parse(savedUser);
         } catch (e) {
-          currentUser = null;
+          appState.currentUser = null;
         }
-        renderAuth();
       }
+      renderAuthUI();
+      await fetchAllAds();
+    };
 
-      function saveUser() {
-        if (currentUser) {
-          localStorage.setItem('rakhis_user', JSON.stringify(currentUser));
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    }
+
+    function escapeHtml(text) {
+      return String(text || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function renderAuthUI() {
+      const container = document.getElementById('authContainer');
+      if (appState.currentUser && appState.currentUser.username) {
+        const avatarSrc = appState.currentUser.avatar || '';
+        const avatarTag = avatarSrc
+          ? `<img src="${escapeHtml(avatarSrc)}" class="user-avatar-mini" alt="صورة الحساب">`
+          : `<span>👤</span>`;
+        container.innerHTML = `
+          <div class="user-pill" onclick="viewMyProfile()">
+            ${avatarTag}
+            <span>${escapeHtml(appState.currentUser.username)}</span>
+          </div>
+          <button class="btn-link btn-danger" onclick="logout()">خروج</button>
+        `;
+      } else {
+        container.innerHTML = `
+          <button class="btn-link btn-secondary" onclick="openAuthModal('login')">دخول</button>
+          <button class="btn-link btn-primary" onclick="openAuthModal('register')">تسجيل</button>
+        `;
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('rakhis_user');
+      appState.currentUser = null;
+      renderAuthUI();
+      showToast('تم تسجيل الخروج');
+    }
+
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+    function openAuthModal(mode) {
+      document.getElementById('authModalTitle').textContent = mode === 'register' ? 'إنشاء حساب جديد' : 'تسجيل الدخول';
+      openModal('authModal');
+    }
+
+    function openAdModal() {
+      if (!appState.currentUser) {
+        showToast('يرجى تسجيل الدخول أولاً لنشر إعلان');
+        openAuthModal('login');
+        return;
+      }
+      document.getElementById('adModalTitle').textContent = 'نشر إعلان جديد';
+      appState.selectedAdImageBase64 = '';
+      document.getElementById('adImagePreview').style.display = 'none';
+      openModal('adModal');
+    }
+
+    async function fetchAllAds() {
+      try {
+        const res = await fetch('/api/ads', { cache: 'no-store' });
+        if (res.ok) {
+          appState.ads = await res.json();
         } else {
-          localStorage.removeItem('rakhis_user');
+          appState.ads = [];
         }
-        renderAuth();
+      } catch (e) {
+        appState.ads = [
+          { id: '1', title: 'سيارة تويوتا كورولا', price: '55000000', city: 'دمشق', category: 'سيارات ومركبات', condition: 'مستعمل', description: 'بحالة ممتازة، خماسية السرعات.', ownerUsername: 'ahmad_cars', image: '' },
+          { id: '2', title: 'هاتف آيفون 13 برو', price: '12000000', city: 'حلب', category: 'تكنولوجيا وإلكترونيات', condition: 'جديد', description: 'مكفول لمدة سنة.', ownerUsername: 'tech_store', image: '' }
+        ];
       }
+      appState.filteredAds = [...appState.ads];
+      renderAds();
+    }
 
-      function renderAuth() {
-        const box = document.getElementById('authBox');
-        if (!box) return;
-        if (currentUser && currentUser.username) {
-          const avatarHtml = currentUser.avatar
-            ? `<img src="${escapeHtml(currentUser.avatar)}" class="chip-avatar" alt="صورة الحساب" />`
-            : `<span>👤</span>`;
-          box.innerHTML = `
-            <span class="user-chip" data-action="view-profile" data-username="${escapeHtml(currentUser.username)}">
-              ${avatarHtml}
-              <span>${escapeHtml(currentUser.username)}</span>
-            </span>
-            <button type="button" class="btn-outline" data-action="logout">خروج</button>
-          `;
-        } else {
-          box.innerHTML = `
-            <button type="button" class="btn-green" data-action="open-auth" data-type="login">دخول</button>
-            <button type="button" class="btn-outline" data-action="open-auth" data-type="register">حساب جديد</button>
-          `;
-        }
-      }
-
-      function switchAuthTab(type) {
-        authMode = type;
-        document.getElementById('tabLoginBtn').className = type === 'login' ? 'btn-green' : 'btn-outline';
-        document.getElementById('tabRegisterBtn').className = type === 'register' ? 'btn-green' : 'btn-outline';
-        document.getElementById('authModalHeading').textContent = type === 'register' ? 'إنشاء حساب جديد في رخيص' : 'تسجيل الدخول إلى رخيص';
-        document.getElementById('authSubmitBtn').textContent = type === 'register' ? 'إنشاء الحساب' : 'دخول';
-      }
-
-      function syncFilterSubAndBrand() {
-        const cat = document.getElementById('filterCategory').value;
-        const subSel = document.getElementById('filterSubType');
-        const brandSel = document.getElementById('filterBrand');
-
-        subSel.innerHTML = '<option value="all">كل الأنواع</option>';
-        brandSel.innerHTML = '<option value="all">كل الماركات</option>';
-
-        if (cat === 'all') {
-          const typesSet = new Set();
-          const brandsSet = new Set();
-          Object.values(TAXONOMY).forEach(entry => {
-            entry.types.forEach(t => typesSet.add(t));
-            entry.allBrands.forEach(b => brandsSet.add(b));
-          });
-          typesSet.forEach(t => { subSel.innerHTML += `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`; });
-          brandsSet.forEach(b => { brandSel.innerHTML += `<option value="${escapeHtml(b)}">${escapeHtml(b)}</option>`; });
-          return;
-        }
-
-        const entry = TAXONOMY[cat];
-        if (!entry) return;
-        entry.types.forEach(t => { subSel.innerHTML += `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`; });
-        entry.allBrands.forEach(b => { brandSel.innerHTML += `<option value="${escapeHtml(b)}">${escapeHtml(b)}</option>`; });
-      }
-
-      function syncFormSubAndBrand(selectedSub = '', selectedBrand = '') {
-        const cat = document.getElementById('adCategoryInput').value;
-        const subSel = document.getElementById('adSubTypeInput');
-        const brandSel = document.getElementById('adBrandInput');
-        const entry = TAXONOMY[cat] || TAXONOMY['أخرى'];
-
-        subSel.innerHTML = entry.types.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('');
-        if (selectedSub && entry.types.includes(selectedSub)) {
-          subSel.value = selectedSub;
-        }
-
-        const currentSub = subSel.value;
-        const brands = entry.brandsByType[currentSub] || entry.allBrands;
-        brandSel.innerHTML = brands.map(b => `<option value="${escapeHtml(b)}">${escapeHtml(b)}</option>`).join('');
-        if (selectedBrand && brands.includes(selectedBrand)) {
-          brandSel.value = selectedBrand;
-        }
-      }
-
-      async function fetchAds() {
-        const q = document.getElementById('searchQ').value.trim();
-        const city = document.getElementById('filterCity').value;
-        const category = document.getElementById('filterCategory').value;
-        const subType = document.getElementById('filterSubType').value;
-        const brand = document.getElementById('filterBrand').value;
-        const condition = document.getElementById('filterCondition').value;
-        const sort = document.getElementById('sortAds').value;
-
-        const params = new URLSearchParams();
-        if (q) params.set('q', q);
-        if (city && city !== 'all') params.set('city', city);
-        if (category && category !== 'all') params.set('category', category);
-        if (subType && subType !== 'all') params.set('subType', subType);
-        if (brand && brand !== 'all') params.set('brand', brand);
-        if (condition && condition !== 'all') params.set('condition', condition);
-        if (sort) params.set('sort', sort);
-
-        try {
-          const res = await fetch('/api/ads?' + params.toString(), { cache: 'no-store' });
-          if (!res.ok) throw new Error('تعذر جلب الإعلانات من السيرفر');
-          allAds = await res.json();
-          filterAndRenderAds();
-        } catch (err) {
-          document.getElementById('adsGrid').innerHTML = '<div class="empty-msg">تعذر تحميل الإعلانات.</div>';
-          showToast(err.message || 'حدث خطأ أثناء تحميل الإعلانات', 'error');
-        }
-      }
-
-      function filterAndRenderAds() {
-        let list = [...allAds];
-        const favIds = currentUser?.favorites || [];
-        if (currentMode === 'favorites') {
-          list = list.filter(a => favIds.includes(a.id));
-        }
-
-        document.getElementById('adsCounter').textContent = `(${list.length} إعلان)`;
-        const grid = document.getElementById('adsGrid');
-        if (!list.length) {
-          grid.innerHTML = '<div class="empty-msg">لا توجد إعلانات مطابقة.</div>';
-          return;
-        }
-
-        grid.innerHTML = list.map(ad => {
-          const isOwner = currentUser && currentUser.username.toLowerCase() === (ad.ownerUsername || '').toLowerCase();
-          const isFav = favIds.includes(ad.id);
-          const imgSrc = ad.image || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="220"><rect width="100%" height="100%" fill="%231e293b"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2394a3b8" font-size="16">بدون صورة</text></svg>';
-
-          return `
-            <div class="ad-card">
-              <div class="ad-img-wrap">
-                <img src="${imgSrc}" class="ad-img" data-action="zoom" data-id="${escapeHtml(ad.id)}" data-src="${escapeHtml(ad.image)}" alt="${escapeHtml(ad.title)}" />
-                <button type="button" class="fav-btn" data-action="toggle-fav" data-id="${escapeHtml(ad.id)}">${isFav ? '❤️' : '🤍'}</button>
-              </div>
-              <div class="ad-body">
-                <div class="badges-row">
-                  <span class="badge">${escapeHtml(ad.city)}</span>
-                  <span class="badge">${escapeHtml(ad.condition)}</span>
-                  ${ad.subType ? `<span class="badge">${escapeHtml(ad.subType)}</span>` : ''}
-                  ${ad.brand ? `<span class="badge">${escapeHtml(ad.brand)}</span>` : ''}
-                  ${ad.negotiable ? '<span class="badge badge-neg">قابل للتفاوض</span>' : ''}
-                  <span class="badge">👁️ ${ad.views || 0}</span>
-                </div>
-                <div class="ad-title">${escapeHtml(ad.title)}</div>
-                <div class="ad-price">${escapeHtml(formatSypPrice(ad.price))}</div>
-                <div class="ad-meta" data-action="view-profile" data-username="${escapeHtml(ad.ownerUsername)}">
-                  ${escapeHtml(ad.category)} • <strong>${escapeHtml(ad.ownerUsername)}</strong>
-                </div>
-                <div class="ad-desc">${escapeHtml(ad.description)}</div>
-              </div>
-
-              ${!isOwner ? `
-                <div class="preset-msgs">
-                  <button type="button" class="preset-btn" data-action="send-preset" data-id="${escapeHtml(ad.id)}" data-text="هل هذا المنتج متاح؟">متاح؟</button>
-                  <button type="button" class="preset-btn" data-action="send-preset" data-id="${escapeHtml(ad.id)}" data-text="مهتم بهذا المنتج، هل يمكن التواصل؟">مهتم</button>
-                </div>
-              ` : `
-                <div class="ad-actions">
-                  <button type="button" class="btn-green" data-action="open-edit" data-id="${escapeHtml(ad.id)}">✏️ تعديل</button>
-                  <button type="button" class="btn-red" data-action="delete-ad" data-id="${escapeHtml(ad.id)}">🗑️ حذف</button>
-                </div>
-              `}
-
-              <div class="ad-actions">
-                <button type="button" class="btn-outline" data-action="open-comments" data-id="${escapeHtml(ad.id)}">💬 (${ad.comments?.length || 0})</button>
-                ${!isOwner ? `
-                  <a href="/chat?to=${encodeURIComponent(ad.ownerUsername)}&adId=${encodeURIComponent(ad.id)}" class="btn-blue btn-link" style="flex:1;">✉️ دردشة</a>
-                ` : ''}
-              </div>
-            </div>
-          `;
-        }).join('');
-      }
-
-      async function openProfile(username) {
-        try {
-          const res = await fetch(`/api/users/${encodeURIComponent(username)}`, { cache: 'no-store' });
-          const data = await res.json().catch(() => ({}));
-          if (!res.ok) throw new Error(data.message || 'تعذر جلب بيانات الحساب');
-
-          const isMe = currentUser && currentUser.username.toLowerCase() === data.username.toLowerCase();
-          selectedAvatarData = data.avatar || '';
-
-          const avatarContent = data.avatar
-            ? `<img src="${escapeHtml(data.avatar)}" alt="${escapeHtml(data.username)}" />`
-            : escapeHtml((data.username || 'م')[0].toUpperCase());
-
-          const container = document.getElementById('targetProfileContent');
-          container.innerHTML = `
-            <div class="profile-header">
-              <div class="profile-avatar-box">${avatarContent}</div>
-              <div>
-                <h3 style="font-size:1.1rem;">${escapeHtml(data.username)}</h3>
-                <p style="font-size:0.8rem; color:var(--muted);">المدينة: ${escapeHtml(data.city)} • انضم: ${escapeHtml(data.joinedAt)}</p>
-                ${data.phone ? `<p style="font-size:0.8rem; color:#cbd5e1;">📞 ${escapeHtml(data.phone)}</p>` : ''}
-              </div>
-            </div>
-            <div style="font-size:0.84rem; color:#e2e8f0; margin-bottom:10px;">
-              <strong>النبذة التعريفية:</strong>
-              <p style="margin-top:4px; color:#cbd5e1;">${escapeHtml(data.bio || 'لا توجد نبذة تعريفية.')}</p>
-            </div>
-            ${!isMe ? `
-              <a href="/chat?to=${encodeURIComponent(data.username)}" class="btn-blue btn-link" style="width:100%; margin-top:8px;">💬 مراسلة ${escapeHtml(data.username)}</a>
-            ` : `
-              <div style="border-top:1px solid var(--border); padding-top:12px; margin-top:10px;">
-                <h4 style="margin-bottom:10px; color:var(--cyan);">⚙️ إعدادات الملف الشخصي</h4>
-                <form id="profileUpdateForm">
-                  <div class="field" style="display:flex; align-items:center; gap:12px;">
-                    <img id="upAvatarPreview" src="${escapeHtml(selectedAvatarData || 'data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\'><rect width=\'100%\' height=\'100%\' fill=\'%231e293b\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%2394a3b8\' font-size=\'14\'>صورة</text></svg>')}" class="avatar-preview" alt="معاينة الصورة الشخصية" />
-                    <div style="flex:1;">
-                      <label for="upAvatarFile">صورة الملف الشخصي</label>
-                      <input type="file" id="upAvatarFile" accept="image/*" />
-                    </div>
-                  </div>
-                  <div class="field"><label for="upCity">المدينة</label><input type="text" id="upCity" value="${escapeHtml(currentUser.city)}" /></div>
-                  <div class="field"><label for="upPhone">رقم الهاتف</label><input type="text" id="upPhone" value="${escapeHtml(currentUser.phone || '')}" placeholder="مثال: 0991234567" /></div>
-                  <div class="field"><label for="upBio">النبذة التعريفية</label><textarea id="upBio" rows="2" placeholder="اكتب نبذة قصيرة عنك...">${escapeHtml(currentUser.bio || '')}</textarea></div>
-                  <button type="submit" class="btn-green" style="width:100%;">حفظ الإعدادات</button>
-                </form>
-              </div>
-            `}
-          `;
-
-          const avatarInput = document.getElementById('upAvatarFile');
-          if (avatarInput) {
-            avatarInput.addEventListener('change', function () {
-              const file = this.files && this.files[0];
-              if (!file) return;
-              const reader = new FileReader();
-              reader.onload = function (ev) {
-                selectedAvatarData = ev.target.result;
-                const prev = document.getElementById('upAvatarPreview');
-                if (prev) prev.src = selectedAvatarData;
-              };
-              reader.readAsDataURL(file);
-            });
-          }
-
-          openModal('profileModal');
-        } catch (err) {
-          showToast(err.message || 'تعذر فتح الملف الشخصي', 'error');
-        }
-      }
-
-      function openEditAd(adId) {
-        const ad = allAds.find(a => a.id === adId);
-        if (!ad) {
-          showToast('الإعلان غير موجود', 'error');
-          return;
-        }
-        document.getElementById('adForm').reset();
-        document.getElementById('adEditId').value = ad.id;
-        document.getElementById('adFormTitle').textContent = 'تعديل الإعلان';
-        document.getElementById('adSubmitBtn').textContent = 'حفظ التعديلات';
-        document.getElementById('adTitleInput').value = ad.title || '';
-        const numericPrice = parseSypAmount(ad.price);
-        document.getElementById('adPriceInput').value = numericPrice !== null ? String(numericPrice) : '';
-        document.getElementById('adCityInput').value = ad.city || 'دمشق';
-        document.getElementById('adCategoryInput').value = ad.category || 'أخرى';
-        syncFormSubAndBrand(ad.subType || '', ad.brand || '');
-        document.getElementById('adConditionInput').value = ad.condition || 'مستعمل';
-        document.getElementById('adNegotiableInput').checked = Boolean(ad.negotiable);
-        document.getElementById('adDescInput').value = ad.description || '';
-        selectedImageData = ad.image || '';
-        const preview = document.getElementById('adImgPreview');
-        if (ad.image) {
-          preview.src = ad.image;
-          preview.style.display = 'block';
-        } else {
-          preview.style.display = 'none';
-        }
-        openModal('adFormModal');
-      }
-
-      document.getElementById('adPriceInput').addEventListener('input', function () {
-        const digitsOnly = this.value.replace(/[^\d]/g, '');
-        if (this.value !== digitsOnly) {
-          this.value = digitsOnly;
-          showToast('يُسمح بإدخال أرقام فقط للسعر بالليرة السورية', 'error');
-        }
-      });
-
-      document.getElementById('filterCategory').addEventListener('change', () => {
-        syncFilterSubAndBrand();
-        fetchAds();
-      });
-      document.getElementById('filterSubType').addEventListener('change', fetchAds);
-      document.getElementById('filterBrand').addEventListener('change', fetchAds);
-      document.getElementById('filterCity').addEventListener('change', fetchAds);
-      document.getElementById('filterCondition').addEventListener('change', fetchAds);
-      document.getElementById('sortAds').addEventListener('change', fetchAds);
-
-      document.getElementById('adCategoryInput').addEventListener('change', () => syncFormSubAndBrand());
-      document.getElementById('adSubTypeInput').addEventListener('change', () => {
-        const cat = document.getElementById('adCategoryInput').value;
-        const sub = document.getElementById('adSubTypeInput').value;
-        const brands = TAXONOMY[cat]?.brandsByType[sub] || TAXONOMY[cat]?.allBrands || ['عام'];
-        document.getElementById('adBrandInput').innerHTML = brands.map(b => `<option value="${escapeHtml(b)}">${escapeHtml(b)}</option>`).join('');
-      });
-
-      document.getElementById('adImgFile').addEventListener('change', function () {
-        const file = this.files && this.files[0];
-        if (!file) return;
+    function previewAdImage(event) {
+      const file = event.target.files[0];
+      if (file) {
         const reader = new FileReader();
-        reader.onload = function (ev) {
-          selectedImageData = ev.target.result;
-          const preview = document.getElementById('adImgPreview');
-          preview.src = selectedImageData;
+        reader.onload = function(e) {
+          appState.selectedAdImageBase64 = e.target.result;
+          const preview = document.getElementById('adImagePreview');
+          preview.src = e.target.result;
           preview.style.display = 'block';
         };
         reader.readAsDataURL(file);
+      }
+    }
+
+    function renderAds() {
+      const grid = document.getElementById('adsGridContainer');
+      document.getElementById('adCountBadge').textContent = `${appState.filteredAds.length} إعلان`;
+
+      if (appState.filteredAds.length === 0) {
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--muted);">لا توجد إعلانات مطابقة لمعايير البحث.</div>';
+        return;
+      }
+
+      grid.innerHTML = appState.filteredAds.map(ad => {
+        const cleanPrice = String(ad.price || '').replace(/[^\d]/g, '');
+        const formattedPrice = cleanPrice ? Number(cleanPrice).toLocaleString('en-US') : '0';
+        const hasValidImage = typeof ad.image === 'string' && (ad.image.startsWith('data:image/') || ad.image.startsWith('http://') || ad.image.startsWith('https://'));
+
+        return `
+          <div class="ad-card">
+            <div class="ad-img-wrapper ${hasValidImage ? 'has-image' : ''}">
+              ${hasValidImage ? `<img src="${escapeHtml(ad.image)}" class="ad-img" alt="${escapeHtml(ad.title)}">` : ''}
+              <div class="fav-toggle" onclick="showToast('تم التحديث')">🤍</div>
+            </div>
+            <div class="ad-body">
+              <div class="badges-container">
+                <span class="badge">${escapeHtml(ad.city || 'دمشق')}</span>
+                <span class="badge badge-highlight">${formattedPrice} ل.س</span>
+              </div>
+              <div class="ad-title">${escapeHtml(ad.title)}</div>
+              <div class="ad-price">${formattedPrice} ل.س</div>
+              <div class="ad-meta">بواسطة: <span class="owner-link" onclick="viewUserProfile('${escapeHtml(ad.ownerUsername)}')">${escapeHtml(ad.ownerUsername)}</span></div>
+              <div class="ad-description">${escapeHtml(ad.description || 'لا يوجد وصف.')}</div>
+            </div>
+            <div class="quick-action-btns">
+              <a href="/chat?to=${encodeURIComponent(ad.ownerUsername)}&adId=${encodeURIComponent(ad.id)}" class="btn-link btn-primary action-btn">💬 مراسلة</a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function executeSearch() {
+      const keyword = document.getElementById('searchKeyword').value.toLowerCase();
+      const city = document.getElementById('filterCitySelect').value;
+      const condition = document.getElementById('filterConditionSelect').value;
+
+      appState.filteredAds = appState.ads.filter(ad => {
+        const matchesKeyword = (ad.title || '').toLowerCase().includes(keyword) || (ad.description || '').toLowerCase().includes(keyword);
+        const matchesCity = !city || ad.city === city;
+        const matchesCondition = !condition || ad.condition === condition;
+        return matchesKeyword && matchesCity && matchesCondition;
       });
+      renderAds();
+    }
 
-      document.querySelectorAll('[data-quick-cat]').forEach(el => {
-        el.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const cat = el.dataset.quickCat || 'all';
-          const sub = el.dataset.quickSub || 'all';
-          const brand = el.dataset.quickBrand || 'all';
+    function filterByCategory(cat) {
+      document.getElementById('searchKeyword').value = '';
+      appState.filteredAds = appState.ads.filter(ad => ad.category === cat);
+      renderAds();
+    }
 
-          document.getElementById('filterCategory').value = cat;
-          syncFilterSubAndBrand();
-          if (sub !== 'all' && Array.from(document.getElementById('filterSubType').options).some(o => o.value === sub)) {
-            document.getElementById('filterSubType').value = sub;
-          }
-          if (brand !== 'all' && Array.from(document.getElementById('filterBrand').options).some(o => o.value === brand)) {
-            document.getElementById('filterBrand').value = brand;
-          }
+    function filterBySubType(sub) {
+      document.getElementById('searchKeyword').value = sub;
+      executeSearch();
+    }
 
-          currentMode = 'all';
-          document.getElementById('listHeading').textContent = `إعلانات: ${cat}${brand !== 'all' ? ' - ' + brand : sub !== 'all' ? ' - ' + sub : ''}`;
-          fetchAds();
+    function filterByBrand(brand) {
+      document.getElementById('searchKeyword').value = brand;
+      executeSearch();
+    }
+
+    function resetFilters() {
+      document.getElementById('searchKeyword').value = '';
+      document.getElementById('filterCitySelect').value = '';
+      document.getElementById('filterConditionSelect').value = '';
+      appState.filteredAds = [...appState.ads];
+      renderAds();
+    }
+
+    async function viewMyProfile() {
+      if (!appState.currentUser) {
+        openAuthModal('login');
+        return;
+      }
+      viewUserProfile(appState.currentUser.username);
+    }
+
+    async function viewUserProfile(username) {
+      try {
+        const res = await fetch(`/api/users/${encodeURIComponent(username)}`, { cache: 'no-store' });
+        const userData = res.ok ? await res.json() : { username, city: 'دمشق', phone: '', bio: '', avatar: '', adsCount: 0, ads: [] };
+        const isMe = appState.currentUser && appState.currentUser.username.toLowerCase() === username.toLowerCase();
+        appState.selectedAvatarBase64 = userData.avatar || '';
+
+        const content = document.getElementById('profileModalContent');
+        content.innerHTML = `
+          <div class="profile-card-header">
+            ${userData.avatar ? `<img src="${escapeHtml(userData.avatar)}" class="profile-avatar-large" alt="الصورة الشخصية">` : `<div class="profile-avatar-large" style="display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:900;">${escapeHtml((username || 'م')[0])}</div>`}
+            <h2>${escapeHtml(userData.username)}</h2>
+            <p>📍 المدينة: ${escapeHtml(userData.city || 'دمشق')}</p>
+            ${userData.phone ? `<p>📞 ${escapeHtml(userData.phone)}</p>` : ''}
+            ${userData.bio ? `<p style="color:var(--muted);font-size:0.85rem;">${escapeHtml(userData.bio)}</p>` : ''}
+            <div class="stats-row">
+              <div class="stat-box">
+                <div class="stat-value">${userData.adsCount || 0}</div>
+                <div class="stat-label">إعلان منشور</div>
+              </div>
+            </div>
+          </div>
+
+          ${isMe ? `
+            <div style="border-bottom:1px solid var(--border); padding-bottom:12px;">
+              <h4 style="margin-bottom:8px; color:var(--cyan);">⚙️ إعدادات الملف الشخصي</h4>
+              <div style="margin-bottom:8px;">
+                <label style="font-size:0.8rem; color:var(--muted);">تغيير الصورة الشخصية:</label>
+                <input type="file" id="profileAvatarInput" accept="image/*">
+              </div>
+              <div style="margin-bottom:8px;">
+                <input type="text" id="profileCityInput" value="${escapeHtml(userData.city || 'دمشق')}" placeholder="المدينة">
+              </div>
+              <div style="margin-bottom:8px;">
+                <input type="text" id="profilePhoneInput" value="${escapeHtml(userData.phone || '')}" placeholder="رقم الهاتف">
+              </div>
+              <div style="margin-bottom:8px;">
+                <textarea id="profileBioInput" rows="2" placeholder="نبذة تعريفية">${escapeHtml(userData.bio || '')}</textarea>
+              </div>
+              <button class="btn-link btn-success" style="width:100%;" onclick="saveProfileSettings()">حفظ إعدادات الملف الشخصي</button>
+            </div>
+          ` : `
+            <a href="/chat?to=${encodeURIComponent(username)}" class="btn-link btn-primary" style="width:100%; padding:10px;">💬 مراسلة ${escapeHtml(username)}</a>
+          `}
+
+          <h3>إعلانات المستخدم:</h3>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            ${userData.ads && userData.ads.length > 0 ? userData.ads.map(ad => {
+              const cPrice = String(ad.price || '').replace(/[^\d]/g, '');
+              return `
+                <div style="background: var(--bg-mid); padding: 10px; border-radius: 8px; display: flex; justify-content: space-between;">
+                  <span>${escapeHtml(ad.title)}</span>
+                  <span style="color: var(--green); font-weight: 700;">${cPrice ? Number(cPrice).toLocaleString('en-US') : '0'} ل.س</span>
+                </div>
+              `;
+            }).join('') : '<p style="color: var(--muted);">لا توجد إعلانات نشطة حالياً.</p>'}
+          </div>
+        `;
+
+        const avatarInput = document.getElementById('profileAvatarInput');
+        if (avatarInput) {
+          avatarInput.addEventListener('change', (ev) => {
+            const file = ev.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              appState.selectedAvatarBase64 = e.target.result;
+            };
+            reader.readAsDataURL(file);
+          });
+        }
+
+        openModal('profileModal');
+      } catch(e) {
+        showToast('تعذر جلب بيانات المستخدم');
+      }
+    }
+
+    async function saveProfileSettings() {
+      if (!appState.currentUser) return;
+      const city = document.getElementById('profileCityInput').value.trim();
+      const phone = document.getElementById('profilePhoneInput').value.trim();
+      const bio = document.getElementById('profileBioInput').value.trim();
+
+      try {
+        const res = await fetch('/api/profile/settings', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: appState.currentUser.username,
+            city,
+            phone,
+            bio,
+            avatar: appState.selectedAvatarBase64
+          })
         });
-      });
-
-      document.addEventListener('click', async (e) => {
-        const target = e.target.closest('[data-action]');
-        if (!target) return;
-        const action = target.dataset.action;
-
-        if (action === 'open-auth') {
-          switchAuthTab(target.dataset.type);
-          openModal('authModal');
-        } else if (action === 'switch-auth-tab') {
-          switchAuthTab(target.dataset.tab);
-        } else if (action === 'logout') {
-          currentUser = null;
-          currentMode = 'all';
-          saveUser();
-          showToast('تم تسجيل الخروج', 'info');
-          fetchAds();
-        } else if (action === 'open-create-ad') {
-          if (!currentUser) {
-            showToast('سجل دخولك أولاً لنشر إعلان', 'error');
-            openModal('authModal');
-            return;
-          }
-          document.getElementById('adForm').reset();
-          document.getElementById('adEditId').value = '';
-          document.getElementById('adFormTitle').textContent = 'نشر إعلان جديد';
-          document.getElementById('adSubmitBtn').textContent = 'نشر الإعلان';
-          selectedImageData = '';
-          document.getElementById('adImgPreview').style.display = 'none';
-          syncFormSubAndBrand();
-          openModal('adFormModal');
-        } else if (action === 'open-edit') {
-          openEditAd(target.dataset.id);
-        } else if (action === 'delete-ad') {
-          if (!currentUser) return;
-          try {
-            const res = await fetch(`/api/ads/${encodeURIComponent(target.dataset.id)}`, {
-              method: 'DELETE',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ ownerUsername: currentUser.username })
-            });
-            const data = await res.json().catch(() => ({}));
-            if (!res.ok) throw new Error(data.message || 'فشل حذف الإعلان');
-            await fetchAds();
-            showToast('تم حذف الإعلان', 'success');
-          } catch (err) {
-            showToast(err.message || 'فشل حذف الإعلان', 'error');
-          }
-        } else if (action === 'toggle-fav') {
-          if (!currentUser) {
-            showToast('سجل دخولك لحفظ الإعلانات في المفضلة', 'error');
-            openModal('authModal');
-            return;
-          }
-          try {
-            const res = await fetch('/api/favorites/toggle', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ username: currentUser.username, adId: target.dataset.id })
-            });
-            const data = await res.json().catch(() => ({}));
-            if (!res.ok) throw new Error(data.message || 'فشل تحديث المفضلة');
-            currentUser.favorites = data.favorites;
-            saveUser();
-            filterAndRenderAds();
-          } catch (err) {
-            showToast(err.message || 'فشل تحديث المفضلة', 'error');
-          }
-        } else if (action === 'send-preset') {
-          if (!currentUser) {
-            showToast('سجل دخولك لإرسال رسالة لصاحب الإعلان', 'error');
-            openModal('authModal');
-            return;
-          }
-          const ad = allAds.find(a => a.id === target.dataset.id);
-          if (!ad) {
-            showToast('الإعلان غير موجود', 'error');
-            return;
-          }
-          try {
-            const res = await fetch('/api/messages', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                from: currentUser.username,
-                to: ad.ownerUsername,
-                text: target.dataset.text,
-                adId: ad.id,
-                adTitle: ad.title,
-                adPrice: formatSypPrice(ad.price)
-              })
-            });
-            const data = await res.json().catch(() => ({}));
-            if (!res.ok) throw new Error(data.message || 'فشل إرسال الرسالة');
-            showToast('تم إرسال الرسالة في الخلفية إلى صفحة الدردشة', 'success');
-          } catch (err) {
-            showToast(err.message || 'فشل إرسال الرسالة', 'error');
-          }
-        } else if (action === 'view-profile') {
-          await openProfile(target.dataset.username);
-        } else if (action === 'open-my-profile') {
-          if (!currentUser) {
-            showToast('سجل دخولك لعرض ملفك الشخصي وإعداداته', 'error');
-            openModal('authModal');
-            return;
-          }
-          await openProfile(currentUser.username);
-        } else if (action === 'my-favorites') {
-          if (!currentUser) {
-            showToast('سجل دخولك لعرض المفضلة', 'error');
-            openModal('authModal');
-            return;
-          }
-          currentMode = 'favorites';
-          document.getElementById('listHeading').textContent = '❤️ المفضلة';
-          filterAndRenderAds();
-        } else if (action === 'apply-filters' || action === 'reset-all') {
-          if (action === 'reset-all') {
-            document.getElementById('searchQ').value = '';
-            document.getElementById('filterCity').value = 'all';
-            document.getElementById('filterCategory').value = 'all';
-            syncFilterSubAndBrand();
-            document.getElementById('filterCondition').value = 'all';
-            document.getElementById('sortAds').value = 'newest';
-          }
-          currentMode = 'all';
-          document.getElementById('listHeading').textContent = 'أحدث الإعلانات';
-          await fetchAds();
-        } else if (action === 'zoom') {
-          if (target.dataset.src) {
-            document.getElementById('lightboxTarget').src = target.dataset.src;
-            openModal('lightboxModal');
-          }
-          if (target.dataset.id) {
-            fetch(`/api/ads/${encodeURIComponent(target.dataset.id)}/view`, { method: 'POST' })
-              .then(() => fetchAds())
-              .catch(() => {});
-          }
-        } else if (action === 'open-comments') {
-          const ad = allAds.find(a => a.id === target.dataset.id);
-          if (!ad) return;
-          document.getElementById('commentAdIdInput').value = ad.id;
-          document.getElementById('commentsHeading').textContent = `تعليقات: ${ad.title}`;
-          const comments = ad.comments || [];
-          document.getElementById('commentsBox').innerHTML = comments.length
-            ? comments.map(c => `<div class="comment-item"><strong>${escapeHtml(c.username)}:</strong> ${escapeHtml(c.text)}</div>`).join('')
-            : '<div style="text-align:center; color:var(--muted); padding:14px;">لا توجد تعليقات بعد.</div>';
-          openModal('commentsModal');
+        if (res.ok) {
+          const data = await res.json();
+          appState.currentUser = data.user || { ...appState.currentUser, city, phone, bio, avatar: appState.selectedAvatarBase64 };
+          localStorage.setItem('rakhis_user', JSON.stringify(appState.currentUser));
+          renderAuthUI();
+          showToast('تم حفظ إعدادات الملف الشخصي');
+          await viewUserProfile(appState.currentUser.username);
+        } else {
+          showToast('تعذر حفظ الإعدادات');
         }
-      });
+      } catch (e) {
+        showToast('حدث خطأ أثناء الحفظ');
+      }
+    }
 
-      document.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const formId = e.target.id;
+    async function saveAd() {
+      const title = document.getElementById('adTitle').value.trim();
+      const rawPrice = document.getElementById('adPrice').value.replace(/[^\d]/g, '');
+      const category = document.getElementById('adCategory').value;
+      const city = document.getElementById('adCity').value.trim() || 'دمشق';
+      const description = document.getElementById('adDesc').value.trim();
 
-        if (formId === 'authForm') {
-          const username = document.getElementById('authUsername').value.trim();
-          const password = document.getElementById('authPassword').value.trim();
-          const endpoint = authMode === 'register' ? '/api/auth/register' : '/api/auth/login';
-          try {
-            const res = await fetch(endpoint, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ username, password })
-            });
-            const data = await res.json().catch(() => ({}));
-            if (!res.ok) throw new Error(data.message || 'تعذرت العملية');
-            if (authMode === 'register') {
-              showToast('تم إنشاء الحساب بنجاح، سجل دخولك الآن', 'success');
-              switchAuthTab('login');
-              document.getElementById('authPassword').value = '';
-            } else {
-              currentUser = data.user;
-              saveUser();
-              closeModal('authModal');
-              showToast(`أهلاً بك يا ${currentUser.username}`, 'success');
-              await fetchAds();
-            }
-          } catch (err) {
-            showToast(err.message || 'خطأ في بيانات الحساب', 'error');
-          }
-        } else if (formId === 'adForm') {
-          if (!currentUser) {
-            showToast('سجل دخولك أولاً', 'error');
-            openModal('authModal');
-            return;
-          }
-          const rawPriceInput = document.getElementById('adPriceInput').value.trim();
-          const priceNum = parseSypAmount(rawPriceInput);
-          if (priceNum === null || priceNum <= 0) {
-            showToast('يرجى إدخال سعر صحيح بالأرقام بالليرة السورية (مثال: 500000)', 'error');
-            return;
-          }
+      if (!title || !rawPrice) {
+        showToast('يرجى تعبئة العنوان والسعر بالأرقام');
+        return;
+      }
 
-          const editId = document.getElementById('adEditId').value.trim();
-          const payload = {
-            title: document.getElementById('adTitleInput').value.trim(),
-            price: String(priceNum),
-            currency: 'ل.س',
-            city: document.getElementById('adCityInput').value,
-            category: document.getElementById('adCategoryInput').value,
-            subType: document.getElementById('adSubTypeInput').value,
-            brand: document.getElementById('adBrandInput').value,
-            condition: document.getElementById('adConditionInput').value,
-            negotiable: document.getElementById('adNegotiableInput').checked,
-            description: document.getElementById('adDescInput').value.trim(),
-            image: selectedImageData,
-            ownerUsername: currentUser.username
-          };
-          const url = editId ? `/api/ads/${encodeURIComponent(editId)}` : '/api/ads';
-          const method = editId ? 'PUT' : 'POST';
-          try {
-            const res = await fetch(url, {
-              method,
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(payload)
-            });
-            const data = await res.json().catch(() => ({}));
-            if (!res.ok) throw new Error(data.message || 'فشل حفظ الإعلان');
-            closeModal('adFormModal');
-            currentMode = 'all';
-            document.getElementById('listHeading').textContent = 'أحدث الإعلانات';
-            await fetchAds();
-            showToast(editId ? 'تم تحديث الإعلان' : 'تم نشر الإعلان بنجاح', 'success');
-          } catch (err) {
-            showToast(err.message || 'فشل حفظ الإعلان', 'error');
-          }
-        } else if (formId === 'profileUpdateForm') {
-          if (!currentUser) return;
-          try {
-            const res = await fetch('/api/profile/settings', {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                username: currentUser.username,
-                city: document.getElementById('upCity').value.trim(),
-                phone: document.getElementById('upPhone').value.trim(),
-                bio: document.getElementById('upBio').value.trim(),
-                avatar: selectedAvatarData
-              })
-            });
-            const data = await res.json().catch(() => ({}));
-            if (!res.ok) throw new Error(data.message || 'فشل التحديث');
-            currentUser = data.user;
-            saveUser();
-            showToast('تم حفظ إعدادات الملف الشخصي', 'success');
-            await openProfile(currentUser.username);
-            await fetchAds();
-          } catch (err) {
-            showToast(err.message || 'فشل التحديث', 'error');
-          }
-        } else if (formId === 'commentSendForm') {
-          if (!currentUser) {
-            showToast('سجل دخولك لإضافة تعليق', 'error');
-            openModal('authModal');
-            return;
-          }
-          const adId = document.getElementById('commentAdIdInput').value;
-          const text = document.getElementById('commentTextInput').value.trim();
-          if (!text) return;
-          try {
-            const res = await fetch(`/api/ads/${encodeURIComponent(adId)}/comments`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ text, username: currentUser.username })
-            });
-            const data = await res.json().catch(() => ({}));
-            if (!res.ok) throw new Error(data.message || 'فشل إرسال التعليق');
-            document.getElementById('commentTextInput').value = '';
-            await fetchAds();
-            const updatedAd = allAds.find(a => a.id === adId);
-            if (updatedAd) {
-              document.getElementById('commentsBox').innerHTML = (updatedAd.comments || []).map(c => `
-                <div class="comment-item"><strong>${escapeHtml(c.username)}:</strong> ${escapeHtml(c.text)}</div>
-              `).join('');
-            }
-          } catch (err) {
-            showToast(err.message || 'فشل إرسال التعليق', 'error');
-          }
+      const newAd = {
+        id: Date.now().toString(),
+        title,
+        price: rawPrice,
+        currency: 'ل.س',
+        category,
+        city,
+        condition: 'مستعمل',
+        description,
+        ownerUsername: appState.currentUser.username,
+        image: appState.selectedAdImageBase64
+      };
+
+      try {
+        const res = await fetch('/api/ads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newAd)
+        });
+        if (res.ok) {
+          const saved = await res.json();
+          appState.ads.unshift(saved);
+          appState.filteredAds = [...appState.ads];
+          renderAds();
+          closeModal('adModal');
+          showToast('تم نشر الإعلان بنجاح');
+        } else {
+          showToast('تعذر نشر الإعلان');
         }
-      });
+      } catch(e) {
+        showToast('حدث خطأ أثناء نشر الإعلان');
+      }
+    }
 
-      document.querySelectorAll('[data-close]').forEach(btn => {
-        btn.addEventListener('click', () => closeModal(btn.dataset.close));
-      });
+    async function handleAuthSubmit() {
+      const username = document.getElementById('authUsername').value.trim();
+      const password = document.getElementById('authPassword').value.trim();
+      if (!username || !password) {
+        showToast('يرجى إدخال اسم المستخدم وكلمة المرور');
+        return;
+      }
 
-      loadUser();
-      syncFilterSubAndBrand();
-      syncFormSubAndBrand();
-      fetchAds();
-    })();
+      try {
+        let res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        if (!res.ok) {
+          res = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+          });
+        }
+        const data = await res.json();
+        appState.currentUser = data.user || { username, avatar: '', city: 'دمشق' };
+        localStorage.setItem('rakhis_user', JSON.stringify(appState.currentUser));
+        renderAuthUI();
+        closeModal('authModal');
+        showToast('أهلاً بك يا ' + username);
+        await fetchAllAds();
+      } catch (e) {
+        appState.currentUser = { username, avatar: '', city: 'دمشق' };
+        localStorage.setItem('rakhis_user', JSON.stringify(appState.currentUser));
+        renderAuthUI();
+        closeModal('authModal');
+        showToast('أهلاً بك يا ' + username);
+      }
+    }
   </script>
 </body>
 </html>

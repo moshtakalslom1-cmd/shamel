@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مركز الرسائل والمحادثات - رخيص</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+
+    :root {
+      --bg-dark: #070b14;
+      --bg-mid: #0f172a;
+      --surface: rgba(19, 29, 49, 0.95);
+      --surface-soft: rgba(30, 41, 59, 0.85);
+      --cyan: #38bdf8;
+      --rose: #fb7185;
+      --gold: #facc15;
+      --green: #22c55e;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: rgba(148, 163, 184, 0.25);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+
+    body {
+      background: radial-gradient(circle at 12% 8%, rgba(56, 189, 248, 0.12), transparent 36%),
+                  linear-gradient(150deg, var(--bg-dark) 0%, var(--bg-mid) 60%, #111c33 100%);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      padding: 12px 18px;
+      background: rgba(7, 11, 20, 0.95);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .back-btn {
+      background: var(--surface-soft);
+      color: var(--cyan);
+      border: 1px solid var(--cyan);
+      padding: 6px 12px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+
+    .mobile-toggle-btn {
+      display: none;
+      background: var(--surface-soft);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 0.8rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .chat-container {
+      display: grid;
+      grid-template-columns: 310px 1fr;
+      flex-grow: 1;
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    .conversations-list {
+      border-left: 1px solid var(--border);
+      overflow-y: auto;
+      background: rgba(15, 23, 42, 0.9);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .conv-search-box {
+      padding: 10px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(7, 11, 20, 0.6);
+    }
+
+    .conv-search-box input {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-dark);
+      color: var(--text);
+      font-size: 0.85rem;
+    }
+
+    .conv-search-box input:focus {
+      outline: none;
+      border-color: var(--cyan);
+    }
+
+    .conversation-item {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .conversation-item:hover,
+    .conversation-item.active {
+      background: rgba(56, 189, 248, 0.14);
+    }
+
+    .peer-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--cyan);
+      background: var(--surface-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .chat-main-pane {
+      display: flex;
+      flex-direction: column;
+      background: transparent;
+      height: 100%;
+      min-height: 0;
+    }
+
+    .active-peer-bar {
+      padding: 10px 16px;
+      background: rgba(19, 29, 49, 0.85);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .ad-context-reminder {
+      background: rgba(56, 189, 248, 0.12);
+      border-bottom: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 8px 16px;
+      font-size: 0.82rem;
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .messages-viewport {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .message-bubble {
+      max-width: 75%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+
+    .message-from {
+      align-self: flex-start;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .message-to {
+      align-self: flex-end;
+      background: var(--cyan);
+      color: #070b14;
+      font-weight: 700;
+    }
+
+    .message-time {
+      font-size: 0.68rem;
+      opacity: 0.75;
+      margin-top: 4px;
+      display: block;
+      text-align: left;
+    }
+
+    .input-area {
+      padding: 12px 14px;
+      background: rgba(7, 11, 20, 0.95);
+      display: flex;
+      gap: 8px;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .input-area input {
+      flex-grow: 1;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg-mid);
+      color: #fff;
+      font-size: 0.88rem;
+    }
+
+    .input-area input:focus {
+      outline: none;
+      border-color: var(--cyan);
+    }
+
+    .input-area button {
+      padding: 10px 18px;
+      border-radius: 10px;
+      background: var(--cyan);
+      border: none;
+      font-weight: 800;
+      color: #070b14;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 768px) {
+      .mobile-toggle-btn { display: inline-flex; }
+      .chat-container {
+        grid-template-columns: 1fr;
+        position: relative;
+      }
+      .conversations-list {
+        display: none;
+        position: absolute;
+        inset: 0;
+        z-index: 20;
+      }
+      .conversations-list.mobile-open {
+        display: flex;
+      }
+      .message-bubble {
+        max-width: 88%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="chat-header">
+    <div class="header-left">
+      <a href="/" class="back-btn">⬅️ السوق</a>
+      <button type="button" class="mobile-toggle-btn" onclick="toggleMobileConversations()">👥 المحادثات</button>
+      <h2 style="font-size: 1rem;">الدردشة</h2>
+    </div>
+    <div id="activeUserBadge" style="font-weight: 800; color: var(--cyan); font-size: 0.85rem;"></div>
+  </header>
+
+  <div class="chat-container">
+    <aside class="conversations-list" id="conversationsContainer">
+      <div class="conv-search-box">
+        <input type="text" id="convSearchInput" placeholder="ابحث عن مستخدم..." oninput="renderConversationsList()">
+      </div>
+      <div id="conversationsItemsList"></div>
+    </aside>
+
+    <section class="chat-main-pane">
+      <div class="active-peer-bar" id="activePeerBar">
+        <span id="activePeerLabel" style="font-weight: 800; color: var(--muted);">اختر شخصاً لبدء المراسلة</span>
+        <span id="activePeerStatus" style="font-size: 0.78rem; color: var(--cyan);"></span>
+      </div>
+
+      <div id="adContextBanner" class="ad-context-reminder"></div>
+
+      <div class="messages-viewport" id="messagesViewport">
+        <div style="text-align: center; color: var(--muted); margin-top: 40px;">
+          اختر محادثة من قائمة الأشخاص الذين راسلتهم لمتابعة الرسائل.
+        </div>
+      </div>
+
+      <div class="input-area">
+        <input type="text" id="messageInput" placeholder="اكتب رسالتك هنا..." onkeydown="if(event.key==='Enter') sendChatMessage()">
+        <button type="button" onclick="sendChatMessage()">إرسال</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    let chatState = {
+      currentUser: null,
+      activePeer: '',
+      activeAd: null,
+      conversations: [],
+      messages: [],
+      pollTimer: null
+    };
+
+    function escapeHtml(text) {
+      return String(text || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function formatTime(ts) {
+      const d = ts ? new Date(ts) : new Date();
+      if (Number.isNaN(d.getTime())) return '';
+      return d.toLocaleTimeString('ar-SY', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function localStorageKey() {
+      const u = (chatState.currentUser && chatState.currentUser.username) ? chatState.currentUser.username : 'guest';
+      return `rakhis_chat_msgs_${u}`;
+    }
+
+    function loadLocalMessages() {
+      try {
+        const raw = localStorage.getItem(localStorageKey());
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveLocalMessages(list) {
+      try {
+        localStorage.setItem(localStorageKey(), JSON.stringify(list));
+      } catch (e) {}
+    }
+
+    window.onload = async () => {
+      const savedUser = localStorage.getItem('rakhis_user');
+      if (!savedUser) {
+        window.location.href = '/';
+        return;
+      }
+      try {
+        chatState.currentUser = JSON.parse(savedUser);
+      } catch (e) {
+        window.location.href = '/';
+        return;
+      }
+
+      document.getElementById('activeUserBadge').textContent = `👤 ${chatState.currentUser.username}`;
+
+      const params = new URLSearchParams(window.location.search);
+      const peerParam = (params.get('to') || '').trim();
+      const adIdParam = (params.get('adId') || '').trim();
+
+      if (peerParam && peerParam.toLowerCase() !== chatState.currentUser.username.toLowerCase()) {
+        chatState.activePeer = peerParam;
+      }
+
+      if (adIdParam) {
+        await loadAdContext(adIdParam);
+      }
+
+      await refreshChatData();
+      chatState.pollTimer = setInterval(refreshChatData, 3000);
+    };
+
+    function toggleMobileConversations() {
+      const el = document.getElementById('conversationsContainer');
+      el.classList.toggle('mobile-open');
+    }
+
+    async function loadAdContext(adId) {
+      try {
+        const res = await fetch(`/api/ads/${encodeURIComponent(adId)}`, { cache: 'no-store' });
+        if (!res.ok) return;
+        const ad = await res.json();
+        chatState.activeAd = ad;
+        if (!chatState.activePeer && ad.ownerUsername && ad.ownerUsername !== chatState.currentUser.username) {
+          chatState.activePeer = ad.ownerUsername;
+        }
+        const rawPrice = String(ad.price || '').replace(/[^\d]/g, '');
+        const formattedPrice = rawPrice ? Number(rawPrice).toLocaleString('en-US') : '0';
+        const banner = document.getElementById('adContextBanner');
+        banner.innerHTML = `
+          <span>إعلان: <strong>${escapeHtml(ad.title)}</strong></span>
+          <span style="color: var(--green); font-weight: 900;">${formattedPrice} ل.س</span>
+        `;
+        banner.style.display = 'flex';
+      } catch (e) {}
+    }
+
+    async function refreshChatData() {
+      const me = chatState.currentUser.username;
+      let serverMsgs = [];
+      let serverPeers = [];
+
+      try {
+        const res = await fetch(`/api/messages?user=${encodeURIComponent(me)}`, { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data)) {
+            serverMsgs = data;
+          } else if (data && Array.isArray(data.messages)) {
+            serverMsgs = data.messages;
+            if (Array.isArray(data.conversations)) serverPeers = data.conversations;
+          }
+        }
+      } catch (e) {}
+
+      const localMsgs = loadLocalMessages();
+      const mergedMap = new Map();
+      [...serverMsgs, ...localMsgs].forEach((m, idx) => {
+        const key = m.id || `${m.from || m.sender}_${m.to || m.receiver}_${m.timestamp || m.time || idx}_${m.text || m.message || ''}`;
+        mergedMap.set(key, {
+          id: m.id || key,
+          from: m.from || m.sender || '',
+          to: m.to || m.receiver || '',
+          text: m.text || m.message || '',
+          adId: m.adId || '',
+          timestamp: m.timestamp || m.time || Date.now()
+        });
+      });
+
+      chatState.messages = Array.from(mergedMap.values()).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+      const peerMap = new Map();
+      serverPeers.forEach(p => {
+        const uname = typeof p === 'string' ? p : (p.username || p.peer);
+        if (uname && uname.toLowerCase() !== me.toLowerCase()) {
+          peerMap.set(uname, {
+            username: uname,
+            lastMessage: p.lastMessage || '',
+            avatar: p.avatar || '',
+            lastTime: p.lastTime || ''
+          });
+        }
+      });
+
+      chatState.messages.forEach(m => {
+        const isFromMe = String(m.from).toLowerCase() === me.toLowerCase();
+        const isToMe = String(m.to).toLowerCase() === me.toLowerCase();
+        if (!isFromMe && !isToMe) return;
+        const peer = isFromMe ? m.to : m.from;
+        if (!peer || peer.toLowerCase() === me.toLowerCase()) return;
+        const prev = peerMap.get(peer) || { username: peer, lastMessage: '', avatar: '', lastTime: '' };
+        prev.lastMessage = m.text;
+        prev.lastTime = formatTime(m.timestamp);
+        peerMap.set(peer, prev);
+      });
+
+      if (chatState.activePeer && chatState.activePeer.toLowerCase() !== me.toLowerCase()) {
+        if (!peerMap.has(chatState.activePeer)) {
+          peerMap.set(chatState.activePeer, {
+            username: chatState.activePeer,
+            lastMessage: 'بدء محادثة جديدة',
+            avatar: '',
+            lastTime: ''
+          });
+        }
+      }
+
+      chatState.conversations = Array.from(peerMap.values());
+      if (!chatState.activePeer && chatState.conversations.length > 0) {
+        chatState.activePeer = chatState.conversations[0].username;
+      }
+
+      renderConversationsList();
+      renderActivePeerHeader();
+      renderMessages();
+    }
+
+    function renderConversationsList() {
+      const container = document.getElementById('conversationsItemsList');
+      const q = (document.getElementById('convSearchInput').value || '').trim().toLowerCase();
+      const list = chatState.conversations.filter(c => !q || c.username.toLowerCase().includes(q));
+
+      if (list.length === 0) {
+        container.innerHTML = '<div style="padding:20px; text-align:center; color:var(--muted); font-size:0.85rem;">لا توجد محادثات بعد. راسل أي معلن من صفحة الإعلانات.</div>';
+        return;
+      }
+
+      container.innerHTML = list.map(c => {
+        const active = c.username.toLowerCase() === (chatState.activePeer || '').toLowerCase();
+        const avatarHtml = c.avatar
+          ? `<img src="${escapeHtml(c.avatar)}" class="peer-avatar" alt="${escapeHtml(c.username)}">`
+          : `<div class="peer-avatar">${escapeHtml(c.username.charAt(0).toUpperCase())}</div>`;
+
+        return `
+          <div class="conversation-item ${active ? 'active' : ''}" onclick="switchConversation('${escapeHtml(c.username)}')">
+            ${avatarHtml}
+            <div style="flex-grow: 1; min-width: 0;">
+              <div style="font-weight: 800; font-size: 0.9rem; display: flex; justify-content: space-between; gap: 6px;">
+                <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(c.username)}</span>
+                <span style="font-size: 0.7rem; color: var(--muted); font-weight: 600;">${escapeHtml(c.lastTime || '')}</span>
+              </div>
+              <div style="font-size: 0.76rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                ${escapeHtml(c.lastMessage || 'اضغط لفتح المحادثة')}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderActivePeerHeader() {
+      const label = document.getElementById('activePeerLabel');
+      const status = document.getElementById('activePeerStatus');
+      if (!chatState.activePeer) {
+        label.textContent = 'اختر شخصاً لبدء المراسلة';
+        status.textContent = '';
+        return;
+      }
+      label.textContent = `💬 ${chatState.activePeer}`;
+      status.textContent = 'محادثة مباشرة';
+    }
+
+    function switchConversation(peerUsername) {
+      chatState.activePeer = peerUsername;
+      const listEl = document.getElementById('conversationsContainer');
+      listEl.classList.remove('mobile-open');
+      renderConversationsList();
+      renderActivePeerHeader();
+      renderMessages();
+    }
+
+    function renderMessages() {
+      const viewPort = document.getElementById('messagesViewport');
+      if (!chatState.activePeer) {
+        viewPort.innerHTML = '<div style="text-align: center; color: var(--muted); margin-top: 40px;">اختر محادثة من قائمة الأشخاص الذين راسلتهم.</div>';
+        return;
+      }
+
+      const me = chatState.currentUser.username.toLowerCase();
+      const peer = chatState.activePeer.toLowerCase();
+
+      const thread = chatState.messages.filter(m => {
+        const f = String(m.from || '').toLowerCase();
+        const t = String(m.to || '').toLowerCase();
+        return (f === me && t === peer) || (f === peer && t === me);
+      });
+
+      if (thread.length === 0) {
+        viewPort.innerHTML = `<div style="text-align: center; color: var(--muted); margin-top: 40px;">ابدأ المحادثة مع ${escapeHtml(chatState.activePeer)} الآن.</div>`;
+        return;
+      }
+
+      viewPort.innerHTML = thread.map(m => {
+        const isSelf = String(m.from || '').toLowerCase() === me;
+        return `
+          <div class="message-bubble ${isSelf ? 'message-to' : 'message-from'}">
+            <div>${escapeHtml(m.text)}</div>
+            <span class="message-time">${escapeHtml(formatTime(m.timestamp))}</span>
+          </div>
+        `;
+      }).join('');
+
+      viewPort.scrollTop = viewPort.scrollHeight;
+    }
+
+    async function sendChatMessage() {
+      const input = document.getElementById('messageInput');
+      const text = (input.value || '').trim();
+      if (!text) return;
+
+      if (!chatState.activePeer) {
+        alert('اختر مستخدماً أولاً من قائمة المحادثات');
+        return;
+      }
+
+      const payload = {
+        id: `${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+        from: chatState.currentUser.username,
+        to: chatState.activePeer,
+        sender: chatState.currentUser.username,
+        receiver: chatState.activePeer,
+        text,
+        message: text,
+        adId: chatState.activeAd ? chatState.activeAd.id : '',
+        timestamp: new Date().toISOString()
+      };
+
+      const localList = loadLocalMessages();
+      localList.push(payload);
+      saveLocalMessages(localList);
+
+      input.value = '';
+      await refreshChatData();
+
+      try {
+        await fetch('/api/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (e) {}
+    }
+  </script>
+</body>
+</html>

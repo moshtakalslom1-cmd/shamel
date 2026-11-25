@@ -276,7 +276,6 @@
             border-color: var(--teal);
         }
 
-        /* نافذة تكبير الصورة (Lightbox) */
         #imageLightboxModal {
             z-index: 2500;
             background: rgba(0, 0, 0, 0.92);
@@ -461,7 +460,7 @@
             <div class="form-group"><label>كلمة المرور</label><input type="password" id="loginPass" required></div>
             <div class="modal-buttons">
                 <button type="submit" class="btn-submit">دخول</button>
-                <button type="button" class="btn-cancel" onclick="browserBack()">إلغاء</button>
+                <button type="button" class="btn-cancel" onclick="closeTopModal()">إلغاء</button>
             </div>
         </form>
     </div>
@@ -476,7 +475,7 @@
             <div class="form-group"><label>نبذة تعريفية</label><input type="text" id="signupBio" placeholder="مثال: تاجر سيارات"></div>
             <div class="modal-buttons">
                 <button type="submit" class="btn-submit">تسجيل</button>
-                <button type="button" class="btn-cancel" onclick="browserBack()">إلغاء</button>
+                <button type="button" class="btn-cancel" onclick="closeTopModal()">إلغاء</button>
             </div>
         </form>
     </div>
@@ -505,7 +504,7 @@
             <div class="form-group"><label>الوصف</label><textarea id="adDescription" rows="3"></textarea></div>
             <div class="modal-buttons">
                 <button type="submit" class="btn-submit">نشر</button>
-                <button type="button" class="btn-cancel" onclick="browserBack()">إلغاء</button>
+                <button type="button" class="btn-cancel" onclick="closeTopModal()">إلغاء</button>
             </div>
         </form>
     </div>
@@ -534,7 +533,7 @@
             <div class="form-group"><label>الوصف</label><textarea id="editAdDescription" rows="3"></textarea></div>
             <div class="modal-buttons">
                 <button type="submit" class="btn-submit">حفظ التعديلات</button>
-                <button type="button" class="btn-cancel" onclick="browserBack()">إلغاء</button>
+                <button type="button" class="btn-cancel" onclick="closeTopModal()">إلغاء</button>
             </div>
         </form>
     </div>
@@ -584,14 +583,14 @@
             <div class="comments-list" id="commentsList"></div>
         </div>
 
-        <button type="button" class="btn-cancel" style="width:100%; margin-top:16px; padding: 10px;" onclick="browserBack()">رجوع</button>
+        <button type="button" class="btn-cancel" style="width:100%; margin-top:16px; padding: 10px;" onclick="closeTopModal()">رجوع</button>
     </div>
 </div>
 
 <!-- نافذة تكبير الصورة -->
 <div id="imageLightboxModal" class="modal">
     <img id="lightboxImg" src="" alt="صورة الإعلان">
-    <button type="button" class="btn-cancel" style="margin-top: 14px; padding: 8px 24px; font-size: 0.95rem;" onclick="browserBack()">إغلاق الصورة</button>
+    <button type="button" class="btn-cancel" style="margin-top: 14px; padding: 8px 24px; font-size: 0.95rem;" onclick="closeTopModal()">إغلاق الصورة</button>
 </div>
 
 <!-- نافذة الدردشة المباشرة -->
@@ -599,7 +598,7 @@
     <div class="modal-content" style="max-width: 550px; height: 85vh; display: flex; flex-direction: column;">
         <div class="chat-header-info">
             <div style="display:flex; align-items:center; gap:8px;">
-                <button type="button" onclick="browserBack()" style="background:rgba(255,255,255,0.2); border:none; color:white; border-radius:6px; padding:5px 10px; cursor:pointer; font-weight:bold;">➔</button>
+                <button type="button" onclick="closeTopModal()" style="background:rgba(255,255,255,0.2); border:none; color:white; border-radius:6px; padding:5px 10px; cursor:pointer; font-weight:bold;">➔</button>
                 <div>
                     <span style="font-size: 0.75rem; opacity: 0.85;">محادثة مباشرة</span>
                     <h3 id="chatTargetUser" style="margin:0; font-size: 1.15rem;"></h3>
@@ -622,7 +621,7 @@
     <div class="modal-content" style="max-width: 600px;">
         <h2 style="margin-top:0; font-size: 1.3rem;">رسائلي ومحادثاتي</h2>
         <div id="conversationsList" style="max-height: 350px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding: 10px; background: #f8fafc; border-radius: 8px;"></div>
-        <button type="button" class="btn-cancel" style="width:100%; margin-top:12px; padding: 10px;" onclick="browserBack()">رجوع</button>
+        <button type="button" class="btn-cancel" style="width:100%; margin-top:12px; padding: 10px;" onclick="closeTopModal()">رجوع</button>
     </div>
 </div>
 
@@ -635,7 +634,6 @@
         'حيوانات': ['طيور', 'قطط وكلاب', 'أغنام ومواشٍ', 'مستلزمات وأعلاف']
     };
 
-    // استرجاع المستخدم المحفوظ من المتصفح تلقائياً
     let currentUser = localStorage.getItem('rakhis_user') || null;
     let activeCategory = 'الكل';
     let activeSubcategory = 'الكل';
@@ -646,6 +644,7 @@
     let chatPollInterval = null;
     let lastRenderedMsgCount = 0;
     let modalStack = [];
+    let ignoreNextPopstate = false;
 
     function showToast(message, type = 'success', icon = '✅') {
         const container = document.getElementById('toastContainer');
@@ -662,10 +661,13 @@
         }, 2800);
     }
 
-    // إدارة زر الرجوع (History API)
     window.history.replaceState({ page: 'main' }, '');
 
     window.addEventListener('popstate', function() {
+        if (ignoreNextPopstate) {
+            ignoreNextPopstate = false;
+            return;
+        }
         if (modalStack.length > 0) {
             const topModalId = modalStack.pop();
             const modalEl = document.getElementById(topModalId);
@@ -681,10 +683,24 @@
     function openModal(id) {
         const el = document.getElementById(id);
         if (!el) return;
+        el.style.display = 'flex';
         if (!modalStack.includes(id)) {
-            el.style.display = 'flex';
             modalStack.push(id);
-            window.history.pushState({ modal: id }, '');
+        }
+        window.history.pushState({ modal: id }, '');
+    }
+
+    function closeTopModal(syncHistory = true) {
+        if (modalStack.length === 0) return;
+        const topModalId = modalStack.pop();
+        const el = document.getElementById(topModalId);
+        if (el) el.style.display = 'none';
+        if (topModalId === 'directChatModal') {
+            stopChatPolling();
+        }
+        if (syncHistory && window.history.state && window.history.state.modal === topModalId) {
+            ignoreNextPopstate = true;
+            window.history.back();
         }
     }
 
@@ -696,22 +712,16 @@
             if (oldEl) oldEl.style.display = 'none';
         }
         const newEl = document.getElementById(newId);
-        if (newEl && !modalStack.includes(newId)) {
+        if (newEl) {
             newEl.style.display = 'flex';
-            modalStack.push(newId);
+            if (!modalStack.includes(newId)) modalStack.push(newId);
             window.history.replaceState({ modal: newId }, '');
-        }
-    }
-
-    function browserBack() {
-        if (modalStack.length > 0 || activeProfileUser) {
-            window.history.back();
         }
     }
 
     window.addEventListener('click', function(event) {
         if (event.target && event.target.classList && event.target.classList.contains('modal')) {
-            browserBack();
+            closeTopModal(true);
         }
     });
 
@@ -868,18 +878,22 @@
         const signupPass = document.getElementById('signupPass');
         const signupBio = document.getElementById('signupBio');
         if (!signupUser || !signupPass) return;
-        const res = await fetch('/api/signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: signupUser.value, password: signupPass.value, bio: signupBio ? signupBio.value : '' })
-        });
-        const data = await res.json();
-        showToast(data.message || (res.ok ? 'تم إنشاء الحساب بنجاح' : 'تعذر الإنشاء'), res.ok ? 'success' : 'error', res.ok ? '🎉' : '⚠️');
-        if (res.ok) {
-            browserBack();
-            currentUser = signupUser.value;
-            localStorage.setItem('rakhis_user', currentUser);
-            updateUserUI();
+        try {
+            const res = await fetch('/api/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: signupUser.value.trim(), password: signupPass.value, bio: signupBio ? signupBio.value : '' })
+            });
+            const data = await res.json();
+            showToast(data.message || (res.ok ? 'تم إنشاء الحساب بنجاح' : 'تعذر الإنشاء'), res.ok ? 'success' : 'error', res.ok ? '🎉' : '⚠️');
+            if (res.ok) {
+                currentUser = signupUser.value.trim();
+                localStorage.setItem('rakhis_user', currentUser);
+                updateUserUI();
+                closeTopModal(true);
+            }
+        } catch (err) {
+            showToast('خطأ في الاتصال بالسيرفر', 'error', '⚠️');
         }
     }
 
@@ -888,18 +902,22 @@
         const loginUser = document.getElementById('loginUser');
         const loginPass = document.getElementById('loginPass');
         if (!loginUser || !loginPass) return;
-        const res = await fetch('/api/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: loginUser.value, password: loginPass.value })
-        });
-        const data = await res.json();
-        showToast(data.message || (res.ok ? 'تم تسجيل الدخول' : 'بيانات غير صحيحة'), res.ok ? 'success' : 'error', res.ok ? '🔐' : '⚠️');
-        if (res.ok) {
-            browserBack();
-            currentUser = loginUser.value;
-            localStorage.setItem('rakhis_user', currentUser);
-            updateUserUI();
+        try {
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: loginUser.value.trim(), password: loginPass.value })
+            });
+            const data = await res.json();
+            showToast(data.message || (res.ok ? 'تم تسجيل الدخول' : 'بيانات غير صحيحة'), res.ok ? 'success' : 'error', res.ok ? '🔐' : '⚠️');
+            if (res.ok) {
+                currentUser = loginUser.value.trim();
+                localStorage.setItem('rakhis_user', currentUser);
+                updateUserUI();
+                closeTopModal(true);
+            }
+        } catch (err) {
+            showToast('خطأ في الاتصال بالسيرفر', 'error', '⚠️');
         }
     }
 
@@ -941,12 +959,19 @@
             openModal('loginModal');
             return;
         }
+        populateCitiesDropdowns();
         populateAdSubcategories('adCategory', 'adSubcategory');
         openModal('adModal');
     }
 
     async function handleAddAd(e) {
         e.preventDefault();
+        if (!currentUser) {
+            showToast('يرجى تسجيل الدخول أولاً', 'warning', '🔑');
+            openModal('loginModal');
+            return;
+        }
+
         const adCategory = document.getElementById('adCategory');
         const adSubcategory = document.getElementById('adSubcategory');
         const adTitle = document.getElementById('adTitle');
@@ -956,50 +981,65 @@
         const adDescription = document.getElementById('adDescription');
         const adImages = document.getElementById('adImages');
 
-        if (!adCategory || !adTitle || !adPrice || !adCity || !adPhone) return;
-        const formData = new FormData();
-        formData.append('category', adCategory.value);
-        formData.append('subcategory', adSubcategory ? adSubcategory.value : 'عام');
-        formData.append('title', adTitle.value);
-        formData.append('price', adPrice.value);
-        formData.append('city', adCity.value);
-        formData.append('phone', adPhone.value);
-        formData.append('description', adDescription ? adDescription.value : '');
-        formData.append('username', currentUser);
-        if (adImages && adImages.files) {
-            for (let i = 0; i < adImages.files.length; i++) formData.append('images', adImages.files[i]);
+        if (!adTitle.value.trim() || !adPrice.value.trim() || !adCity.value.trim() || !adPhone.value.trim()) {
+            showToast('يرجى تعبئة العنوان والسعر والمدينة والهاتف', 'warning', '⚠️');
+            return;
         }
 
-        const res = await fetch('/api/ads', { method: 'POST', body: formData });
-        const data = await res.json();
-        showToast(data.message || (res.ok ? 'تم نشر الإعلان' : 'حدث خطأ'), res.ok ? 'success' : 'error', res.ok ? '📢' : '⚠️');
-        if (res.ok) {
-            browserBack();
-            document.getElementById('adForm')?.reset();
-            populateCitiesDropdowns();
-            populateAdSubcategories('adCategory', 'adSubcategory');
-            const searchInput = document.getElementById('searchInput');
-            loadAds(activeCategory, activeSubcategory, searchInput ? searchInput.value : '', activeProfileUser, activeCity);
+        const formData = new FormData();
+        formData.append('category', adCategory ? adCategory.value : 'إلكترونيات');
+        formData.append('subcategory', adSubcategory && adSubcategory.value ? adSubcategory.value : 'عام');
+        formData.append('title', adTitle.value.trim());
+        formData.append('price', adPrice.value.trim());
+        formData.append('city', adCity.value.trim());
+        formData.append('phone', adPhone.value.trim());
+        formData.append('description', adDescription ? adDescription.value : '');
+        formData.append('username', currentUser);
+
+        if (adImages && adImages.files && adImages.files.length > 0) {
+            for (let i = 0; i < adImages.files.length; i++) {
+                formData.append('images', adImages.files[i]);
+            }
+        }
+
+        try {
+            const res = await fetch('/api/ads', { method: 'POST', body: formData });
+            const data = await res.json();
+            showToast(data.message || (res.ok ? 'تم نشر الإعلان بنجاح' : 'تعذر نشر الإعلان'), res.ok ? 'success' : 'error', res.ok ? '📢' : '⚠️');
+            if (res.ok) {
+                document.getElementById('adForm')?.reset();
+                populateCitiesDropdowns();
+                populateAdSubcategories('adCategory', 'adSubcategory');
+                closeTopModal(true);
+                const searchInput = document.getElementById('searchInput');
+                loadAds(activeCategory, activeSubcategory, searchInput ? searchInput.value : '', activeProfileUser, activeCity);
+            }
+        } catch (err) {
+            showToast('حدث خطأ أثناء إرسال الإعلان', 'error', '⚠️');
         }
     }
 
-    // فتح نافذة تعديل الإعلان وتعبئة بياناته الحالية
     function openEditAdModal() {
-        if (!currentAdDetailsObj || currentUser !== currentAdDetailsObj.username) return;
-        document.getElementById('editAdCategory').value = currentAdDetailsObj.category;
+        if (!currentAdDetailsObj) return;
+        if (!currentUser || currentUser.trim() !== String(currentAdDetailsObj.username || '').trim()) {
+            showToast('يمكن لصاحب الإعلان فقط تعديله', 'warning', '⚠️');
+            return;
+        }
+
+        populateCitiesDropdowns();
+        document.getElementById('editAdCategory').value = currentAdDetailsObj.category || 'إلكترونيات';
         populateAdSubcategories('editAdCategory', 'editAdSubcategory');
         document.getElementById('editAdSubcategory').value = currentAdDetailsObj.subcategory || 'عام';
-        document.getElementById('editAdTitle').value = currentAdDetailsObj.title;
-        document.getElementById('editAdPrice').value = currentAdDetailsObj.price;
-        document.getElementById('editAdCity').value = currentAdDetailsObj.city;
-        document.getElementById('editAdPhone').value = currentAdDetailsObj.phone;
+        document.getElementById('editAdTitle').value = currentAdDetailsObj.title || '';
+        document.getElementById('editAdPrice').value = currentAdDetailsObj.price || '';
+        document.getElementById('editAdCity').value = currentAdDetailsObj.city || '';
+        document.getElementById('editAdPhone').value = currentAdDetailsObj.phone || '';
         document.getElementById('editAdDescription').value = currentAdDetailsObj.description || '';
         document.getElementById('editAdImages').value = '';
 
         openModal('editAdModal');
     }
 
-    // حفظ تعديلات الإعلان
     async function handleEditAd(e) {
         e.preventDefault();
         if (!currentAdDetailsObj || !currentUser) return;
@@ -1007,10 +1047,10 @@
         const formData = new FormData();
         formData.append('category', document.getElementById('editAdCategory').value);
         formData.append('subcategory', document.getElementById('editAdSubcategory').value);
-        formData.append('title', document.getElementById('editAdTitle').value);
-        formData.append('price', document.getElementById('editAdPrice').value);
-        formData.append('city', document.getElementById('editAdCity').value);
-        formData.append('phone', document.getElementById('editAdPhone').value);
+        formData.append('title', document.getElementById('editAdTitle').value.trim());
+        formData.append('price', document.getElementById('editAdPrice').value.trim());
+        formData.append('city', document.getElementById('editAdCity').value.trim());
+        formData.append('phone', document.getElementById('editAdPhone').value.trim());
         formData.append('description', document.getElementById('editAdDescription').value);
         formData.append('username', currentUser);
 
@@ -1021,37 +1061,42 @@
             }
         }
 
-        const res = await fetch(`/api/ads/${currentAdDetailsObj.id}`, {
-            method: 'PUT',
-            body: formData
-        });
-        const data = await res.json();
-        showToast(data.message || (res.ok ? 'تم تعديل الإعلان بنجاح' : 'فشل التعديل'), res.ok ? 'success' : 'error', res.ok ? '✏️' : '⚠️');
-        if (res.ok) {
-            // إغلاق نافذة التعديل وتحديث تفاصيل الإعلان والشبكة
-            browserBack();
-            await viewAdDetails(currentAdDetailsObj.id, true);
-            const searchInput = document.getElementById('searchInput');
-            loadAds(activeCategory, activeSubcategory, searchInput ? searchInput.value : '', activeProfileUser, activeCity);
+        try {
+            const res = await fetch(`/api/ads/${encodeURIComponent(currentAdDetailsObj.id)}`, {
+                method: 'PUT',
+                body: formData
+            });
+            const data = await res.json();
+            showToast(data.message || (res.ok ? 'تم تعديل الإعلان بنجاح' : 'فشل تعديل الإعلان'), res.ok ? 'success' : 'error', res.ok ? '✏️' : '⚠️');
+            if (res.ok) {
+                closeTopModal(true);
+                await viewAdDetails(currentAdDetailsObj.id, true);
+                const searchInput = document.getElementById('searchInput');
+                loadAds(activeCategory, activeSubcategory, searchInput ? searchInput.value : '', activeProfileUser, activeCity);
+            }
+        } catch (err) {
+            showToast('حدث خطأ أثناء حفظ التعديلات', 'error', '⚠️');
         }
     }
 
-    // حذف الإعلان
     async function deleteCurrentAd() {
         if (!currentAdDetailsObj || !currentUser) return;
-        const res = await fetch(`/api/ads/${currentAdDetailsObj.id}?username=${encodeURIComponent(currentUser)}`, {
-            method: 'DELETE'
-        });
-        const data = await res.json();
-        showToast(data.message || (res.ok ? 'تم حذف الإعلان' : 'تعذر الحذف'), res.ok ? 'success' : 'error', res.ok ? '🗑️' : '⚠️');
-        if (res.ok) {
-            browserBack(); // إغلاق نافذة التفاصيل
-            const searchInput = document.getElementById('searchInput');
-            loadAds(activeCategory, activeSubcategory, searchInput ? searchInput.value : '', activeProfileUser, activeCity);
+        try {
+            const res = await fetch(`/api/ads/${encodeURIComponent(currentAdDetailsObj.id)}?username=${encodeURIComponent(currentUser)}`, {
+                method: 'DELETE'
+            });
+            const data = await res.json();
+            showToast(data.message || (res.ok ? 'تم حذف الإعلان' : 'تعذر حذف الإعلان'), res.ok ? 'success' : 'error', res.ok ? '🗑️' : '⚠️');
+            if (res.ok) {
+                closeTopModal(true);
+                const searchInput = document.getElementById('searchInput');
+                loadAds(activeCategory, activeSubcategory, searchInput ? searchInput.value : '', activeProfileUser, activeCity);
+            }
+        } catch (err) {
+            showToast('حدث خطأ أثناء حذف الإعلان', 'error', '⚠️');
         }
     }
 
-    // فتح الصورة بحجم كامل
     function openFullImage(src) {
         const imgEl = document.getElementById('lightboxImg');
         if (!imgEl || !src) return;
@@ -1061,71 +1106,78 @@
 
     async function loadAds(category = 'الكل', subcategory = 'الكل', q = '', filterUser = '', city = 'الكل') {
         const url = `/api/ads?category=${encodeURIComponent(category)}&subcategory=${encodeURIComponent(subcategory)}&q=${encodeURIComponent(q)}&username=${encodeURIComponent(filterUser)}&city=${encodeURIComponent(city)}`;
-        const res = await fetch(url);
-        const ads = await res.json();
-        const grid = document.getElementById('adsGrid');
-        if (!grid) return;
-        grid.innerHTML = '';
-        if (filterUser) await updateProfileBanner(filterUser, ads.length);
-        else updateProfileBanner('');
+        try {
+            const res = await fetch(url);
+            const ads = await res.json();
+            const grid = document.getElementById('adsGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            if (filterUser) await updateProfileBanner(filterUser, ads.length);
+            else updateProfileBanner('');
 
-        if (!ads.length) {
-            grid.innerHTML = '<p style="color:#475569; font-size: 0.9rem; text-align: center; grid-column: 1/-1; padding: 15px;">لا توجد إعلانات مطابقة.</p>';
-            return;
-        }
+            if (!ads.length) {
+                grid.innerHTML = '<p style="color:#475569; font-size: 0.9rem; text-align: center; grid-column: 1/-1; padding: 15px;">لا توجد إعلانات مطابقة.</p>';
+                return;
+            }
 
-        ads.forEach(ad => {
-            const firstImage = ad.images && ad.images.length > 0 ? ad.images[0] : '';
-            grid.innerHTML += `
-                <div class="ad-card" onclick="viewAdDetails('${ad.id}')">
-                    <img src="${firstImage}" class="ad-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'120\\' height=\\'100\\'><rect width=\\'120\\' height=\\'100\\' fill=\\'%23e2e8f0\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' font-size=\\'11\\'>بلا صورة</text></svg>'">
-                    <div class="ad-info">
-                        <div class="ad-title">${ad.title}</div>
-                        <div class="ad-sub">${ad.category} • ${ad.subcategory || ''}</div>
-                        <div class="ad-price">${ad.price} TL</div>
-                        <div class="ad-city">📍 ${ad.city}</div>
+            ads.forEach(ad => {
+                const firstImage = ad.images && ad.images.length > 0 ? ad.images[0] : '';
+                grid.innerHTML += `
+                    <div class="ad-card" onclick="viewAdDetails('${ad.id}')">
+                        <img src="${firstImage}" class="ad-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'120\\' height=\\'100\\'><rect width=\\'120\\' height=\\'100\\' fill=\\'%23e2e8f0\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' font-size=\\'11\\'>بلا صورة</text></svg>'">
+                        <div class="ad-info">
+                            <div class="ad-title">${ad.title}</div>
+                            <div class="ad-sub">${ad.category} • ${ad.subcategory || ''}</div>
+                            <div class="ad-price">${ad.price} TL</div>
+                            <div class="ad-city">📍 ${ad.city}</div>
+                        </div>
                     </div>
-                </div>
-            `;
-        });
+                `;
+            });
+        } catch (err) {
+            showToast('تعذر تحميل الإعلانات', 'error', '⚠️');
+        }
     }
 
     async function viewAdDetails(id, skipModalOpen = false) {
-        const res = await fetch(`/api/ads/${id}`);
-        const ad = await res.json();
-        if (res.ok) {
-            currentAdDetailsObj = ad;
-            document.getElementById('detTitle').innerText = ad.title;
-            document.getElementById('detCategory').innerText = ad.category;
-            document.getElementById('detSubcategory').innerText = ad.subcategory || 'عام';
-            document.getElementById('detPrice').innerText = ad.price + ' TL';
-            document.getElementById('detCity').innerText = ad.city;
-            document.getElementById('detPhone').innerText = ad.phone;
-            document.getElementById('detUser').innerText = ad.username;
-            document.getElementById('detDesc').innerText = ad.description;
+        try {
+            const res = await fetch(`/api/ads/${encodeURIComponent(id)}`);
+            const ad = await res.json();
+            if (res.ok) {
+                currentAdDetailsObj = ad;
+                document.getElementById('detTitle').innerText = ad.title;
+                document.getElementById('detCategory').innerText = ad.category;
+                document.getElementById('detSubcategory').innerText = ad.subcategory || 'عام';
+                document.getElementById('detPrice').innerText = ad.price + ' TL';
+                document.getElementById('detCity').innerText = ad.city;
+                document.getElementById('detPhone').innerText = ad.phone;
+                document.getElementById('detUser').innerText = ad.username;
+                document.getElementById('detDesc').innerText = ad.description;
 
-            // إظهار أزرار التعديل والحذف إذا كان المستخدم الحالي هو صاحب الإعلان
-            const isOwner = currentUser && currentUser === ad.username;
-            document.getElementById('ownerControls').style.display = isOwner ? 'flex' : 'none';
-            document.getElementById('quickMsgBox').style.display = isOwner ? 'none' : 'block';
-            document.getElementById('directChatBtn').style.display = isOwner ? 'none' : 'inline-block';
+                const isOwner = Boolean(currentUser && currentUser.trim() === String(ad.username || '').trim());
+                document.getElementById('ownerControls').style.display = isOwner ? 'flex' : 'none';
+                document.getElementById('quickMsgBox').style.display = isOwner ? 'none' : 'block';
+                document.getElementById('directChatBtn').style.display = isOwner ? 'none' : 'inline-block';
 
-            const imgsDiv = document.getElementById('detImages');
-            if (imgsDiv) {
-                imgsDiv.innerHTML = '';
-                (ad.images || []).forEach(img => {
-                    imgsDiv.innerHTML += `<img src="${img}" onclick="openFullImage('${img}')" title="اضغط لتكبير الصورة">`;
-                });
+                const imgsDiv = document.getElementById('detImages');
+                if (imgsDiv) {
+                    imgsDiv.innerHTML = '';
+                    (ad.images || []).forEach(img => {
+                        imgsDiv.innerHTML += `<img src="${img}" onclick="openFullImage('${img}')" title="اضغط لتكبير الصورة">`;
+                    });
+                }
+                loadComments(ad.id);
+                if (!skipModalOpen) {
+                    openModal('detailsModal');
+                }
             }
-            loadComments(ad.id);
-            if (!skipModalOpen) {
-                openModal('detailsModal');
-            }
+        } catch (err) {
+            showToast('تعذر فتح تفاصيل الإعلان', 'error', '⚠️');
         }
     }
 
     async function loadComments(adId) {
-        const res = await fetch(`/api/ads/${adId}/comments`);
+        const res = await fetch(`/api/ads/${encodeURIComponent(adId)}/comments`);
         const comments = await res.json();
         const list = document.getElementById('commentsList');
         if (!list) return;
@@ -1155,7 +1207,7 @@
         const text = input.value.trim();
         if (!text) return;
 
-        const res = await fetch(`/api/ads/${currentAdDetailsObj.id}/comments`, {
+        const res = await fetch(`/api/ads/${encodeURIComponent(currentAdDetailsObj.id)}/comments`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user: currentUser, text })
@@ -1345,10 +1397,10 @@
         loadAds('الكل', 'الكل', '', username, 'الكل');
     }
 
-    // التهيئة عند تحميل الصفحة
-    updateUserUI();
+    updateUserUI();s
     populateCitiesDropdowns();
     populateAdSubcategories('adCategory', 'adSubcategory');
+    populateAdSubcategories('editAdCategory', 'editAdSubcategory');
     loadAds('الكل', 'الكل', '', '', 'الكل');
 </script>
 

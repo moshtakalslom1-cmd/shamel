@@ -27,7 +27,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage, limits: { files: 5 } });
 
-// --- نظام الحفظ الدائم في ملف JSON ---
 const DATA_FILE = path.join(__dirname, 'data.json');
 let users = new Map();
 let ads = [];
@@ -69,14 +68,15 @@ function formatTimeNow() {
 // --- المستخدمون ---
 app.post('/api/signup', (req, res) => {
   const { username, password, bio } = req.body || {};
-  if (!username || !password) {
+  const cleanUser = (username || '').trim();
+  if (!cleanUser || !password) {
     return res.status(400).json({ message: 'يرجى إدخال اسم المستخدم وكلمة المرور' });
   }
-  if (users.has(username)) {
+  if (users.has(cleanUser)) {
     return res.status(400).json({ message: 'اسم المستخدم موجود مسبقاً' });
   }
-  users.set(username, {
-    username,
+  users.set(cleanUser, {
+    username: cleanUser,
     password,
     bio: (bio && bio.trim()) || 'معلن في منصة رخيص',
     joinedAt: new Date().toISOString().slice(0, 10)
@@ -87,7 +87,8 @@ app.post('/api/signup', (req, res) => {
 
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body || {};
-  const user = users.get(username);
+  const cleanUser = (username || '').trim();
+  const user = users.get(cleanUser);
   if (!user || user.password !== password) {
     return res.status(401).json({ message: 'بيانات الدخول غير صحيحة' });
   }
@@ -152,7 +153,8 @@ app.get('/api/ads/:id', (req, res) => {
 
 app.post('/api/ads', upload.array('images', 5), (req, res) => {
   const { category, subcategory, title, price, city, phone, description, username } = req.body || {};
-  if (!title || !price || !city || !phone || !username) {
+  const cleanUser = (username || '').trim();
+  if (!title || !price || !city || !phone || !cleanUser) {
     return res.status(400).json({ message: 'يرجى تعبئة جميع الحقول المطلوبة' });
   }
 
@@ -161,12 +163,12 @@ app.post('/api/ads', upload.array('images', 5), (req, res) => {
     id: String(Date.now()),
     category: category || 'إلكترونيات',
     subcategory: subcategory || 'عام',
-    title,
-    price,
-    city,
-    phone,
+    title: String(title).trim(),
+    price: String(price).trim(),
+    city: String(city).trim(),
+    phone: String(phone).trim(),
     description: description || '',
-    username,
+    username: cleanUser,
     images: uploadedImages,
     comments: []
   };
@@ -176,22 +178,21 @@ app.post('/api/ads', upload.array('images', 5), (req, res) => {
   return res.json({ message: 'تم نشر الإعلان بنجاح', ad: newAd });
 });
 
-// تعديل إعلان قائم
 app.put('/api/ads/:id', upload.array('images', 5), (req, res) => {
   const adIndex = ads.findIndex((a) => String(a.id) === String(req.params.id));
   if (adIndex === -1) return res.status(404).json({ message: 'الإعلان غير موجود' });
 
   const { category, subcategory, title, price, city, phone, description, username } = req.body || {};
-  if (ads[adIndex].username !== username) {
+  if (String(ads[adIndex].username || '').trim() !== String(username || '').trim()) {
     return res.status(403).json({ message: 'غير مصرح لك بتعديل هذا الإعلان' });
   }
 
   ads[adIndex].category = category || ads[adIndex].category;
   ads[adIndex].subcategory = subcategory || ads[adIndex].subcategory;
-  ads[adIndex].title = title || ads[adIndex].title;
-  ads[adIndex].price = price || ads[adIndex].price;
-  ads[adIndex].city = city || ads[adIndex].city;
-  ads[adIndex].phone = phone || ads[adIndex].phone;
+  ads[adIndex].title = title ? String(title).trim() : ads[adIndex].title;
+  ads[adIndex].price = price ? String(price).trim() : ads[adIndex].price;
+  ads[adIndex].city = city ? String(city).trim() : ads[adIndex].city;
+  ads[adIndex].phone = phone ? String(phone).trim() : ads[adIndex].phone;
   ads[adIndex].description = description !== undefined ? description : ads[adIndex].description;
 
   if (req.files && req.files.length > 0) {
@@ -202,13 +203,12 @@ app.put('/api/ads/:id', upload.array('images', 5), (req, res) => {
   return res.json({ message: 'تم تحديث الإعلان بنجاح', ad: ads[adIndex] });
 });
 
-// حذف إعلان
 app.delete('/api/ads/:id', (req, res) => {
   const adIndex = ads.findIndex((a) => String(a.id) === String(req.params.id));
   if (adIndex === -1) return res.status(404).json({ message: 'الإعلان غير موجود' });
 
   const { username } = req.query;
-  if (ads[adIndex].username !== username) {
+  if (String(ads[adIndex].username || '').trim() !== String(username || '').trim()) {
     return res.status(403).json({ message: 'غير مصرح لك بحذف هذا الإعلان' });
   }
 

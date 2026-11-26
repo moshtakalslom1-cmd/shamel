@@ -1,9 +1,230 @@
-<!DOCTYPE html>
+<header>
+    <div class="header-inner">
+      <div class="brand" onclick="goHome()">
+        <div class="brand-badge">✦</div>
+        <div>
+          <div class="brand-title">رخيص والسوق الشامل</div>
+          <div class="brand-sub">إعلانات سريعة • تواصل مباشر</div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="btn btn-gold" onclick="openAdForm()">+ إعلان</button>
+        <button class="btn btn-diamond" onclick="openChatModal()">💬 الدردشات</button>
+        <button class="btn" onclick="openProfileModal()">
+          <img id="headerAvatar" class="avatar-mini" src="https://api.dicebear.com/7.x/avataaars/svg?seed=user" alt="Avatar" />
+          <span>ملفك</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="toolbar">
+      <input id="searchInput" class="input" type="search" placeholder="بحث سريع في الإعلانات..." oninput="renderAds()" />
+      <select id="cityFilter" class="select" onchange="renderAds()">
+        <option value="">كل المدن</option>
+        <option value="دمشق">دمشق</option>
+        <option value="حلب">حلب</option>
+        <option value="حمص">حمص</option>
+        <option value="اللاذقية">اللاذقية</option>
+        <option value="أنطاليا">أنطاليا</option>
+        <option value="إسطنبول">إسطنبول</option>
+        <option value="غازي عنتاب">غازي عنتاب</option>
+      </select>
+      <select id="conditionFilter" class="select" onchange="renderAds()">
+        <option value="">كل الحالات</option>
+        <option value="جديد">جديد</option>
+        <option value="مستعمل">مستعمل</option>
+      </select>
+      <select id="sortSelect" class="select" onchange="renderAds()">
+        <option value="newest">الأحدث أولاً</option>
+        <option value="price-asc">الأقل سعراً</option>
+        <option value="price-desc">الأعلى سعراً</option>
+      </select>
+    </section>
+
+    <section id="categoriesStrip" class="categories-strip"></section>
+    <section id="adsGrid" class="ads-grid"></section>
+  </main>
+
+  <!-- نافذة تفاصيل الإعلان -->
+  <div id="detailsModal" class="modal-backdrop" onclick="handleBackdropClick(event, 'details')">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div id="detailTitle" class="modal-title">تفاصيل الإعلان</div>
+        <button class="btn" onclick="closeActiveModal()">✕</button>
+      </div>
+      <div id="detailContent"></div>
+    </div>
+  </div>
+
+  <!-- نافذة إضافة وتعديل الإعلان -->
+  <div id="adFormModal" class="modal-backdrop" onclick="handleBackdropClick(event, 'adForm')">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div id="adFormTitle" class="modal-title">إضافة إعلان جديد</div>
+        <button class="btn" onclick="closeActiveModal()">✕</button>
+      </div>
+      <form id="adForm" onsubmit="submitAdForm(event)">
+        <input type="hidden" id="editAdId" />
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="adTitle">عنوان الإعلان</label>
+            <input id="adTitle" class="input" type="text" required placeholder="مثال: كرت شاشة أو هاتف..." />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="adPrice">السعر</label>
+            <input id="adPrice" class="input" type="number" min="0" step="any" required placeholder="0" />
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="adCategory">القسم</label>
+            <select id="adCategory" class="select" required></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="adCondition">الحالة</label>
+            <select id="adCondition" class="select">
+              <option value="مستعمل">مستعمل</option>
+              <option value="جديد">جديد</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="adCurrency">العملة</label>
+            <select id="adCurrency" class="select">
+              <option value="USD">USD ($)</option>
+              <option value="TRY">TRY (₺)</option>
+              <option value="SYP">SYP</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="adCity">المدينة</label>
+            <input id="adCity" class="input" type="text" placeholder="مثال: أنطاليا أو دمشق..." />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="adNeighbourhood">الحي / المنطقة</label>
+            <input id="adNeighbourhood" class="input" type="text" placeholder="اختياري..." />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="adDescription">الوصف والتفاصيل</label>
+          <textarea id="adDescription" class="textarea" rows="3" placeholder="اكتب تفاصيل المنتج وحالته وطريقة التواصل..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="adImageFile">صورة من الجهاز أو رابط صورة</label>
+          <input id="adImageFile" class="input" type="file" accept="image/*" onchange="handleImageFile(event, 'ad')" />
+          <input id="adImageUrl" class="input" type="url" placeholder="أو الصق رابط صورة مباشر (https://...)" oninput="handleImageUrl(event)" style="margin-top: 8px;" />
+          <div id="adImagePreviewBox" class="preview-box" style="display: none;">
+            <img id="adImagePreview" src="" alt="معاينة الصورة" />
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px;">
+          <button type="button" class="btn" onclick="closeActiveModal()">إلغاء</button>
+          <button type="submit" class="btn btn-gold">حفظ ونشر</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- نافذة الدردشة والرسائل الصوتية وقائمة الحظر -->
+  <div id="chatModal" class="modal-backdrop" onclick="handleBackdropClick(event, 'chat')">
+    <div class="modal-box" style="max-width: 860px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div id="chatModalTitle" class="modal-title">💬 الدردشة المباشرة</div>
+        <div style="display: flex; gap: 8px;">
+          <button id="toggleBlockBtn" type="button" class="btn btn-danger" onclick="toggleBlockCurrentPeer()">🚫 حظر</button>
+          <button class="btn" onclick="closeActiveModal()">✕</button>
+        </div>
+      </div>
+
+      <div class="chat-container">
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <input
+            class="input"
+            type="text"
+            placeholder="اسم مستخدم جديد + Enter..."
+            onkeydown="if(event.key==='Enter'){event.preventDefault();addOrSelectPeer(this.value);this.value='';}"
+          />
+          <div id="chatUserList" class="chat-user-list"></div>
+        </div>
+
+        <div class="chat-main">
+          <div id="chatMessages" class="chat-messages"></div>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;">
+            <button type="button" class="btn" style="padding: 4px 10px; font-size: 0.78rem;" onclick="insertQuickPhrase('هل المنتج لا يزال متوفراً؟')">هل المنتج متوفر؟</button>
+            <button type="button" class="btn" style="padding: 4px 10px; font-size: 0.78rem;" onclick="insertQuickPhrase('ما هو السعر النهائي؟')">السعر النهائي؟</button>
+            <button type="button" class="btn" style="padding: 4px 10px; font-size: 0.78rem;" onclick="insertQuickPhrase('ممكن المعاينة والتسليم اليوم؟')">التسليم اليوم؟</button>
+          </div>
+
+          <form onsubmit="sendChatMessage(event)" style="display: flex; gap: 8px; margin-top: 8px;">
+            <button id="voiceRecordBtn" type="button" class="btn btn-diamond" onclick="toggleVoiceRecording()" title="تسجيل صوتي">🎙️</button>
+            <input id="chatTextInput" class="input" type="text" placeholder="اكتب رسالتك هنا..." required />
+            <button type="submit" class="btn btn-gold">إرسال</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="blocked-list">
+        <div class="form-label">قائمة المحظورين</div>
+        <div id="blockedUsersContainer" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة الملف الشخصي -->
+  <div id="profileModal" class="modal-backdrop" onclick="handleBackdropClick(event, 'profile')">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title">👤 الملف الشخصي</div>
+        <button class="btn" onclick="closeActiveModal()">✕</button>
+      </div>
+      <form onsubmit="saveProfile(event)">
+        <div class="form-group">
+          <label class="form-label" for="profileName">الاسم الظاهر</label>
+          <input id="profileName" class="input" type="text" required placeholder="اكتب اسمك..." />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="profileCity">المدينة</label>
+          <input id="profileCity" class="input" type="text" placeholder="مثال: أنطاليا..." />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="profileBio">نبذة تعريفية</label>
+          <textarea id="profileBio" class="textarea" rows="2" placeholder="نبذة قصيرة عنك..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="profileAvatarFile">صورة رمزية من الجهاز</label>
+          <input id="profileAvatarFile" class="input" type="file" accept="image/*" onchange="handleImageFile(event, 'avatar')" />
+          <div class="preview-box" style="max-height: 120px;">
+            <img id="profileAvatarPreview" src="" alt="الصورة الرمزية" />
+          </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px;">
+          <button type="button" class="btn" onclick="closeActiveModal()">إلغاء</button>
+          <button type="submit" class="btn btn-gold">حفظ الملف</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="app.js"></script>
+</body>
+</html><!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>رخيص والسوق الشامل — المنظمة الفاخرة</title>
+  <title>رخيص والسوق الشامل — المنصة المتكاملة</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -12,7 +233,7 @@
       --bg-dark: #07090e;
       --bg-card: #0d111a;
       --bg-elevated: #131824;
-      --border-subtle: rgba(245, 196, 81, 0.18);
+      --border-subtle: rgba(245, 196, 81, 0.2);
       --gold: #f5c451;
       --gold-deep: #b8861b;
       --silver: #cbd5e1;
@@ -21,148 +242,564 @@
       --text-muted: #94a3b8;
       --danger: #ef4444;
       --success: #22c55e;
-      --radius-lg: 12px;
-      --radius-md: 8px;
+      --radius-lg: 14px;
+      --radius-md: 9px;
+      --shadow-lux: 0 10px 28px rgba(0, 0, 0, 0.7);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+    }
 
     html, body {
-      background: var(--bg-dark);
+      background: radial-gradient(circle at top right, #131a2c 0%, var(--bg-dark) 72%);
       color: var(--text-main);
       min-height: 100vh;
       overflow-x: hidden;
       font-size: 14px;
     }
 
+    /* الهيدر */
     header {
-      position: sticky; top: 0; z-index: 50;
+      position: sticky;
+      top: 0;
+      z-index: 50;
       background: rgba(9, 12, 18, 0.95);
-      backdrop-filter: blur(15px);
-      border-bottom: 1px solid var(--border-subtle);
-      padding: 8px 12px;
+      backdrop-filter: blur(14px);
+      border-bottom: 1.5px solid var(--gold);
+      padding: 8px 14px;
     }
 
     .header-inner {
-      max-width: 1400px; margin: 0 auto; display: flex;
-      flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px;
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
     }
 
-    .brand { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
 
     .brand-badge {
-      width: 36px; height: 36px; border-radius: 8px;
-      background: linear-gradient(135deg, var(--gold), var(--gold-deep));
-      display: grid; place-items: center; font-weight: 800; color: #07090e; font-size: 1.1rem;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-deep) 60%, var(--diamond));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: #07090e;
+      font-size: 1.1rem;
+      box-shadow: 0 0 16px rgba(245, 196, 81, 0.35);
     }
 
     .brand-title {
-      font-size: 1.1rem; font-weight: 800;
-      background: linear-gradient(90deg, var(--gold), #fff);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      font-size: 1.05rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--gold), #fff, var(--diamond));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .brand-sub { font-size: 0.7rem; color: var(--silver); }
+    .brand-sub {
+      font-size: 0.72rem;
+      color: var(--silver);
+    }
 
-    .header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
 
+    /* الأزرار */
     .btn {
-      border: 1px solid var(--border-subtle); background: var(--bg-elevated);
-      color: var(--text-main); padding: 6px 12px; border-radius: var(--radius-md);
-      font-size: 0.85rem; font-weight: 700; cursor: pointer; display: inline-flex;
-      align-items: center; gap: 4px; transition: all 0.2s ease;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      padding: 6px 12px;
+      border-radius: var(--radius-md);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
     }
 
-    .btn:hover { border-color: var(--gold); }
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--gold);
+    }
 
-    .btn-gold { background: var(--gold); color: #07090e; border: none; }
-    .btn-diamond { border-color: var(--diamond); color: var(--diamond); }
-    .btn-danger { border-color: var(--danger); color: #fca5a5; }
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold), #e0a82e);
+      color: #07090e;
+      border: none;
+      box-shadow: 0 4px 14px rgba(245, 196, 81, 0.25);
+    }
 
-    .container { max-width: 1400px; margin: 0 auto; padding: 12px; }
+    .btn-diamond {
+      background: linear-gradient(135deg, rgba(125, 211, 252, 0.15), rgba(203, 213, 225, 0.1));
+      border-color: rgba(125, 211, 252, 0.45);
+      color: var(--diamond);
+    }
 
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.16);
+      border-color: rgba(239, 68, 68, 0.55);
+      color: #fca5a5;
+    }
+
+    .avatar-mini {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid var(--gold);
+    }
+
+    /* الحاوية الرئيسية */
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 12px 14px 32px;
+    }
+
+    /* شريط البحث والفلاتر */
     .toolbar {
-      background: var(--bg-card); border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg); padding: 10px; display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; margin-bottom: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 8px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow-lux);
     }
 
     .input, .select, .textarea {
-      width: 100%; background: var(--bg-dark); border: 1px solid var(--border-subtle);
-      color: var(--text-main); padding: 8px 12px; border-radius: var(--radius-md);
-      font-size: 0.85rem; outline: none;
+      width: 100%;
+      background: var(--bg-dark);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 7px 11px;
+      border-radius: var(--radius-md);
+      font-size: 0.84rem;
+      outline: none;
+      transition: border-color 0.2s ease;
     }
-    .input:focus, .select:focus { border-color: var(--gold); }
 
+    .input:focus, .select:focus, .textarea:focus {
+      border-color: var(--gold);
+    }
+
+    /* شريط الأقسام المتراص دون تمرير أفقي مزعج */
     .categories-strip {
-      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
     }
 
     .cat-chip {
-      padding: 6px 12px; border-radius: 999px; background: var(--bg-card);
-      border: 1px solid var(--border-subtle); color: var(--silver);
-      font-size: 0.8rem; font-weight: 700; cursor: pointer;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: var(--bg-card);
+      border: 1px solid rgba(203, 213, 225, 0.2);
+      color: var(--silver);
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
-    .cat-chip.active { border-color: var(--gold); color: var(--gold); }
 
+    .cat-chip.active {
+      background: linear-gradient(135deg, rgba(245, 196, 81, 0.25), rgba(125, 211, 252, 0.15));
+      border-color: var(--gold);
+      color: var(--gold);
+      box-shadow: 0 0 12px rgba(245, 196, 81, 0.2);
+    }
+
+    /* شبكة الإعلانات: 4 أعمدة في السطر */
     .ads-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
     }
-    @media (max-width: 1200px) { .ads-grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 900px) { .ads-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 600px) { .ads-grid { grid-template-columns: 1fr; } }
+
+    @media (max-width: 1150px) {
+      .ads-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 820px) {
+      .ads-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 480px) {
+      .ads-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    }
 
     .ad-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle); border-radius: var(--radius-lg);
-      overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
-      cursor: pointer; transition: transform 0.15s;
+      background: linear-gradient(180deg, rgba(16, 21, 33, 0.96) 0%, rgba(10, 13, 20, 0.99) 100%);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: var(--shadow-lux);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+      cursor: pointer;
     }
-    .ad-card:hover { transform: translateY(-2px); border-color: var(--gold); }
 
-    .ad-img-wrap { position: relative; height: 130px; background: #07090e; }
-    .ad-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .ad-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+    }
+
+    .ad-img-wrap {
+      position: relative;
+      height: 115px;
+      background: #07090e;
+      overflow: hidden;
+    }
+
+    .ad-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
 
     .ad-badge-cat {
-      position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.8);
-      border: 1px solid var(--diamond); color: var(--diamond); padding: 2px 8px;
-      border-radius: 999px; font-size: 0.7rem;
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(7, 9, 14, 0.85);
+      border: 1px solid rgba(125, 211, 252, 0.45);
+      color: var(--diamond);
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 700;
     }
 
-    .ad-body { padding: 10px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
-    .ad-title { font-size: 0.95rem; font-weight: 700; line-height: 1.3; }
-    .ad-price { font-size: 1rem; font-weight: 800; color: var(--gold); }
-    .ad-meta { font-size: 0.75rem; color: var(--text-muted); display: flex; justify-content: space-between; }
+    .ad-body {
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
 
-    .ad-footer { padding: 8px 10px; border-top: 1px solid var(--border-subtle); display: flex; gap: 4px; }
-    .ad-footer .btn { padding: 4px 8px; font-size: 0.75rem; }
+    .ad-title {
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
+    .ad-price {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .ad-meta {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ad-footer {
+      padding: 6px 8px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      gap: 4px;
+    }
+
+    .ad-footer .btn {
+      flex: 1;
+      justify-content: center;
+      padding: 4px 6px;
+      font-size: 0.72rem;
+      gap: 3px;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 40px 16px;
+      background: var(--bg-card);
+      border: 1px dashed var(--border-subtle);
+      border-radius: var(--radius-lg);
+      color: var(--text-muted);
+    }
+
+    /* النوافذ المنبثقة */
     .modal-backdrop {
-      position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.8);
-      display: none; align-items: center; justify-content: center; padding: 10px; overflow-y: auto;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(5, 7, 11, 0.85);
+      backdrop-filter: blur(7px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      overflow-y: auto;
     }
-    .modal-backdrop.open { display: flex; }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
     .modal-box {
-      width: 100%; max-width: 600px; background: var(--bg-card);
-      border: 1px solid var(--gold); border-radius: var(--radius-lg); padding: 16px;
+      width: 100%;
+      max-width: 780px;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: var(--bg-card);
+      border: 1px solid rgba(245, 196, 81, 0.45);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
     }
-    .modal-header { display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-subtle); padding-bottom: 8px; margin-bottom: 12px; }
-    .modal-title { font-size: 1.1rem; font-weight: 800; color: var(--gold); }
 
-    .chat-container { display: grid; grid-template-columns: 180px 1fr; gap: 10px; height: 50vh; }
-    .chat-user-list { background: var(--bg-dark); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 6px; overflow-y: auto; }
-    .user-item { padding: 8px; border-radius: var(--radius-md); cursor: pointer; font-size: 0.85rem; }
-    .user-item.active { background: var(--bg-elevated); color: var(--gold); }
-    .chat-messages { background: var(--bg-dark); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 10px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 6px; }
-    .msg-bubble { max-width: 85%; padding: 8px 12px; border-radius: 12px; font-size: 0.85rem; }
-    .msg-me { align-self: flex-start; background: var(--gold); color: #07090e; font-weight: 600; }
-    .msg-other { align-self: flex-end; background: var(--bg-elevated); border: 1px solid var(--diamond); }
-    .msg-time { display: block; font-size: 0.65rem; opacity: 0.7; margin-top: 2px; }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+      gap: 8px;
+    }
 
-    .toast-container { position: fixed; bottom: 12px; left: 12px; right: 12px; z-index: 200; display: flex; flex-direction: column; align-items: center; gap: 6px; pointer-events: none; }
-    .toast { pointer-events: auto; max-width: 400px; width: 100%; background: #111622; border: 1px solid var(--gold); color: var(--text-main); padding: 10px 16px; border-radius: var(--radius-md); font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; }
+    .modal-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+
+    .form-label {
+      font-size: 0.8rem;
+      color: var(--silver);
+      font-weight: 700;
+    }
+
+    .preview-box {
+      margin-top: 6px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px dashed var(--gold);
+      max-height: 180px;
+      background: var(--bg-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+    }
+
+    .preview-box img {
+      max-width: 100%;
+      max-height: 165px;
+      object-fit: contain;
+    }
+
+    /* الدردشة */
+    .chat-container {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 12px;
+      height: 52vh;
+      min-height: 320px;
+    }
+
+    @media (max-width: 650px) {
+      .chat-container {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+      .chat-user-list {
+        max-height: 110px;
+      }
+      .chat-messages {
+        height: 240px;
+      }
+    }
+
+    .chat-user-list {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 8px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .user-item {
+      padding: 7px 10px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.2s;
+      border: 1px solid transparent;
+      font-size: 0.84rem;
+    }
+
+    .user-item:hover {
+      background: var(--bg-elevated);
+    }
+
+    .user-item.active {
+      background: linear-gradient(135deg, rgba(245, 196, 81, 0.2), transparent);
+      border-color: var(--gold);
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .chat-main {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .chat-messages {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 10px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .msg-bubble {
+      max-width: 82%;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 0.84rem;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .msg-me {
+      align-self: flex-start;
+      background: linear-gradient(135deg, var(--gold), #e0a82e);
+      color: #07090e;
+      font-weight: 700;
+    }
+
+    .msg-other {
+      align-self: flex-end;
+      background: var(--bg-elevated);
+      border: 1px solid rgba(125, 211, 252, 0.35);
+      color: var(--text-main);
+    }
+
+    .msg-time {
+      display: block;
+      font-size: 0.65rem;
+      opacity: 0.72;
+      margin-top: 3px;
+      text-align: left;
+    }
+
+    .blocked-list {
+      margin-top: 12px;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 10px;
+    }
+
+    .blocked-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(239, 68, 68, 0.14);
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      color: #fecaca;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+    }
+
+    /* التنبيهات */
+    .toast-container {
+      position: fixed;
+      bottom: 14px;
+      left: 14px;
+      right: 14px;
+      z-index: 200;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .toast {
+      pointer-events: auto;
+      max-width: 440px;
+      width: 100%;
+      background: #111622;
+      border: 1px solid var(--gold);
+      color: var(--text-main);
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .toast.error { border-color: var(--danger); color: #fecaca; }
+    .toast.success { border-color: var(--success); color: #bbf7d0; }
   </style>
 </head>
 <body>
@@ -180,7 +817,10 @@
       <div class="header-actions">
         <button class="btn btn-gold" onclick="openAdForm()">+ إعلان</button>
         <button class="btn btn-diamond" onclick="openChatModal()">💬 الدردشات</button>
-        <button class="btn" onclick="openProfileModal()">👤 ملفك</button>
+        <button class="btn" onclick="openProfileModal()">
+          <img id="headerAvatar" class="avatar-mini" src="https://api.dicebear.com/7.x/avataaars/svg?seed=user" alt="Avatar" />
+          <span id="headerUsername">ملفك</span>
+        </button>
       </div>
     </div>
   </header>
@@ -192,17 +832,20 @@
         <option value="">كل المدن</option>
         <option value="دمشق">دمشق</option>
         <option value="حلب">حلب</option>
+        <option value="حمص">حمص</option>
+        <option value="اللاذقية">اللاذقية</option>
         <option value="أنطاليا">أنطاليا</option>
         <option value="إسطنبول">إسطنبول</option>
       </select>
       <select id="conditionFilter" class="select" onchange="renderAds()">
-        <option value="">الحالة</option>
+        <option value="">كل الحالات</option>
         <option value="جديد">جديد</option>
         <option value="مستعمل">مستعمل</option>
       </select>
       <select id="sortSelect" class="select" onchange="renderAds()">
-        <option value="newest">الأحدث</option>
-        <option value="price-asc">الأرخص</option>
+        <option value="newest">الأحدث أولاً</option>
+        <option value="price-asc">الأقل سعراً</option>
+        <option value="price-desc">الأعلى سعراً</option>
       </select>
     </section>
 
@@ -210,82 +853,168 @@
     <section id="adsGrid" class="ads-grid"></section>
   </main>
 
+  <!-- نافذة تفاصيل الإعلان -->
   <div id="detailsModal" class="modal-backdrop" onclick="handleBackdropClick(event, 'details')">
     <div class="modal-box" onclick="event.stopPropagation()">
       <div class="modal-header">
-        <div id="detailTitle" class="modal-title">تفاصل الإعلان</div>
+        <div id="detailTitle" class="modal-title">تفاصيل الإعلان</div>
         <button class="btn" onclick="closeActiveModal()">✕</button>
       </div>
       <div id="detailContent"></div>
     </div>
   </div>
 
+  <!-- نافذة إضافة وتعديل الإعلان -->
   <div id="adFormModal" class="modal-backdrop" onclick="handleBackdropClick(event, 'adForm')">
     <div class="modal-box" onclick="event.stopPropagation()">
       <div class="modal-header">
-        <div id="adFormTitle" class="modal-title">إضافة إعلان</div>
+        <div id="adFormTitle" class="modal-title">إضافة إعلان جديد</div>
         <button class="btn" onclick="closeActiveModal()">✕</button>
       </div>
       <form id="adForm" onsubmit="submitAdForm(event)">
         <input type="hidden" id="editAdId" />
-        <div style="display:grid; grid-template-columns:1fr 120px; gap:8px;">
-          <div class="input-group"><input id="adTitle" class="input" type="text" required placeholder="العنوان..." /></div>
-          <div class="input-group"><input id="adPrice" class="input" type="number" required placeholder="السعر..." /></div>
-        </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:8px;">
-          <select id="adCategory" class="select" required></select>
-          <select id="adCondition" class="select"><option value="مستعمل">مستعمل</option><option value="جديد">جديد</option></select>
-          <select id="adCurrency" class="select"><option value="USD">$</option><option value="SYP">SYP</option><option value="TRY">TRY</option></select>
-        </div>
-        <input id="adCity" class="input" type="text" placeholder="المدينة..." style="margin-top:8px;" />
-        <textarea id="adDescription" class="textarea" rows="2" placeholder="الوصف..." style="margin-top:8px;"></textarea>
-        
-        <div style="margin-top:8px;">
-          <input id="adImageFile" class="input" type="file" accept="image/*" onchange="handleImageFile(event, 'ad')" />
-          <div id="adImagePreviewBox" class="preview-box" style="display:none;margin-top:4px;"><img id="adImagePreview" src="" style="max-height:100px;" /></div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="adTitle">عنوان الإعلان</label>
+            <input id="adTitle" class="input" type="text" required placeholder="مثال: كرت شاشة أو هاتف..." />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="adPrice">السعر</label>
+            <input id="adPrice" class="input" type="number" min="0" step="any" required placeholder="0" />
+          </div>
         </div>
 
-        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="adCategory">القسم</label>
+            <select id="adCategory" class="select" required></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="adCondition">الحالة</label>
+            <select id="adCondition" class="select">
+              <option value="مستعمل">مستعمل</option>
+              <option value="جديد">جديد</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="adCurrency">العملة</label>
+            <select id="adCurrency" class="select">
+              <option value="USD">USD ($)</option>
+              <option value="TRY">TRY (₺)</option>
+              <option value="SYP">SYP</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="adCity">المدينة</label>
+            <input id="adCity" class="input" type="text" placeholder="مثال: أنطاليا أو دمشق..." />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="adNeighbourhood">الحي / المنطقة</label>
+            <input id="adNeighbourhood" class="input" type="text" placeholder="اختياري..." />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="adDescription">الوصف والتفاصيل</label>
+          <textarea id="adDescription" class="textarea" rows="3" placeholder="اكتب تفاصيل المنتج وحالته..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="adImageFile">صورة من الجهاز أو رابط صورة</label>
+          <input id="adImageFile" class="input" type="file" accept="image/*" onchange="handleImageFile(event, 'ad')" />
+          <input id="adImageUrl" class="input" type="url" placeholder="أو رابط صورة مباشر (https://...)" oninput="handleImageUrl(event)" style="margin-top: 6px;" />
+          <div id="adImagePreviewBox" class="preview-box" style="display: none;">
+            <img id="adImagePreview" src="" alt="معاينة الصورة" />
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px;">
           <button type="button" class="btn" onclick="closeActiveModal()">إلغاء</button>
-          <button type="submit" class="btn btn-gold">حفظ</button>
+          <button type="submit" class="btn btn-gold">حفظ ونشر</button>
         </div>
       </form>
     </div>
   </div>
 
+  <!-- نافذة الدردشة والرسائل الصوتية وقائمة الحظر -->
   <div id="chatModal" class="modal-backdrop" onclick="handleBackdropClick(event, 'chat')">
-    <div class="modal-box" style="max-width:800px;" onclick="event.stopPropagation()">
+    <div class="modal-box" style="max-width: 860px;" onclick="event.stopPropagation()">
       <div class="modal-header">
-        <div id="chatModalTitle" class="modal-title">💬 الدردشة</div>
-        <button id="toggleBlockBtn" type="button" class="btn btn-danger" onclick="toggleBlockCurrentPeer()">🚫 حظر</button>
-        <button class="btn" onclick="closeActiveModal()">✕</button>
+        <div id="chatModalTitle" class="modal-title">💬 الدردشة المباشرة</div>
+        <div style="display: flex; gap: 6px;">
+          <button id="toggleBlockBtn" type="button" class="btn btn-danger" onclick="toggleBlockCurrentPeer()">🚫 حظر</button>
+          <button class="btn" onclick="closeActiveModal()">✕</button>
+        </div>
       </div>
+
       <div class="chat-container">
-        <div style="display:flex; flex-direction:column; gap:6px;">
-          <input class="input" placeholder="مستخدم جديد..." onkeydown="if(event.key==='Enter'){event.preventDefault();addOrSelectPeer(this.value);this.value='';}" />
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <input
+            class="input"
+            type="text"
+            placeholder="اسم مستخدم + Enter..."
+            onkeydown="if(event.key==='Enter'){event.preventDefault();addOrSelectPeer(this.value);this.value='';}"
+          />
           <div id="chatUserList" class="chat-user-list"></div>
         </div>
-        <div style="display:flex; flex-direction:column; justify-content:space-between;">
+
+        <div class="chat-main">
           <div id="chatMessages" class="chat-messages"></div>
-          <form onsubmit="sendChatMessage(event)" style="display:flex; gap:6px; margin-top:8px;">
-            <button id="voiceRecordBtn" type="button" class="btn btn-diamond" onclick="toggleVoiceRecording()">🎙️</button>
-            <input id="chatTextInput" class="input" placeholder="رسالة..." required />
+
+          <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px;">
+            <button type="button" class="btn" style="padding: 3px 9px; font-size: 0.74rem;" onclick="insertQuickPhrase('هل المنتج لا يزال متوفراً؟')">متوفر؟</button>
+            <button type="button" class="btn" style="padding: 3px 9px; font-size: 0.74rem;" onclick="insertQuickPhrase('ما هو السعر النهائي؟')">السعر النهائي؟</button>
+            <button type="button" class="btn" style="padding: 3px 9px; font-size: 0.74rem;" onclick="insertQuickPhrase('ممكن المعاينة والتسليم اليوم؟')">التسليم اليوم؟</button>
+          </div>
+
+          <form onsubmit="sendChatMessage(event)" style="display: flex; gap: 6px; margin-top: 6px;">
+            <button id="voiceRecordBtn" type="button" class="btn btn-diamond" onclick="toggleVoiceRecording()" title="تسجيل صوتي">🎙️</button>
+            <input id="chatTextInput" class="input" type="text" placeholder="اكتب رسالتك..." required />
             <button type="submit" class="btn btn-gold">إرسال</button>
           </form>
         </div>
       </div>
+
+      <div class="blocked-list">
+        <div class="form-label">قائمة المحظورين</div>
+        <div id="blockedUsersContainer" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;"></div>
+      </div>
     </div>
   </div>
 
+  <!-- نافذة الملف الشخصي -->
   <div id="profileModal" class="modal-backdrop" onclick="handleBackdropClick(event, 'profile')">
     <div class="modal-box" onclick="event.stopPropagation()">
-      <div class="modal-header"><div class="modal-title">👤 الملف الشخصي</div><button class="btn" onclick="closeActiveModal()">✕</button></div>
+      <div class="modal-header">
+        <div class="modal-title">👤 الملف الشخصي</div>
+        <button class="btn" onclick="closeActiveModal()">✕</button>
+      </div>
       <form onsubmit="saveProfile(event)">
-        <input id="profileName" class="input" type="text" required placeholder="الاسم الظاهر..." />
-        <input id="profileCity" class="input" type="text" placeholder="المدينة..." style="margin-top:8px;" />
-        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
+        <div class="form-group">
+          <label class="form-label" for="profileName">الاسم الظاهر</label>
+          <input id="profileName" class="input" type="text" required placeholder="اكتب اسمك..." />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="profileCity">المدينة</label>
+          <input id="profileCity" class="input" type="text" placeholder="مثال: أنطاليا..." />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="profileBio">نبذة تعريفية</label>
+          <textarea id="profileBio" class="textarea" rows="2" placeholder="نبذة قصيرة عنك..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="profileAvatarFile">صورة رمزية من الجهاز</label>
+          <input id="profileAvatarFile" class="input" type="file" accept="image/*" onchange="handleImageFile(event, 'avatar')" />
+          <div class="preview-box" style="max-height: 120px;">
+            <img id="profileAvatarPreview" src="" alt="الصورة الرمزية" />
+          </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px;">
           <button type="button" class="btn" onclick="closeActiveModal()">إلغاء</button>
-          <button type="submit" class="btn btn-gold">حفظ</button>
+          <button type="submit" class="btn btn-gold">حفظ الملف</button>
         </div>
       </form>
     </div>
@@ -293,6 +1022,822 @@
 
   <div id="toastContainer" class="toast-container"></div>
 
-  <script src="app.js"></script>
+  <script>
+    // ==========================================
+    // 1. الإعدادات والحالة العامة
+    // ==========================================
+    const CATEGORIES = [
+      'الكل',
+      'إلكترونيات وكمبيوتر',
+      'موبايلات وتابلت',
+      'سيارات ومركبات',
+      'عقارات ومنازل',
+      'أثاث ومفروشات',
+      'أدوات منزلية',
+      'أزياء وموضة',
+      'خدمات ومهن'
+    ];
+
+    const DEFAULT_AVATAR = 'https://api.dicebear.com/7.x/avataaars/svg?seed=user';
+    const DEFAULT_AD_IMG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="240" viewBox="0 0 400 240"><rect width="400" height="240" fill="%230d111a"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23f5c451" font-family="sans-serif" font-size="18">بدون صورة</text></svg>';
+
+    const STORAGE_KEYS = {
+      profile: 'rakhis_profile_v1',
+      blocked: 'rakhis_blocked_v1',
+      peers: 'rakhis_peers_v1'
+    };
+
+    const state = {
+      ads: [],
+      messages: [],
+      selectedCategory: 'الكل',
+      activeModal: null,
+      modalHistoryPushed: false,
+      currentPeer: '',
+      peers: loadJson(STORAGE_KEYS.peers, []),
+      blockedUsers: loadJson(STORAGE_KEYS.blocked, []),
+      profile: loadJson(STORAGE_KEYS.profile, {
+        name: 'مشتاق',
+        city: 'أنطاليا',
+        bio: '',
+        avatar: DEFAULT_AVATAR
+      }),
+      uploadedAdImage: '',
+      uploadedAvatarImage: '',
+      mediaRecorder: null,
+      audioChunks: [],
+      isRecording: false
+    };
+
+    function loadJson(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch {
+        return fallback;
+      }
+    }
+
+    function saveJson(key, val) {
+      try {
+        localStorage.setItem(key, JSON.stringify(val));
+      } catch (e) {
+        console.warn('LocalStorage error:', e);
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // ==========================================
+    // 2. التنبيهات المخصصة (showToast)
+    // ==========================================
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `
+        <span>${escapeHtml(message)}</span>
+        <button style="background:none;border:none;color:inherit;font-weight:800;cursor:pointer;" onclick="this.parentElement.remove()">✕</button>
+      `;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        if (toast.parentElement) toast.remove();
+      }, 3500);
+    }
+
+    // ==========================================
+    // 3. إدارة زر الرجوع والنوافذ المنبثقة (history.pushState)
+    // ==========================================
+    const MODAL_MAP = {
+      details: 'detailsModal',
+      adForm: 'adFormModal',
+      chat: 'chatModal',
+      profile: 'profileModal'
+    };
+
+    function openModal(name) {
+      const id = MODAL_MAP[name];
+      if (!id) return;
+
+      Object.values(MODAL_MAP).forEach(elId => {
+        const el = document.getElementById(elId);
+        if (el) el.classList.remove('open');
+      });
+
+      const target = document.getElementById(id);
+      if (target) {
+        target.classList.add('open');
+        state.activeModal = name;
+        if (!state.modalHistoryPushed) {
+          history.pushState({ modal: name }, '', '#modal-' + name);
+          state.modalHistoryPushed = true;
+        }
+      }
+    }
+
+    function closeModalUIOnly() {
+      Object.values(MODAL_MAP).forEach(elId => {
+        const el = document.getElementById(elId);
+        if (el) el.classList.remove('open');
+      });
+      state.activeModal = null;
+      state.modalHistoryPushed = false;
+      stopVoiceRecordingIfActive();
+    }
+
+    function closeActiveModal() {
+      if (!state.activeModal) return;
+      if (state.modalHistoryPushed) {
+        history.back();
+      } else {
+        closeModalUIOnly();
+      }
+    }
+
+    function handleBackdropClick(event, name) {
+      if (event.target && event.target.classList.contains('modal-backdrop') && state.activeModal === name) {
+        closeActiveModal();
+      }
+    }
+
+    window.addEventListener('popstate', () => {
+      if (state.activeModal) {
+        closeModalUIOnly();
+      }
+    });
+
+    function goHome() {
+      if (state.activeModal) closeActiveModal();
+      state.selectedCategory = 'الكل';
+      const searchEl = document.getElementById('searchInput');
+      const cityEl = document.getElementById('cityFilter');
+      const condEl = document.getElementById('conditionFilter');
+      const sortEl = document.getElementById('sortSelect');
+      if (searchEl) searchEl.value = '';
+      if (cityEl) cityEl.value = '';
+      if (condEl) condEl.value = '';
+      if (sortEl) sortEl.value = 'newest';
+      renderCategories();
+      renderAds();
+    }
+
+    // ==========================================
+    // 4. جلب البيانات من السيرفر (Ads & Messages)
+    // ==========================================
+    async function fetchAds() {
+      try {
+        const res = await fetch('/api/ads');
+        if (!res.ok) throw new Error('فشل جلب الإعلانات');
+        const data = await res.json();
+        state.ads = Array.isArray(data) ? data : [];
+        renderAds();
+      } catch (err) {
+        console.error(err);
+        state.ads = [];
+        renderAds();
+        showToast('تعذر جلب الإعلانات من الخادم', 'error');
+      }
+    }
+
+    async function fetchMessages() {
+      try {
+        const res = await fetch('/api/messages');
+        if (!res.ok) throw new Error('فشل جلب الرسائل');
+        const data = await res.json();
+        state.messages = Array.isArray(data) ? data : [];
+        syncPeersFromMessages();
+        if (state.activeModal === 'chat') {
+          renderChatUsers();
+          renderChatMessages();
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // ==========================================
+    // 5. عرض الأقسام والفلترة والإعلانات
+    // ==========================================
+    function renderCategories() {
+      const strip = document.getElementById('categoriesStrip');
+      const select = document.getElementById('adCategory');
+      if (!strip) return;
+
+      strip.innerHTML = CATEGORIES.map(cat => {
+        const activeClass = state.selectedCategory === cat ? 'active' : '';
+        return `<button type="button" class="cat-chip ${activeClass}" onclick="selectCategory('${escapeHtml(cat)}')">${escapeHtml(cat)}</button>`;
+      }).join('');
+
+      if (select) {
+        const currentVal = select.value;
+        select.innerHTML = CATEGORIES
+          .filter(c => c !== 'الكل')
+          .map(cat => `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`)
+          .join('');
+        if (currentVal) select.value = currentVal;
+      }
+    }
+
+    function selectCategory(cat) {
+      state.selectedCategory = cat;
+      renderCategories();
+      renderAds();
+    }
+
+    function formatPrice(price, currency) {
+      const num = Number(price || 0).toLocaleString('en-US');
+      const map = { USD: '$', TRY: '₺', SYP: 'ل.س' };
+      return `${num} ${map[currency] || currency || '$'}`;
+    }
+
+    function renderAds() {
+      const grid = document.getElementById('adsGrid');
+      if (!grid) return;
+
+      const q = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
+      const city = (document.getElementById('cityFilter')?.value || '').trim();
+      const cond = (document.getElementById('conditionFilter')?.value || '').trim();
+      const sort = document.getElementById('sortSelect')?.value || 'newest';
+
+      let filtered = state.ads.filter(ad => {
+        if (state.selectedCategory !== 'الكل' && ad.category !== state.selectedCategory) return false;
+        if (city && !(ad.city || '').includes(city) && !(ad.neighbourhood || '').includes(city)) return false;
+        if (cond && ad.condition !== cond) return false;
+        if (q) {
+          const hay = `${ad.title || ''} ${ad.description || ''} ${ad.category || ''} ${ad.city || ''}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+
+      if (sort === 'price-asc') {
+        filtered.sort((a, b) => Number(a.price || 0) - Number(b.price || 0));
+      } else if (sort === 'price-desc') {
+        filtered.sort((a, b) => Number(b.price || 0) - Number(a.price || 0));
+      } else {
+        filtered.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+      }
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div style="font-size: 1rem; font-weight: 800; color: var(--silver); margin-bottom: 6px;">لا توجد إعلانات حالياً</div>
+            <div style="font-size: 0.82rem;">اضغط على "+ إعلان" لإضافة أول إعلان لك.</div>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(ad => {
+        const id = ad._id || ad.id;
+        const imgSrc = ad.image && ad.image.trim() ? ad.image : DEFAULT_AD_IMG;
+        return `
+          <article class="ad-card" onclick="openAdDetails('${escapeHtml(id)}')">
+            <div class="ad-img-wrap">
+              <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(ad.title)}" loading="lazy" onerror="this.src='${DEFAULT_AD_IMG}'" />
+              <span class="ad-badge-cat">${escapeHtml(ad.category || 'عام')}</span>
+            </div>
+            <div class="ad-body">
+              <div class="ad-title">${escapeHtml(ad.title)}</div>
+              <div class="ad-price">${escapeHtml(formatPrice(ad.price, ad.currency))}</div>
+              <div class="ad-meta">
+                <span>${escapeHtml(ad.city || 'غير محدد')}</span>
+                <span>${escapeHtml(ad.condition || 'مستعمل')}</span>
+              </div>
+            </div>
+            <div class="ad-footer" onclick="event.stopPropagation()">
+              <button type="button" class="btn btn-gold" onclick="openAdForm('${escapeHtml(id)}')">تعديل</button>
+              <button type="button" class="btn btn-danger" onclick="deleteAd('${escapeHtml(id)}')">حذف</button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    // ==========================================
+    // 6. تفاصيل الإعلان، الإضافة، التعديل، والحذف
+    // ==========================================
+    function openAdDetails(id) {
+      const ad = state.ads.find(item => (item._id || item.id) === id);
+      if (!ad) return;
+
+      const imgSrc = ad.image && ad.image.trim() ? ad.image : DEFAULT_AD_IMG;
+      const owner = ad.ownerUsername || 'user';
+      document.getElementById('detailTitle').textContent = ad.title || 'تفاصيل الإعلان';
+      document.getElementById('detailContent').innerHTML = `
+        <div style="border-radius: var(--radius-md); overflow: hidden; max-height: 280px; background: #07090e; margin-bottom: 12px; text-align: center;">
+          <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(ad.title)}" style="max-width: 100%; max-height: 280px; object-fit: contain;" onerror="this.src='${DEFAULT_AD_IMG}'" />
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+          <span style="font-size: 1.2rem; font-weight: 800; color: var(--gold);">${escapeHtml(formatPrice(ad.price, ad.currency))}</span>
+          <span class="cat-chip active">${escapeHtml(ad.category || '')}</span>
+        </div>
+        <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 10px;">
+          المدينة: <strong style="color: var(--text-main);">${escapeHtml(ad.city || 'غير محدد')}</strong> •
+          الحالة: <strong style="color: var(--text-main);">${escapeHtml(ad.condition || 'مستعمل')}</strong> •
+          الناشر: <strong style="color: var(--diamond);">${escapeHtml(owner)}</strong>
+        </div>
+        <p style="font-size: 0.9rem; line-height: 1.6; color: var(--silver); white-space: pre-wrap; margin-bottom: 14px;">${escapeHtml(ad.description || 'لا يوجد وصف إضافي.')}</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <button type="button" class="btn btn-diamond" onclick="startChatWithOwner('${escapeHtml(owner)}', '${escapeHtml(ad._id || ad.id)}', '${escapeHtml(ad.title)}')">💬 مراسلة الناشر</button>
+          <button type="button" class="btn btn-gold" onclick="closeActiveModal(); setTimeout(() => openAdForm('${escapeHtml(ad._id || ad.id)}'), 120)">✏️ تعديل</button>
+          <button type="button" class="btn btn-danger" onclick="deleteAd('${escapeHtml(ad._id || ad.id)}', true)">🗑️ حذف</button>
+        </div>
+      `;
+      openModal('details');
+    }
+
+    function openAdForm(id = null) {
+      const form = document.getElementById('adForm');
+      form.reset();
+      state.uploadedAdImage = '';
+      document.getElementById('adImagePreviewBox').style.display = 'none';
+      document.getElementById('adImagePreview').src = '';
+
+      if (id) {
+        const ad = state.ads.find(item => (item._id || item.id) === id);
+        if (!ad) return;
+
+        document.getElementById('adFormTitle').textContent = 'تعديل الإعلان';
+        document.getElementById('editAdId').value = id;
+        document.getElementById('adTitle').value = ad.title || '';
+        document.getElementById('adPrice').value = ad.price ?? 0;
+        document.getElementById('adCategory').value = ad.category || CATEGORIES[1];
+        document.getElementById('adCondition').value = ad.condition || 'مستعمل';
+        document.getElementById('adCurrency').value = ad.currency || 'USD';
+        document.getElementById('adCity').value = ad.city || state.profile.city || '';
+        document.getElementById('adNeighbourhood').value = ad.neighbourhood || '';
+        document.getElementById('adDescription').value = ad.description || '';
+
+        if (ad.image) {
+          state.uploadedAdImage = ad.image;
+          if (!ad.image.startsWith('data:')) {
+            document.getElementById('adImageUrl').value = ad.image;
+          }
+          document.getElementById('adImagePreview').src = ad.image;
+          document.getElementById('adImagePreviewBox').style.display = 'flex';
+        }
+      } else {
+        document.getElementById('adFormTitle').textContent = 'إضافة إعلان جديد';
+        document.getElementById('editAdId').value = '';
+        document.getElementById('adCity').value = state.profile.city || '';
+      }
+
+      openModal('adForm');
+    }
+
+    function handleImageFile(event, target) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const dataUrl = String(reader.result || '');
+        if (target === 'ad') {
+          state.uploadedAdImage = dataUrl;
+          document.getElementById('adImageUrl').value = '';
+          document.getElementById('adImagePreview').src = dataUrl;
+          document.getElementById('adImagePreviewBox').style.display = 'flex';
+        } else if (target === 'avatar') {
+          state.uploadedAvatarImage = dataUrl;
+          document.getElementById('profileAvatarPreview').src = dataUrl;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleImageUrl(event) {
+      const url = (event.target.value || '').trim();
+      state.uploadedAdImage = url;
+      const box = document.getElementById('adImagePreviewBox');
+      const img = document.getElementById('adImagePreview');
+      if (url) {
+        img.src = url;
+        box.style.display = 'flex';
+      } else {
+        img.src = '';
+        box.style.display = 'none';
+      }
+    }
+
+    async function submitAdForm(event) {
+      event.preventDefault();
+
+      const editId = document.getElementById('editAdId').value.trim();
+      const urlInput = document.getElementById('adImageUrl').value.trim();
+      const finalImage = state.uploadedAdImage || urlInput || '';
+
+      const payload = {
+        title: document.getElementById('adTitle').value.trim(),
+        price: Number(document.getElementById('adPrice').value || 0),
+        category: document.getElementById('adCategory').value,
+        condition: document.getElementById('adCondition').value,
+        currency: document.getElementById('adCurrency').value,
+        city: document.getElementById('adCity').value.trim() || 'دمشق',
+        neighbourhood: document.getElementById('adNeighbourhood').value.trim(),
+        description: document.getElementById('adDescription').value.trim(),
+        image: finalImage,
+        ownerUsername: state.profile.name || 'user'
+      };
+
+      try {
+        const isEdit = Boolean(editId);
+        const res = await fetch(isEdit ? `/api/ads/${encodeURIComponent(editId)}` : '/api/ads', {
+          method: isEdit ? 'PUT' : 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.message || 'فشل حفظ الإعلان');
+        }
+
+        closeActiveModal();
+        await fetchAds();
+        showToast(isEdit ? 'تم تحديث الإعلان بنجاح' : 'تم نشر الإعلان بنجاح', 'success');
+      } catch (err) {
+        console.error(err);
+        showToast(err.message || 'حدث خطأ أثناء حفظ الإعلان', 'error');
+      }
+    }
+
+    async function deleteAd(id, fromDetails = false) {
+      try {
+        const res = await fetch(`/api/ads/${encodeURIComponent(id)}`, {
+          method: 'DELETE'
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.message || 'فشل حذف الإعلان');
+        }
+
+        if (fromDetails && state.activeModal === 'details') {
+          closeActiveModal();
+        }
+        await fetchAds();
+        showToast('تم حذف الإعلان', 'success');
+      } catch (err) {
+        console.error(err);
+        showToast(err.message || 'تعذر حذف الإعلان', 'error');
+      }
+    }
+
+    // ==========================================
+    // 7. الدردشة، الرسائل الصوتية، وقائمة الحظر
+    // ==========================================
+    function syncPeersFromMessages() {
+      const me = state.profile.name || 'user';
+      const set = new Set(state.peers);
+      state.messages.forEach(m => {
+        if (m.sender && m.sender !== me) set.add(m.sender);
+        if (m.to && m.to !== me) set.add(m.to);
+      });
+      state.peers = Array.from(set);
+      saveJson(STORAGE_KEYS.peers, state.peers);
+      if (!state.currentPeer && state.peers.length > 0) {
+        state.currentPeer = state.peers[0];
+      }
+    }
+
+    function openChatModal() {
+      fetchMessages();
+      renderChatUsers();
+      renderChatMessages();
+      renderBlockedUsers();
+      updateBlockButton();
+      openModal('chat');
+    }
+
+    function startChatWithOwner(owner, adId = '', adTitle = '') {
+      if (state.activeModal === 'details') {
+        closeActiveModal();
+      }
+      addOrSelectPeer(owner);
+      if (adTitle) {
+        const input = document.getElementById('chatTextInput');
+        if (input && !input.value) {
+          input.value = `مرحباً، بخصوص إعلان: ${adTitle}`;
+        }
+      }
+      setTimeout(() => openChatModal(), 120);
+    }
+
+    function addOrSelectPeer(name) {
+      const clean = String(name || '').trim();
+      if (!clean) return;
+      if (!state.peers.includes(clean)) {
+        state.peers.unshift(clean);
+        saveJson(STORAGE_KEYS.peers, state.peers);
+      }
+      state.currentPeer = clean;
+      renderChatUsers();
+      renderChatMessages();
+      updateBlockButton();
+    }
+
+    function renderChatUsers() {
+      const list = document.getElementById('chatUserList');
+      if (!list) return;
+
+      const visiblePeers = state.peers.filter(u => !state.blockedUsers.includes(u));
+      if (visiblePeers.length === 0) {
+        list.innerHTML = `<div style="font-size: 0.78rem; color: var(--text-muted); padding: 6px;">لا توجد محادثات نشطة</div>`;
+        return;
+      }
+
+      if (!visiblePeers.includes(state.currentPeer)) {
+        state.currentPeer = visiblePeers[0];
+      }
+
+      list.innerHTML = visiblePeers.map(user => {
+        const active = user === state.currentPeer ? 'active' : '';
+        return `<div class="user-item ${active}" onclick="addOrSelectPeer('${escapeHtml(user)}')"><span>${escapeHtml(user)}</span></div>`;
+      }).join('');
+    }
+
+    function renderChatMessages() {
+      const box = document.getElementById('chatMessages');
+      if (!box) return;
+
+      const peer = state.currentPeer;
+      if (!peer) {
+        box.innerHTML = `<div style="font-size: 0.82rem; color: var(--text-muted); text-align: center; margin: auto;">اختر مستخدماً أو أضف اسماً لبدء الدردشة</div>`;
+        return;
+      }
+
+      if (state.blockedUsers.includes(peer)) {
+        box.innerHTML = `<div style="font-size: 0.82rem; color: #fca5a5; text-align: center; margin: auto;">هذا المستخدم محظور</div>`;
+        return;
+      }
+
+      const me = state.profile.name || 'user';
+      const convo = state.messages
+        .filter(m =>
+          !state.blockedUsers.includes(m.sender) &&
+          !state.blockedUsers.includes(m.to) &&
+          ((m.sender === me && m.to === peer) || (m.sender === peer && (m.to === me || m.to === 'user')))
+        )
+        .sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
+
+      if (convo.length === 0) {
+        box.innerHTML = `<div style="font-size: 0.8rem; color: var(--text-muted); text-align: center; margin: auto;">لا توجد رسائل مع ${escapeHtml(peer)} بعد</div>`;
+        return;
+      }
+
+      box.innerHTML = convo.map(m => {
+        const isMe = m.sender === me;
+        const timeStr = m.createdAt
+          ? new Date(m.createdAt).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })
+          : '';
+        const textVal = String(m.text || '');
+
+        let bodyHtml = '';
+        if (textVal.startsWith('data:audio')) {
+          bodyHtml = `<audio controls src="${escapeHtml(textVal)}" style="max-width: 100%; height: 32px;"></audio>`;
+        } else {
+          bodyHtml = `<div>${escapeHtml(textVal)}</div>`;
+        }
+
+        return `
+          <div class="msg-bubble ${isMe ? 'msg-me' : 'msg-other'}">
+            ${bodyHtml}
+            <span class="msg-time">${escapeHtml(timeStr)}</span>
+          </div>
+        `;
+      }).join('');
+
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function insertQuickPhrase(phrase) {
+      const input = document.getElementById('chatTextInput');
+      if (input) {
+        input.value = phrase;
+        input.focus();
+      }
+    }
+
+    async function sendChatMessage(event) {
+      event.preventDefault();
+      const input = document.getElementById('chatTextInput');
+      const text = (input.value || '').trim();
+      const peer = (state.currentPeer || '').trim();
+
+      if (!peer) {
+        showToast('أدخل أو اختر اسم المستلم أولاً', 'error');
+        return;
+      }
+      if (state.blockedUsers.includes(peer)) {
+        showToast('لا يمكن إرسال رسالة لمستخدم محظور', 'error');
+        return;
+      }
+      if (!text) return;
+
+      try {
+        const res = await fetch('/api/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sender: state.profile.name || 'user',
+            to: peer,
+            text
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'فشل إرسال الرسالة');
+
+        input.value = '';
+        state.messages.unshift(data);
+        renderChatMessages();
+      } catch (err) {
+        showToast(err.message || 'تعذر إرسال الرسالة', 'error');
+      }
+    }
+
+    async function toggleVoiceRecording() {
+      const btn = document.getElementById('voiceRecordBtn');
+      if (!state.isRecording) {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          showToast('المتصفح لا يدعم التسجيل الصوتي', 'error');
+          return;
+        }
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          state.audioChunks = [];
+          state.mediaRecorder = new MediaRecorder(stream);
+
+          state.mediaRecorder.ondataavailable = e => {
+            if (e.data && e.data.size > 0) state.audioChunks.push(e.data);
+          };
+
+          state.mediaRecorder.onstop = async () => {
+            stream.getTracks().forEach(t => t.stop());
+            const blob = new Blob(state.audioChunks, { type: 'audio/webm' });
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+              const base64Audio = String(reader.result || '');
+              const peer = (state.currentPeer || '').trim();
+              if (!peer || !base64Audio) return;
+              try {
+                const res = await fetch('/api/messages', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    sender: state.profile.name || 'user',
+                    to: peer,
+                    text: base64Audio
+                  })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                  state.messages.unshift(data);
+                  renderChatMessages();
+                  showToast('تم إرسال الرسالة الصوتية', 'success');
+                }
+              } catch {
+                showToast('تعذر إرسال الرسالة الصوتية', 'error');
+              }
+            };
+            reader.readAsDataURL(blob);
+          };
+
+          state.mediaRecorder.start();
+          state.isRecording = true;
+          if (btn) btn.textContent = '⏹️';
+          showToast('جاري التسجيل الصوتي...', 'info');
+        } catch {
+          showToast('يرجى السماح بالوصول إلى الميكروفون', 'error');
+        }
+      } else {
+        stopVoiceRecordingIfActive();
+      }
+    }
+
+    function stopVoiceRecordingIfActive() {
+      const btn = document.getElementById('voiceRecordBtn');
+      if (state.isRecording && state.mediaRecorder) {
+        try {
+          state.mediaRecorder.stop();
+        } catch {}
+      }
+      state.isRecording = false;
+      if (btn) btn.textContent = '🎙️';
+    }
+
+    function toggleBlockCurrentPeer() {
+      const peer = (state.currentPeer || '').trim();
+      if (!peer) return;
+
+      if (state.blockedUsers.includes(peer)) {
+        unblockUser(peer);
+      } else {
+        state.blockedUsers.push(peer);
+        saveJson(STORAGE_KEYS.blocked, state.blockedUsers);
+        state.currentPeer = state.peers.find(u => !state.blockedUsers.includes(u)) || '';
+        renderChatUsers();
+        renderChatMessages();
+        renderBlockedUsers();
+        updateBlockButton();
+        showToast(`تم حظر ${peer}`, 'info');
+      }
+    }
+
+    function unblockUser(username) {
+      state.blockedUsers = state.blockedUsers.filter(u => u !== username);
+      saveJson(STORAGE_KEYS.blocked, state.blockedUsers);
+      if (!state.currentPeer) state.currentPeer = username;
+      renderChatUsers();
+      renderChatMessages();
+      renderBlockedUsers();
+      updateBlockButton();
+      showToast(`تم إلغاء حظر ${username}`, 'success');
+    }
+
+    function renderBlockedUsers() {
+      const container = document.getElementById('blockedUsersContainer');
+      if (!container) return;
+
+      if (state.blockedUsers.length === 0) {
+        container.innerHTML = `<span style="font-size: 0.76rem; color: var(--text-muted);">لا يوجد مستخدمون محظورون</span>`;
+        return;
+      }
+
+      container.innerHTML = state.blockedUsers.map(u => `
+        <span class="blocked-chip">
+          <span>${escapeHtml(u)}</span>
+          <button type="button" style="background:none;border:none;color:#fff;cursor:pointer;font-weight:800;" onclick="unblockUser('${escapeHtml(u)}')">إلغاء</button>
+        </span>
+      `).join('');
+    }
+
+    function updateBlockButton() {
+      const btn = document.getElementById('toggleBlockBtn');
+      if (!btn) return;
+      const peer = (state.currentPeer || '').trim();
+      if (peer && state.blockedUsers.includes(peer)) {
+        btn.textContent = '✅ إلغاء الحظر';
+      } else {
+        btn.textContent = '🚫 حظر';
+      }
+    }
+
+    // ==========================================
+    // 8. الملف الشخصي
+    // ==========================================
+    function applyProfileHeader() {
+      const avatarEl = document.getElementById('headerAvatar');
+      const nameEl = document.getElementById('headerUsername');
+      if (avatarEl) avatarEl.src = state.profile.avatar || DEFAULT_AVATAR;
+      if (nameEl) nameEl.textContent = state.profile.name || 'ملفك';
+    }
+
+    function openProfileModal() {
+      state.uploadedAvatarImage = state.profile.avatar || DEFAULT_AVATAR;
+      document.getElementById('profileName').value = state.profile.name || '';
+      document.getElementById('profileCity').value = state.profile.city || '';
+      document.getElementById('profileBio').value = state.profile.bio || '';
+      document.getElementById('profileAvatarPreview').src = state.uploadedAvatarImage;
+      openModal('profile');
+    }
+
+    function saveProfile(event) {
+      event.preventDefault();
+      const name = document.getElementById('profileName').value.trim();
+      if (!name) return;
+
+      state.profile = {
+        name,
+        city: document.getElementById('profileCity').value.trim(),
+        bio: document.getElementById('profileBio').value.trim(),
+        avatar: state.uploadedAvatarImage || state.profile.avatar || DEFAULT_AVATAR
+      };
+
+      saveJson(STORAGE_KEYS.profile, state.profile);
+      applyProfileHeader();
+      closeActiveModal();
+      showToast('تم حفظ بيانات الملف الشخصي', 'success');
+    }
+
+    // ==========================================
+    // 9. التشغيل الأولي
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', () => {
+      applyProfileHeader();
+      renderCategories();
+      fetchAds();
+      fetchMessages();
+    });
+  </script>
 </body>
 </html>

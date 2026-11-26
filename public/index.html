@@ -3,31 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>رخيص والسوق الشامل — واجهة ذهبية وفضية وألماسية</title>
+  <title>رخيص والسوق الشامل — واجهة النخبة الداكنة</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #06080d;
-      --bg-card: rgba(14, 19, 30, 0.92);
-      --bg-elevated: rgba(23, 30, 46, 0.95);
+      --bg-void: #040208;
+      --bg-obsidian: #0b0614;
+      --bg-amethyst: #150926;
+      --bg-card: #190c2e;
+      --bg-card-hover: #22103d;
+      --purple-neon: #a855f7;
+      --purple-deep: #581c87;
       --gold: #f6c453;
-      --gold-bright: #ffe599;
-      --gold-deep: #a97614;
+      --gold-bright: #ffe699;
+      --gold-dark: #9a6b0e;
       --silver: #e2e8f0;
-      --silver-muted: #94a3b8;
-      --diamond: #67e8f9;
-      --diamond-soft: rgba(103, 232, 249, 0.16);
+      --silver-dim: #94a3b8;
+      --diamond: #38bdf8;
+      --diamond-bright: #bae6fd;
       --border-gold: rgba(246, 196, 83, 0.36);
-      --border-diamond: rgba(103, 232, 249, 0.35);
+      --border-diamond: rgba(56, 189, 248, 0.38);
+      --border-purple: rgba(168, 85, 247, 0.35);
       --text-main: #f8fafc;
-      --text-muted: #94a3b8;
+      --text-muted: #a1a1aa;
       --danger: #ef4444;
       --success: #22c55e;
-      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-lg: 15px;
       --radius-md: 11px;
-      --shadow-lux: 0 12px 30px rgba(0, 0, 0, 0.72);
+      --shadow-lux: 0 14px 36px rgba(0, 0, 0, 0.82);
     }
 
     * {
@@ -39,25 +45,51 @@
 
     html, body {
       background:
-        radial-gradient(circle at 12% 8%, rgba(246, 196, 83, 0.14), transparent 36%),
-        radial-gradient(circle at 88% 12%, rgba(103, 232, 249, 0.13), transparent 38%),
-        radial-gradient(circle at 50% 100%, rgba(226, 232, 240, 0.08), transparent 45%),
-        var(--bg-dark);
+        radial-gradient(circle at 15% 10%, rgba(147, 51, 234, 0.24), transparent 38%),
+        radial-gradient(circle at 85% 12%, rgba(56, 189, 248, 0.14), transparent 36%),
+        radial-gradient(circle at 50% 95%, rgba(246, 196, 83, 0.11), transparent 45%),
+        var(--bg-void);
       color: var(--text-main);
       min-height: 100vh;
       overflow-x: hidden;
       font-size: 14px;
     }
 
+    /* زخارف الأيقونات الفاخرة */
+    .ornament-diamond {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--diamond-bright);
+      text-shadow: 0 0 10px rgba(56, 189, 248, 0.65);
+    }
+
+    .ornament-gold {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-bright);
+      text-shadow: 0 0 10px rgba(246, 196, 83, 0.55);
+    }
+
+    .ornament-silver {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--silver);
+      text-shadow: 0 0 8px rgba(226, 232, 240, 0.35);
+    }
+
+    /* الهيدر العلوي */
     header {
       position: sticky;
       top: 0;
-      z-index: 50;
-      background: rgba(8, 11, 18, 0.92);
-      backdrop-filter: blur(16px);
+      z-index: 60;
+      background: rgba(10, 5, 19, 0.94);
+      backdrop-filter: blur(18px);
       border-bottom: 1.5px solid var(--border-gold);
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.65);
-      padding: 9px 14px;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.78), 0 0 22px rgba(168, 85, 247, 0.16);
+      padding: 10px 16px;
     }
 
     .header-inner {
@@ -67,57 +99,64 @@
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 12px;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 11px;
       cursor: pointer;
     }
 
-    .brand-badge {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--gold), var(--silver) 52%, var(--diamond));
+    .brand-crest {
+      width: 44px;
+      height: 44px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--gold-bright), var(--purple-neon) 52%, var(--diamond));
+      padding: 2px;
+      box-shadow: 0 0 20px rgba(246, 196, 83, 0.35), 0 0 18px rgba(168, 85, 247, 0.35);
+    }
+
+    .brand-crest-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 11px;
+      background: #0c0617;
       display: grid;
       place-items: center;
+      font-size: 1.3rem;
       font-weight: 800;
-      color: #06080d;
-      font-size: 1.25rem;
-      box-shadow: 0 0 18px rgba(246, 196, 83, 0.35), 0 0 14px rgba(103, 232, 249, 0.25);
-      border: 1px solid rgba(255, 255, 255, 0.45);
+      color: var(--gold-bright);
     }
 
     .brand-title {
-      font-size: 1.08rem;
+      font-size: 1.12rem;
       font-weight: 800;
-      background: linear-gradient(90deg, var(--gold-bright), var(--silver), var(--diamond));
+      background: linear-gradient(90deg, var(--gold-bright), var(--silver), var(--diamond-bright));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .brand-sub {
       font-size: 0.72rem;
-      color: var(--silver);
+      color: var(--silver-dim);
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
     .btn {
       border: 1px solid rgba(226, 232, 240, 0.22);
-      background: linear-gradient(180deg, rgba(28, 36, 54, 0.95), rgba(15, 20, 32, 0.98));
+      background: linear-gradient(180deg, rgba(33, 17, 58, 0.96), rgba(16, 8, 30, 0.98));
       color: var(--silver);
-      padding: 6px 12px;
+      padding: 7px 13px;
       border-radius: var(--radius-md);
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       font-weight: 700;
       cursor: pointer;
       display: inline-flex;
@@ -128,34 +167,34 @@
 
     .btn:hover {
       transform: translateY(-1px);
-      border-color: var(--gold);
+      border-color: var(--diamond);
       color: #fff;
-      box-shadow: 0 4px 14px rgba(246, 196, 83, 0.2);
+      box-shadow: 0 6px 18px rgba(168, 85, 247, 0.28);
     }
 
     .btn-gold {
-      background: linear-gradient(135deg, var(--gold-bright), var(--gold) 55%, var(--gold-deep));
-      color: #07090e;
-      border: 1px solid rgba(255, 229, 153, 0.7);
-      box-shadow: 0 4px 16px rgba(246, 196, 83, 0.3);
+      background: linear-gradient(135deg, var(--gold-bright), var(--gold) 58%, var(--gold-dark));
+      color: #090510;
+      border: 1px solid rgba(255, 230, 153, 0.75);
+      box-shadow: 0 4px 18px rgba(246, 196, 83, 0.32);
     }
 
     .btn-diamond {
-      background: linear-gradient(135deg, rgba(103, 232, 249, 0.22), rgba(226, 232, 240, 0.08));
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.22), rgba(168, 85, 247, 0.16));
       border: 1px solid var(--border-diamond);
-      color: var(--diamond);
-      box-shadow: 0 0 14px rgba(103, 232, 249, 0.14);
+      color: var(--diamond-bright);
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.16);
     }
 
     .btn-danger {
       background: rgba(239, 68, 68, 0.16);
-      border: 1px solid rgba(239, 68, 68, 0.5);
+      border: 1px solid rgba(239, 68, 68, 0.55);
       color: #fca5a5;
     }
 
     .avatar-mini {
-      width: 24px;
-      height: 24px;
+      width: 25px;
+      height: 25px;
       border-radius: 50%;
       object-fit: cover;
       border: 1.5px solid var(--gold);
@@ -164,71 +203,127 @@
     .container {
       max-width: 1440px;
       margin: 0 auto;
-      padding: 12px 14px 36px;
+      padding: 14px 16px 44px;
     }
 
-    .toolbar {
-      background: var(--bg-card);
+    /* السطر الأول: شريط الإجراءات والبحث الرئيسي */
+    .top-action-bar {
+      background: linear-gradient(135deg, rgba(25, 12, 46, 0.95), rgba(13, 7, 24, 0.98));
       border: 1px solid var(--border-gold);
       border-radius: var(--radius-lg);
-      padding: 10px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 8px;
+      padding: 11px 13px;
       margin-bottom: 10px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
       box-shadow: var(--shadow-lux);
+    }
+
+    @media (max-width: 720px) {
+      .top-action-bar {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .quick-pills {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+
+    /* السطر الثاني: شريط أفقي للمدن والحالات والترتيب مزخرف بالألماسي والفضي والذهبي */
+    .horizontal-filters-bar {
+      background: linear-gradient(90deg, rgba(22, 10, 40, 0.95), rgba(15, 8, 28, 0.95), rgba(22, 10, 40, 0.95));
+      border: 1px solid var(--border-diamond);
+      border-radius: var(--radius-lg);
+      padding: 9px 12px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+      overflow-x: auto;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65);
+    }
+
+    .filter-pill-box {
+      flex: 1 1 190px;
+      min-width: 175px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(6, 3, 12, 0.88);
+      border-radius: var(--radius-md);
+      padding: 3px 9px;
+    }
+
+    .filter-pill-box.diamond-ring {
+      border: 1px solid var(--border-diamond);
+      box-shadow: inset 0 0 12px rgba(56, 189, 248, 0.1);
+    }
+
+    .filter-pill-box.gold-silver-ring {
+      border: 1px solid var(--border-gold);
+      box-shadow: inset 0 0 12px rgba(246, 196, 83, 0.1);
     }
 
     .input, .select, .textarea {
       width: 100%;
-      background: rgba(7, 10, 16, 0.92);
-      border: 1px solid rgba(226, 232, 240, 0.18);
+      background: transparent;
+      border: none;
       color: var(--text-main);
-      padding: 7px 11px;
+      padding: 7px 6px;
+      font-size: 0.84rem;
+      outline: none;
+    }
+
+    .standalone-input, .standalone-textarea {
+      width: 100%;
+      background: rgba(6, 3, 12, 0.9);
+      border: 1px solid var(--border-purple);
+      color: var(--text-main);
+      padding: 8px 12px;
       border-radius: var(--radius-md);
       font-size: 0.84rem;
       outline: none;
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .input:focus, .select:focus, .textarea:focus {
+    .standalone-input:focus, .standalone-textarea:focus, .select:focus, .input:focus {
       border-color: var(--diamond);
-      box-shadow: 0 0 0 2px rgba(103, 232, 249, 0.14);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.22);
     }
 
-    /* شريط الأقسام المزخرف والمتحرك أفقياً */
+    .select option {
+      background: #120921;
+      color: #f8fafc;
+    }
+
+    /* شريط الأقسام المزخرف المتحرك أفقياً */
     .categories-strip {
       display: flex;
       gap: 8px;
       overflow-x: auto;
-      padding: 4px 2px 10px;
-      margin-bottom: 8px;
+      padding: 4px 2px 12px;
+      margin-bottom: 10px;
       scrollbar-width: thin;
       scrollbar-color: var(--gold) transparent;
     }
 
-    .categories-strip::-webkit-scrollbar {
-      height: 5px;
-    }
-
-    .categories-strip::-webkit-scrollbar-thumb {
-      background: linear-gradient(90deg, var(--gold), var(--diamond));
-      border-radius: 999px;
-    }
-
     .cat-chip {
       flex: 0 0 auto;
-      padding: 6px 14px;
+      padding: 7px 15px;
       border-radius: 999px;
-      background: linear-gradient(135deg, rgba(20, 26, 40, 0.95), rgba(11, 15, 24, 0.98));
+      background: linear-gradient(135deg, rgba(25, 12, 46, 0.96), rgba(11, 6, 20, 0.98));
       border: 1px solid rgba(226, 232, 240, 0.22);
       color: var(--silver);
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       font-weight: 700;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
       transition: all 0.22s ease;
       white-space: nowrap;
     }
@@ -240,31 +335,31 @@
     }
 
     .cat-chip.active {
-      background: linear-gradient(135deg, rgba(246, 196, 83, 0.24), rgba(103, 232, 249, 0.16));
-      border-color: var(--gold);
+      background: linear-gradient(135deg, rgba(246, 196, 83, 0.25), rgba(168, 85, 247, 0.24), rgba(56, 189, 248, 0.2));
+      border-color: var(--gold-bright);
       color: var(--gold-bright);
-      box-shadow: 0 0 16px rgba(246, 196, 83, 0.24);
+      box-shadow: 0 0 18px rgba(246, 196, 83, 0.26);
     }
 
-    /* شبكة الإعلانات المرتبة (4 أعمدة على الشاشات الكبيرة) */
+    /* شبكة الإعلانات: 3 إعلانات في كل صف أفقياً على الشاشات الكبيرة */
     .ads-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 11px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
     }
 
-    @media (max-width: 1180px) {
-      .ads-grid { grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 960px) {
+      .ads-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
     }
 
-    @media (max-width: 780px) {
+    @media (max-width: 560px) {
       .ads-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
     }
 
     .ad-card {
       position: relative;
-      background: linear-gradient(165deg, rgba(22, 29, 46, 0.96) 0%, rgba(10, 13, 21, 0.99) 100%);
-      border: 1px solid rgba(226, 232, 240, 0.2);
+      background: linear-gradient(165deg, rgba(27, 13, 50, 0.97) 0%, rgba(11, 6, 20, 0.99) 100%);
+      border: 1px solid var(--border-purple);
       border-radius: var(--radius-lg);
       overflow: hidden;
       display: flex;
@@ -278,15 +373,15 @@
     .ad-card:hover {
       transform: translateY(-3px);
       border-color: var(--gold);
-      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.8), 0 0 16px rgba(246, 196, 83, 0.18);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.86), 0 0 18px rgba(246, 196, 83, 0.22);
     }
 
     .ad-img-wrap {
       position: relative;
-      height: 128px;
-      background: #06080d;
+      height: 150px;
+      background: #06030d;
       overflow: hidden;
-      border-bottom: 1px solid rgba(246, 196, 83, 0.2);
+      border-bottom: 1px solid var(--border-gold);
     }
 
     .ad-img-wrap img {
@@ -298,33 +393,32 @@
 
     .ad-badge-cat {
       position: absolute;
-      top: 7px;
-      right: 7px;
-      background: rgba(6, 8, 13, 0.86);
+      top: 8px;
+      right: 8px;
+      background: rgba(7, 4, 15, 0.88);
       border: 1px solid var(--border-diamond);
-      color: var(--diamond);
-      padding: 2px 8px;
+      color: var(--diamond-bright);
+      padding: 2px 9px;
       border-radius: 999px;
-      font-size: 0.68rem;
+      font-size: 0.7rem;
       font-weight: 700;
-      backdrop-filter: blur(6px);
     }
 
     .ad-badge-owner {
       position: absolute;
-      bottom: 7px;
-      left: 7px;
-      background: rgba(6, 8, 13, 0.85);
-      border: 1px solid rgba(246, 196, 83, 0.4);
+      bottom: 8px;
+      left: 8px;
+      background: rgba(7, 4, 15, 0.88);
+      border: 1px solid var(--border-gold);
       color: var(--gold-bright);
-      padding: 2px 8px;
+      padding: 2px 9px;
       border-radius: 999px;
-      font-size: 0.66rem;
+      font-size: 0.68rem;
       font-weight: 700;
     }
 
     .ad-body {
-      padding: 9px 11px;
+      padding: 10px 12px;
       display: flex;
       flex-direction: column;
       gap: 4px;
@@ -332,7 +426,7 @@
     }
 
     .ad-title {
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       font-weight: 800;
       color: #fff;
       white-space: nowrap;
@@ -341,7 +435,7 @@
     }
 
     .ad-price {
-      font-size: 0.95rem;
+      font-size: 0.98rem;
       font-weight: 800;
       background: linear-gradient(90deg, var(--gold-bright), var(--gold));
       -webkit-background-clip: text;
@@ -349,44 +443,45 @@
     }
 
     .ad-meta {
-      font-size: 0.72rem;
-      color: var(--silver-muted);
+      font-size: 0.73rem;
+      color: var(--silver-dim);
       display: flex;
       justify-content: space-between;
       gap: 6px;
     }
 
     .ad-footer {
-      padding: 7px 9px;
-      border-top: 1px solid rgba(226, 232, 240, 0.12);
+      padding: 8px 10px;
+      border-top: 1px solid rgba(226, 232, 240, 0.14);
       display: flex;
-      gap: 5px;
-      background: rgba(8, 11, 18, 0.65);
+      gap: 6px;
+      background: rgba(8, 4, 16, 0.75);
     }
 
     .ad-footer .btn {
       flex: 1;
       justify-content: center;
-      padding: 4px 7px;
-      font-size: 0.73rem;
+      padding: 5px 8px;
+      font-size: 0.75rem;
     }
 
     .empty-state {
       grid-column: 1 / -1;
       text-align: center;
-      padding: 44px 18px;
+      padding: 46px 18px;
       background: var(--bg-card);
       border: 1px dashed var(--border-gold);
       border-radius: var(--radius-lg);
       color: var(--text-muted);
     }
 
+    /* النوافذ المنبثقة */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      z-index: 100;
-      background: rgba(4, 6, 10, 0.86);
-      backdrop-filter: blur(8px);
+      z-index: 120;
+      background: rgba(4, 2, 10, 0.88);
+      backdrop-filter: blur(9px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -400,14 +495,18 @@
 
     .modal-box {
       width: 100%;
-      max-width: 780px;
+      max-width: 820px;
       max-height: 90vh;
       overflow-y: auto;
-      background: linear-gradient(180deg, #121826 0%, #0b0f18 100%);
+      background: linear-gradient(180deg, #190c2e 0%, #0d0618 100%);
       border: 1px solid var(--border-gold);
-      border-radius: var(--radius-lg);
-      padding: 18px;
-      box-shadow: 0 22px 55px rgba(0, 0, 0, 0.88), 0 0 24px rgba(103, 232, 249, 0.1);
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), 0 0 26px rgba(168, 85, 247, 0.2);
+    }
+
+    .modal-box.wide-profile-box {
+      max-width: 980px;
     }
 
     .modal-box.auth-box {
@@ -419,15 +518,15 @@
       align-items: center;
       justify-content: space-between;
       border-bottom: 1px solid rgba(226, 232, 240, 0.16);
-      padding-bottom: 10px;
-      margin-bottom: 14px;
+      padding-bottom: 11px;
+      margin-bottom: 15px;
       gap: 8px;
     }
 
     .modal-title {
-      font-size: 1.05rem;
+      font-size: 1.08rem;
       font-weight: 800;
-      background: linear-gradient(90deg, var(--gold-bright), var(--diamond));
+      background: linear-gradient(90deg, var(--gold-bright), var(--diamond-bright));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -443,7 +542,7 @@
       padding: 8px;
       border-radius: var(--radius-md);
       border: 1px solid rgba(226, 232, 240, 0.2);
-      background: rgba(7, 10, 16, 0.9);
+      background: rgba(7, 4, 15, 0.9);
       color: var(--silver);
       font-weight: 700;
       cursor: pointer;
@@ -454,7 +553,56 @@
     .auth-tab.active {
       border-color: var(--gold);
       color: var(--gold-bright);
-      background: rgba(246, 196, 83, 0.14);
+      background: rgba(246, 196, 83, 0.15);
+    }
+
+    /* الملف الشخصي الموسع */
+    .profile-expanded-grid {
+      display: grid;
+      grid-template-columns: 270px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    @media (max-width: 760px) {
+      .profile-expanded-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .profile-side-card {
+      background: rgba(9, 4, 18, 0.92);
+      border: 1px solid var(--border-diamond);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      text-align: center;
+    }
+
+    .profile-main-card {
+      background: rgba(9, 4, 18, 0.92);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+    }
+
+    .my-ads-mini-list {
+      margin-top: 14px;
+      border-top: 1px solid rgba(226, 232, 240, 0.14);
+      padding-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 8px;
+    }
+
+    .my-ad-mini-item {
+      background: rgba(25, 12, 46, 0.9);
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-md);
+      padding: 8px 10px;
+      font-size: 0.78rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
     .form-grid {
@@ -482,7 +630,7 @@
       overflow: hidden;
       border: 1px dashed var(--gold);
       max-height: 180px;
-      background: #07090e;
+      background: #06030d;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -497,7 +645,7 @@
 
     .chat-container {
       display: grid;
-      grid-template-columns: 205px 1fr;
+      grid-template-columns: 215px 1fr;
       gap: 12px;
       height: 52vh;
       min-height: 320px;
@@ -517,7 +665,7 @@
     }
 
     .chat-user-list {
-      background: rgba(7, 10, 16, 0.92);
+      background: rgba(7, 4, 15, 0.94);
       border: 1px solid rgba(226, 232, 240, 0.18);
       border-radius: var(--radius-md);
       padding: 8px;
@@ -540,11 +688,11 @@
     }
 
     .user-item:hover {
-      background: rgba(246, 196, 83, 0.08);
+      background: rgba(168, 85, 247, 0.14);
     }
 
     .user-item.active {
-      background: linear-gradient(135deg, rgba(246, 196, 83, 0.22), rgba(103, 232, 249, 0.1));
+      background: linear-gradient(135deg, rgba(246, 196, 83, 0.22), rgba(56, 189, 248, 0.14));
       border-color: var(--gold);
       color: var(--gold-bright);
       font-weight: 700;
@@ -558,7 +706,7 @@
     }
 
     .chat-messages {
-      background: rgba(7, 10, 16, 0.92);
+      background: rgba(7, 4, 15, 0.94);
       border: 1px solid rgba(226, 232, 240, 0.18);
       border-radius: var(--radius-md);
       padding: 10px;
@@ -581,13 +729,13 @@
     .msg-me {
       align-self: flex-start;
       background: linear-gradient(135deg, var(--gold-bright), var(--gold));
-      color: #07090e;
+      color: #07040f;
       font-weight: 700;
     }
 
     .msg-other {
       align-self: flex-end;
-      background: var(--bg-elevated);
+      background: var(--bg-card-hover);
       border: 1px solid var(--border-diamond);
       color: var(--text-main);
     }
@@ -595,7 +743,7 @@
     .msg-time {
       display: block;
       font-size: 0.65rem;
-      opacity: 0.72;
+      opacity: 0.75;
       margin-top: 3px;
       text-align: left;
     }
@@ -623,7 +771,7 @@
       bottom: 14px;
       left: 14px;
       right: 14px;
-      z-index: 200;
+      z-index: 220;
       pointer-events: none;
       display: flex;
       flex-direction: column;
@@ -633,14 +781,14 @@
 
     .toast {
       pointer-events: auto;
-      max-width: 440px;
+      max-width: 460px;
       width: 100%;
-      background: #101624;
+      background: #140a24;
       border: 1px solid var(--gold);
       color: var(--text-main);
       padding: 10px 14px;
       border-radius: var(--radius-md);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.85);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -658,7 +806,9 @@
   <header>
     <div class="header-inner">
       <div class="brand" onclick="goHome()">
-        <div class="brand-badge">❖</div>
+        <div class="brand-crest">
+          <div class="brand-crest-inner">❖</div>
+        </div>
         <div>
           <div class="brand-title">رخيص والسوق الشامل</div>
           <div id="authStatusText" class="brand-sub">إعلانات سريعة • تواصل مباشر</div>
@@ -666,9 +816,9 @@
       </div>
 
       <div class="header-actions">
-        <button type="button" class="btn btn-gold" onclick="openAdForm()">✦ + إعلان</button>
-        <button type="button" class="btn btn-diamond" onclick="openChatModal()">◈ الدردشات</button>
-        <button id="authOpenBtn" type="button" class="btn" onclick="openAuthModal('login')">❖ دخول / حساب</button>
+        <button type="button" class="btn btn-gold" onclick="openAdForm()"><span class="ornament-gold">✦</span> + إعلان</button>
+        <button type="button" class="btn btn-diamond" onclick="openChatModal()"><span class="ornament-diamond">◈</span> الدردشات</button>
+        <button id="authOpenBtn" type="button" class="btn" onclick="openAuthModal('login')"><span class="ornament-silver">❖</span> دخول / حساب</button>
         <button id="logoutBtn" type="button" class="btn btn-danger" style="display: none;" onclick="logoutUser()">خروج</button>
         <button type="button" class="btn" onclick="openProfileModal()">
           <img id="headerAvatar" class="avatar-mini" src="https://api.dicebear.com/7.x/avataaars/svg?seed=user" alt="Avatar" />
@@ -679,38 +829,63 @@
   </header>
 
   <main class="container">
-    <section class="toolbar">
-      <input id="searchInput" class="input" type="search" placeholder="❖ ابحث عن إعلان..." oninput="renderAds()" />
-      <select id="cityFilter" class="select" onchange="renderAds()">
-        <option value="">◈ كل المدن</option>
-        <option value="دمشق">دمشق</option>
-        <option value="حلب">حلب</option>
-        <option value="حمص">حمص</option>
-        <option value="اللاذقية">اللاذقية</option>
-        <option value="أنطاليا">أنطاليا</option>
-        <option value="إسطنبول">إسطنبول</option>
-      </select>
-      <select id="conditionFilter" class="select" onchange="renderAds()">
-        <option value="">✦ كل الحالات</option>
-        <option value="جديد">جديد</option>
-        <option value="مستعمل">مستعمل</option>
-      </select>
-      <select id="sortSelect" class="select" onchange="renderAds()">
-        <option value="newest">الأحدث أولاً</option>
-        <option value="price-asc">الأقل سعراً</option>
-        <option value="price-desc">الأعلى سعراً</option>
-      </select>
+    <!-- السطر الأول: البحث والإجراءات -->
+    <section class="top-action-bar">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span class="ornament-diamond" style="font-size: 1.05rem;">❖</span>
+        <input id="searchInput" class="input" type="search" placeholder="ابحث عن سيارة، عقار، هاتف، أو أي إعلان..." oninput="renderAds()" />
+      </div>
+      <div class="quick-pills">
+        <button type="button" class="btn btn-gold" onclick="openAdForm()">✦ نشر إعلان</button>
+        <button type="button" class="btn btn-diamond" onclick="openChatModal()">◈ المحادثات</button>
+        <button type="button" class="btn" onclick="openProfileModal()"><span class="ornament-silver">❖</span> ملفي الموسع</button>
+      </div>
     </section>
 
-    <section id="categoriesStrip" class="categories-strip"></section>
-    <section id="adsGrid" class="ads-grid"></section>
-  </main>
+    <!-- السطر الثاني: شريط أفقي للمدن والحالات والترتيب مزخرف بالألماسي والفضي والذهبي -->
+    <section class="horizontal-filters-bar">
+      <div class="filter-pill-box diamond-ring">
+        <span class="ornament-diamond">◈</span>
+        <select id="cityFilter" class="select" onchange="renderAds()">
+          <option value="">كل المدن</option>
+          <option value="دمشق">دمشق</option>
+          <option value="حلب">حلب</option>
+          <option value="حمص">حمص</option>
+          <option value="اللاذقية">اللاذقية</option>
+          <option value="أنطاليا">أنطاليا</option>
+          <option value="إسطنبول">إسطنبول</option>
+        </select>
+      </div>
 
-  <!-- تسجيل الدخول وإنشاء الحساب (الاسم وكلمة المرور فقط) -->
+      <div class="filter-pill-box gold-silver-ring">
+        <span class="ornament-gold">✦</span>
+        <select id="conditionFilter" class="select" onchange="renderAds()">
+          <option value="">كل الحالات</option>
+          <option value="جديد">جديد</option>
+          <option value="مستعمل">مستعمل</option>
+        </select>
+      </div>
+
+      <div class="filter-pill-box diamond-ring">
+        <span class="ornament-silver">❖</span>
+        <select id="sortSelect" class="select" onchange="renderAds()">
+          <option value="newest">الأحدث أولاً</option>
+          <option value="price-asc">الأقل سعراً</option>
+          <option value="price-desc">الأعلى سعراً</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- شريط الأقسام المزخرف -->
+    <section id="categoriesStrip" class="categories-strip"></section>
+
+    <!-- شبكة الإعلانات (3 أعمدة أفقياً) -->
+    <section id="adsGrid" class="ads-grid"></section>
+  </main><!-- نافذة تسجيل الدخول وإنشاء الحساب (الاسم وكلمة المرور فقط) -->
   <div id="authModal" class="modal-backdrop" onclick="handleBackdropClick(event, 'auth')">
     <div class="modal-box auth-box" onclick="event.stopPropagation()">
       <div class="modal-header">
-        <div class="modal-title">❖ الحساب وتسجيل الدخول</div>
+        <div class="modal-title"><span class="ornament-diamond">❖</span> الحساب وتسجيل الدخول</div>
         <button type="button" class="btn" onclick="closeActiveModal()">✕</button>
       </div>
 
@@ -722,11 +897,11 @@
       <form id="loginForm" onsubmit="handleLogin(event)">
         <div class="form-group">
           <label class="form-label" for="loginUsername">الاسم</label>
-          <input id="loginUsername" class="input" type="text" required placeholder="اكتب اسمك..." />
+          <input id="loginUsername" class="standalone-input" type="text" required placeholder="اكتب اسمك..." />
         </div>
         <div class="form-group">
           <label class="form-label" for="loginPassword">كلمة المرور</label>
-          <input id="loginPassword" class="input" type="password" required placeholder="••••••••" />
+          <input id="loginPassword" class="standalone-input" type="password" required placeholder="••••••••" />
         </div>
         <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px;">
           <button type="button" class="btn" onclick="closeActiveModal()">إلغاء</button>
@@ -737,11 +912,11 @@
       <form id="registerForm" style="display: none;" onsubmit="handleRegister(event)">
         <div class="form-group">
           <label class="form-label" for="regUsername">الاسم</label>
-          <input id="regUsername" class="input" type="text" required placeholder="اكتب اسمك..." />
+          <input id="regUsername" class="standalone-input" type="text" required placeholder="اكتب اسمك..." />
         </div>
         <div class="form-group">
           <label class="form-label" for="regPassword">كلمة المرور</label>
-          <input id="regPassword" class="input" type="password" required placeholder="••••••••" />
+          <input id="regPassword" class="standalone-input" type="password" required placeholder="••••••••" />
         </div>
         <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px;">
           <button type="button" class="btn" onclick="closeActiveModal()">إلغاء</button>
@@ -751,7 +926,7 @@
     </div>
   </div>
 
-  <!-- تفاصيل الإعلان -->
+  <!-- نافذة تفاصيل الإعلان -->
   <div id="detailsModal" class="modal-backdrop" onclick="handleBackdropClick(event, 'details')">
     <div class="modal-box" onclick="event.stopPropagation()">
       <div class="modal-header">
@@ -762,7 +937,7 @@
     </div>
   </div>
 
-  <!-- إضافة وتعديل الإعلان -->
+  <!-- نافذة إضافة وتعديل الإعلان -->
   <div id="adFormModal" class="modal-backdrop" onclick="handleBackdropClick(event, 'adForm')">
     <div class="modal-box" onclick="event.stopPropagation()">
       <div class="modal-header">
@@ -774,29 +949,29 @@
         <div class="form-grid">
           <div class="form-group">
             <label class="form-label" for="adTitle">عنوان الإعلان</label>
-            <input id="adTitle" class="input" type="text" required placeholder="مثال: هاتف أو سيارة أو شقة..." />
+            <input id="adTitle" class="standalone-input" type="text" required placeholder="مثال: هاتف أو سيارة أو شقة..." />
           </div>
           <div class="form-group">
             <label class="form-label" for="adPrice">السعر</label>
-            <input id="adPrice" class="input" type="number" min="0" step="any" required placeholder="0" />
+            <input id="adPrice" class="standalone-input" type="number" min="0" step="any" required placeholder="0" />
           </div>
         </div>
 
         <div class="form-grid">
           <div class="form-group">
             <label class="form-label" for="adCategory">القسم</label>
-            <select id="adCategory" class="select" required></select>
+            <select id="adCategory" class="standalone-input select" required></select>
           </div>
           <div class="form-group">
             <label class="form-label" for="adCondition">الحالة</label>
-            <select id="adCondition" class="select">
+            <select id="adCondition" class="standalone-input select">
               <option value="مستعمل">مستعمل</option>
               <option value="جديد">جديد</option>
             </select>
           </div>
           <div class="form-group">
             <label class="form-label" for="adCurrency">العملة</label>
-            <select id="adCurrency" class="select">
+            <select id="adCurrency" class="standalone-input select">
               <option value="USD">USD ($)</option>
               <option value="TRY">TRY (₺)</option>
               <option value="SYP">SYP</option>
@@ -807,23 +982,23 @@
         <div class="form-grid">
           <div class="form-group">
             <label class="form-label" for="adCity">المدينة</label>
-            <input id="adCity" class="input" type="text" placeholder="مثال: دمشق أو أنطاليا..." />
+            <input id="adCity" class="standalone-input" type="text" placeholder="مثال: دمشق أو أنطاليا..." />
           </div>
           <div class="form-group">
             <label class="form-label" for="adNeighbourhood">الحي / المنطقة</label>
-            <input id="adNeighbourhood" class="input" type="text" placeholder="اختياري..." />
+            <input id="adNeighbourhood" class="standalone-input" type="text" placeholder="اختياري..." />
           </div>
         </div>
 
         <div class="form-group">
           <label class="form-label" for="adDescription">الوصف والتفاصيل</label>
-          <textarea id="adDescription" class="textarea" rows="3" placeholder="اكتب تفاصيل المنتج وحالته..."></textarea>
+          <textarea id="adDescription" class="standalone-textarea" rows="3" placeholder="اكتب تفاصيل المنتج وحالته..."></textarea>
         </div>
 
         <div class="form-group">
           <label class="form-label" for="adImageFile">صورة من الجهاز أو رابط صورة</label>
-          <input id="adImageFile" class="input" type="file" accept="image/*" onchange="handleImageFile(event, 'ad')" />
-          <input id="adImageUrl" class="input" type="url" placeholder="أو رابط صورة مباشر (https://...)" oninput="handleImageUrl(event)" style="margin-top: 6px;" />
+          <input id="adImageFile" class="standalone-input" type="file" accept="image/*" onchange="handleImageFile(event, 'ad')" />
+          <input id="adImageUrl" class="standalone-input" type="url" placeholder="أو رابط صورة مباشر (https://...)" oninput="handleImageUrl(event)" style="margin-top: 6px;" />
           <div id="adImagePreviewBox" class="preview-box" style="display: none;">
             <img id="adImagePreview" src="" alt="معاينة الصورة" />
           </div>
@@ -837,11 +1012,11 @@
     </div>
   </div>
 
-  <!-- الدردشة والرسائل الصوتية وقائمة الحظر -->
+  <!-- نافذة الدردشة والرسائل الصوتية وقائمة الحظر -->
   <div id="chatModal" class="modal-backdrop" onclick="handleBackdropClick(event, 'chat')">
-    <div class="modal-box" style="max-width: 860px;" onclick="event.stopPropagation()">
+    <div class="modal-box" style="max-width: 880px;" onclick="event.stopPropagation()">
       <div class="modal-header">
-        <div id="chatModalTitle" class="modal-title">◈ الدردشة المباشرة</div>
+        <div id="chatModalTitle" class="modal-title"><span class="ornament-diamond">◈</span> الدردشة المباشرة</div>
         <div style="display: flex; gap: 6px;">
           <button id="toggleBlockBtn" type="button" class="btn btn-danger" onclick="toggleBlockCurrentPeer()">🚫 حظر</button>
           <button type="button" class="btn" onclick="closeActiveModal()">✕</button>
@@ -851,7 +1026,7 @@
       <div class="chat-container">
         <div style="display: flex; flex-direction: column; gap: 6px;">
           <input
-            class="input"
+            class="standalone-input"
             type="text"
             placeholder="اسم مستخدم + Enter..."
             onkeydown="if(event.key==='Enter'){event.preventDefault();addOrSelectPeer(this.value);this.value='';}"
@@ -870,7 +1045,7 @@
 
           <form onsubmit="sendChatMessage(event)" style="display: flex; gap: 6px; margin-top: 6px;">
             <button id="voiceRecordBtn" type="button" class="btn btn-diamond" onclick="toggleVoiceRecording()" title="تسجيل صوتي">🎙️</button>
-            <input id="chatTextInput" class="input" type="text" placeholder="اكتب رسالتك..." required />
+            <input id="chatTextInput" class="standalone-input" type="text" placeholder="اكتب رسالتك..." required />
             <button type="submit" class="btn btn-gold">إرسال</button>
           </form>
         </div>
@@ -883,38 +1058,57 @@
     </div>
   </div>
 
-  <!-- الملف الشخصي -->
+  <!-- نافذة الملف الشخصي الموسعة -->
   <div id="profileModal" class="modal-backdrop" onclick="handleBackdropClick(event, 'profile')">
-    <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-box wide-profile-box" onclick="event.stopPropagation()">
       <div class="modal-header">
-        <div class="modal-title">✦ الملف الشخصي</div>
+        <div class="modal-title"><span class="ornament-gold">✦</span> الملف الشخصي الموسع</div>
         <button type="button" class="btn" onclick="closeActiveModal()">✕</button>
       </div>
-      <form onsubmit="saveProfile(event)">
-        <div class="form-group">
-          <label class="form-label" for="profileName">الاسم الظاهر</label>
-          <input id="profileName" class="input" type="text" required placeholder="اكتب اسمك..." />
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="profileCity">المدينة</label>
-          <input id="profileCity" class="input" type="text" placeholder="مثال: دمشق أو أنطاليا..." />
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="profileBio">نبذة تعريفية</label>
-          <textarea id="profileBio" class="textarea" rows="2" placeholder="نبذة قصيرة عنك..."></textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="profileAvatarFile">صورة رمزية من الجهاز</label>
-          <input id="profileAvatarFile" class="input" type="file" accept="image/*" onchange="handleImageFile(event, 'avatar')" />
-          <div class="preview-box" style="max-height: 120px;">
-            <img id="profileAvatarPreview" src="" alt="الصورة الرمزية" />
+
+      <div class="profile-expanded-grid">
+        <div class="profile-side-card">
+          <img id="profileAvatarPreview" src="" alt="الصورة الرمزية" style="width: 108px; height: 108px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold); margin-bottom: 10px;" />
+          <div id="profileCardUsername" style="font-size: 1rem; font-weight: 800; color: var(--gold-bright);">مستخدم</div>
+          <div id="profileCardCity" style="font-size: 0.78rem; color: var(--diamond-bright); margin-top: 3px;">غير محدد</div>
+          <div id="profileCardBio" style="font-size: 0.78rem; color: var(--silver-dim); margin-top: 8px; line-height: 1.5;"></div>
+          <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(226, 232, 240, 0.14); font-size: 0.78rem; color: var(--silver);">
+            إعلاناتي المنشورة: <strong id="profileAdsCount" style="color: var(--gold-bright);">0</strong>
           </div>
         </div>
-        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px;">
-          <button type="button" class="btn" onclick="closeActiveModal()">إلغاء</button>
-          <button type="submit" class="btn btn-gold">حفظ الملف</button>
+
+        <div class="profile-main-card">
+          <form onsubmit="saveProfile(event)">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="profileName">الاسم الظاهر</label>
+                <input id="profileName" class="standalone-input" type="text" required placeholder="اكتب اسمك..." />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="profileCity">المدينة</label>
+                <input id="profileCity" class="standalone-input" type="text" placeholder="مثال: دمشق أو أنطاليا..." />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="profileBio">نبذة تعريفية</label>
+              <textarea id="profileBio" class="standalone-textarea" rows="2" placeholder="نبذة قصيرة عنك وعن إعلاناتك..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="profileAvatarFile">صورة رمزية من الجهاز</label>
+              <input id="profileAvatarFile" class="standalone-input" type="file" accept="image/*" onchange="handleImageFile(event, 'avatar')" />
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px;">
+              <button type="button" class="btn" onclick="closeActiveModal()">إلغاء</button>
+              <button type="submit" class="btn btn-gold">حفظ الملف</button>
+            </div>
+          </form>
+
+          <div class="my-ads-mini-list" id="profileMyAdsList"></div>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 

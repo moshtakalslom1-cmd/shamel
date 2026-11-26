@@ -7,19 +7,18 @@
     <style>
         :root {
             --gold-bright: #FFD700;
-            --gold-deep: #B8860B;
             --gold-grad: linear-gradient(135deg, #AA771C 0%, #FCF6BA 35%, #D4AF37 60%, #FCF6BA 85%, #8A5A00 100%);
             --silver-grad: linear-gradient(135deg, #7A7F85 0%, #F5F7FA 35%, #AEB4BC 60%, #FFFFFF 80%, #5C6166 100%);
             --diamond-grad: linear-gradient(135deg, #4FD1C5 0%, #E0FFFF 35%, #87CEFA 65%, #FFFFFF 85%, #38BDF8 100%);
             --bg-obsidian: #0A0C10;
             --bg-panel: #12161F;
-            --bg-card: #171C28;
             --bg-input: #0F131B;
             --border-gold: rgba(212, 175, 55, 0.45);
             --border-diamond: rgba(135, 206, 250, 0.35);
             --text-main: #F8FAFC;
             --text-muted: #94A3B8;
             --diamond-accent: #67E8F9;
+            --danger-color: #F87171;
         }
 
         * {
@@ -41,7 +40,6 @@
             overflow-x: hidden;
         }
 
-        /* Header & Ornate Title */
         header {
             background: linear-gradient(180deg, rgba(23, 28, 40, 0.96), rgba(12, 15, 22, 0.96));
             border-bottom: 1px solid var(--border-gold);
@@ -66,7 +64,7 @@
         .brand-box {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .brand-ornament {
@@ -74,7 +72,6 @@
             background: var(--diamond-grad);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 6px rgba(103, 232, 249, 0.45));
         }
 
         .brand-title {
@@ -83,10 +80,7 @@
             background: var(--gold-grad);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: 0.5px;
-            position: relative;
-            padding: 0 6px;
-            text-shadow: 0 0 18px rgba(212, 175, 55, 0.2);
+            padding: 0 4px;
         }
 
         .brand-title::before,
@@ -148,7 +142,25 @@
             background: rgba(103, 232, 249, 0.08);
         }
 
-        /* Main Layout */
+        .btn-danger {
+            background: rgba(248, 113, 113, 0.14);
+            color: var(--danger-color);
+            border: 1px solid rgba(248, 113, 113, 0.45);
+            border-radius: 8px;
+            padding: 7px 13px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s ease;
+        }
+
+        .btn-danger:hover {
+            background: rgba(248, 113, 113, 0.25);
+        }
+
         .main-container {
             max-width: 1440px;
             width: 100%;
@@ -157,7 +169,6 @@
             flex: 1;
         }
 
-        /* Filter & Search Bar */
         .toolbar {
             background: var(--bg-panel);
             border: 1px solid rgba(148, 163, 184, 0.2);
@@ -180,7 +191,6 @@
             padding: 8px 10px;
             font-size: 13px;
             outline: none;
-            transition: border-color 0.2s ease;
         }
 
         .toolbar input:focus,
@@ -200,11 +210,6 @@
             white-space: nowrap;
         }
 
-        .btn-reset:hover {
-            background: rgba(103, 232, 249, 0.1);
-        }
-
-        /* Section Titles */
         .section-header {
             display: flex;
             align-items: center;
@@ -220,9 +225,6 @@
             background: var(--silver-grad);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
         .section-badge {
@@ -234,7 +236,6 @@
             border-radius: 999px;
         }
 
-        /* Horizontal Packed Categories without Horizontal Page Scroll */
         .categories-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
@@ -255,30 +256,21 @@
             font-size: 12.5px;
             font-weight: 600;
             color: var(--text-main);
-            text-align: center;
-            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
             min-height: 44px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
         }
 
         .category-tile:hover {
             transform: translateY(-2px);
             border-color: var(--gold-bright);
-            box-shadow: 0 4px 14px rgba(212, 175, 55, 0.2);
         }
 
         .category-tile.active {
             background: linear-gradient(145deg, rgba(212, 175, 55, 0.22), rgba(103, 232, 249, 0.12));
             border-color: var(--gold-bright);
             box-shadow: 0 0 14px rgba(212, 175, 55, 0.3);
-            color: #FFFBEB;
         }
 
-        .category-icon {
-            font-size: 15px;
-            filter: drop-shadow(0 0 4px rgba(103, 232, 249, 0.35));
-        }
-
-        /* Compact Multi-Column Ads Grid (4-5 per row on wide screens) */
         .ads-grid {
             display: grid;
             grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -286,31 +278,18 @@
         }
 
         @media (max-width: 1200px) {
-            .ads-grid {
-                grid-template-columns: repeat(4, minmax(0, 1fr));
-            }
-            .toolbar {
-                grid-template-columns: 1fr 1fr;
-            }
+            .ads-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .toolbar { grid-template-columns: 1fr 1fr; }
         }
 
         @media (max-width: 900px) {
-            .ads-grid {
-                grid-template-columns: repeat(3, minmax(0, 1fr));
-            }
+            .ads-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
         }
 
         @media (max-width: 640px) {
-            .ads-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                gap: 8px;
-            }
-            .toolbar {
-                grid-template-columns: 1fr;
-            }
-            .brand-title {
-                font-size: 19px;
-            }
+            .ads-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+            .toolbar { grid-template-columns: 1fr; }
+            .brand-title { font-size: 19px; }
         }
 
         .ad-card {
@@ -422,7 +401,6 @@
             font-size: 14px;
         }
 
-        /* Modals */
         .modal-backdrop {
             display: none;
             position: fixed;
@@ -441,7 +419,7 @@
 
         .modal-box {
             width: 100%;
-            max-width: 540px;
+            max-width: 560px;
             max-height: 90vh;
             overflow-y: auto;
             background: var(--bg-panel);
@@ -475,10 +453,6 @@
             font-size: 22px;
             cursor: pointer;
             line-height: 1;
-        }
-
-        .modal-close:hover {
-            color: var(--diamond-accent);
         }
 
         .form-grid {
@@ -516,6 +490,39 @@
             font-family: inherit;
         }
 
+        .upload-zone {
+            border: 1px dashed var(--border-diamond);
+            background: rgba(15, 19, 27, 0.85);
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .upload-preview-wrap {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            background: rgba(23, 28, 40, 0.9);
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(103, 232, 249, 0.25);
+        }
+
+        .upload-preview-wrap.visible {
+            display: flex;
+        }
+
+        .upload-preview-img {
+            width: 64px;
+            height: 64px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid var(--border-gold);
+        }
+
         .detail-img {
             width: 100%;
             max-height: 240px;
@@ -550,6 +557,12 @@
             color: var(--text-main);
             margin-bottom: 12px;
             white-space: pre-wrap;
+        }
+
+        .detail-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .messages-box {
@@ -598,7 +611,6 @@
     </header>
 
     <main class="main-container">
-        <!-- Search & Filter Bar -->
         <section class="toolbar" aria-label="أدوات البحث والفلترة">
             <input type="search" id="searchInput" placeholder="ابحث عن سيارة، هاتف، عقار، لابتوب..." oninput="applyFilters()">
 
@@ -634,14 +646,12 @@
             <button class="btn-reset" onclick="resetFilters()">إعادة ضبط</button>
         </section>
 
-        <!-- Compact Horizontal Categories -->
         <div class="section-header">
             <h2 class="section-title">✦ الأقسام الرئيسية</h2>
             <span class="section-badge" id="activeCategoryLabel">جميع الأقسام</span>
         </div>
         <section class="categories-grid" id="categoriesGrid"></section>
 
-        <!-- Compact Multi-Column Ads Grid -->
         <div class="section-header">
             <h2 class="section-title">✦ أحدث الإعلانات</h2>
             <span class="section-badge" id="adsCountBadge">0 إعلان</span>
@@ -649,14 +659,17 @@
         <section class="ads-grid" id="adsGrid"></section>
     </main>
 
-    <!-- Create Ad Modal -->
-    <div class="modal-backdrop" id="createAdModal">
+    <!-- Create / Edit Ad Modal -->
+    <div class="modal-backdrop" id="adFormModal">
         <div class="modal-box">
             <div class="modal-head">
-                <h3 class="modal-title">نشر إعلان جديد</h3>
-                <button class="modal-close" onclick="closeModal('createAdModal')">&times;</button>
+                <h3 class="modal-title" id="adFormModalTitle">نشر إعلان جديد</h3>
+                <button class="modal-close" onclick="closeModal('adFormModal')">&times;</button>
             </div>
-            <form id="createAdForm" onsubmit="handleCreateAd(event)">
+            <form id="adForm" onsubmit="handleSaveAd(event)">
+                <input type="hidden" id="editingAdId" value="">
+                <input type="hidden" id="adImageData" value="">
+
                 <div class="form-grid">
                     <div class="form-group full">
                         <label for="adTitle">عنوان الإعلان</label>
@@ -701,8 +714,18 @@
                     </div>
 
                     <div class="form-group full">
-                        <label for="adImage">رابط الصورة (اختياري)</label>
-                        <input type="url" id="adImage" placeholder="https://...">
+                        <label>صورة الإعلان (رفع فوري من الجهاز أو رابط)</label>
+                        <div class="upload-zone">
+                            <input type="file" id="adFileInput" accept="image/*" onchange="handleFileSelect(event)">
+                            <input type="url" id="adImageUrl" placeholder="أو الصق رابط صورة مباشر https://..." oninput="handleUrlInput(event)">
+                            <div class="upload-preview-wrap" id="imagePreviewWrap">
+                                <div style="display:flex; align-items:center; gap:10px;">
+                                    <img id="imagePreviewThumb" class="upload-preview-img" src="" alt="معاينة الصورة">
+                                    <span style="font-size:12px; color:var(--diamond-accent);">تم تجهيز الصورة فوراً</span>
+                                </div>
+                                <button type="button" class="btn-danger" onclick="clearSelectedImage()">إزالة الصورة</button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="form-group full">
@@ -711,7 +734,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn-gold" style="width:100%; justify-content:center; padding:10px;">
+                <button type="submit" class="btn-gold" id="adSubmitBtn" style="width:100%; justify-content:center; padding:10px;">
                     نشر الإعلان الآن
                 </button>
             </form>
@@ -776,7 +799,7 @@
 
             grid.innerHTML = CATEGORIES.map(cat => `
                 <div class="category-tile ${selectedCategory === cat.name ? 'active' : ''}" onclick="toggleCategory('${escapeAttr(cat.name)}')">
-                    <span class="category-icon">${cat.icon}</span>
+                    <span>${cat.icon}</span>
                     <span>${escapeHtml(cat.name)}</span>
                 </div>
             `).join('');
@@ -882,10 +905,149 @@
             }).join('');
         }
 
+        function setImagePreview(src) {
+            const wrap = document.getElementById('imagePreviewWrap');
+            const thumb = document.getElementById('imagePreviewThumb');
+            document.getElementById('adImageData').value = src || '';
+            if (src) {
+                thumb.src = src;
+                wrap.classList.add('visible');
+            } else {
+                thumb.src = '';
+                wrap.classList.remove('visible');
+            }
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            if (file.size > 4 * 1024 * 1024) {
+                alert('حجم الصورة كبير جداً، اختر صورة أقل من 4MB.');
+                event.target.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('adImageUrl').value = '';
+                setImagePreview(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleUrlInput(event) {
+            const url = event.target.value.trim();
+            if (url) {
+                document.getElementById('adFileInput').value = '';
+                setImagePreview(url);
+            } else if (!document.getElementById('adFileInput').files.length) {
+                setImagePreview('');
+            }
+        }
+
+        function clearSelectedImage() {
+            document.getElementById('adFileInput').value = '';
+            document.getElementById('adImageUrl').value = '';
+            setImagePreview('');
+        }
+
+        function openCreateModal() {
+            document.getElementById('adForm').reset();
+            document.getElementById('editingAdId').value = '';
+            document.getElementById('adFormModalTitle').textContent = 'نشر إعلان جديد';
+            document.getElementById('adSubmitBtn').textContent = 'نشر الإعلان الآن';
+            setImagePreview('');
+            openModal('adFormModal');
+        }
+
+        function openEditModal(id) {
+            const ad = allAds.find(item => (item._id || item.id) === id);
+            if (!ad) return;
+
+            closeModal('detailAdModal');
+            document.getElementById('editingAdId').value = id;
+            document.getElementById('adFormModalTitle').textContent = 'تعديل الإعلان';
+            document.getElementById('adSubmitBtn').textContent = 'حفظ التعديلات';
+
+            document.getElementById('adTitle').value = ad.title || '';
+            document.getElementById('adPrice').value = ad.price ?? '';
+            document.getElementById('adCurrency').value = ad.currency || 'USD';
+            document.getElementById('adCategory').value = ad.category || CATEGORIES[0].name;
+            document.getElementById('adCondition').value = ad.condition || 'مستعمل';
+            document.getElementById('adCity').value = ad.city || 'دمشق';
+            document.getElementById('adNeighbourhood').value = ad.neighbourhood || '';
+            document.getElementById('adDescription').value = ad.description || '';
+
+            document.getElementById('adFileInput').value = '';
+            const existingImg = ad.image || '';
+            document.getElementById('adImageUrl').value = existingImg.startsWith('data:') ? '' : existingImg;
+            setImagePreview(existingImg);
+
+            openModal('adFormModal');
+        }
+
+        async function handleSaveAd(e) {
+            e.preventDefault();
+            const editingId = document.getElementById('editingAdId').value.trim();
+            const finalImage = document.getElementById('adImageData').value.trim() || document.getElementById('adImageUrl').value.trim();
+
+            const payload = {
+                title: document.getElementById('adTitle').value.trim(),
+                price: Number(document.getElementById('adPrice').value),
+                currency: document.getElementById('adCurrency').value,
+                category: document.getElementById('adCategory').value,
+                condition: document.getElementById('adCondition').value,
+                city: document.getElementById('adCity').value.trim(),
+                neighbourhood: document.getElementById('adNeighbourhood').value.trim(),
+                image: finalImage,
+                description: document.getElementById('adDescription').value.trim(),
+                ownerUsername: 'user'
+            };
+
+            const url = editingId ? `${API_BASE}/ads/${encodeURIComponent(editingId)}` : `${API_BASE}/ads`;
+            const method = editingId ? 'PUT' : 'POST';
+
+            try {
+                const res = await fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+                closeModal('adFormModal');
+                await loadAds();
+            } catch (err) {
+                console.error('Error saving ad:', err);
+                alert(editingId ? 'تعذر حفظ التعديل، تحقق من مسار PUT /api/ads/:id في السيرفر.' : 'تعذر نشر الإعلان، تحقق من اتصال الخادم.');
+            }
+        }
+
+        async function handleDeleteAd(id) {
+            if (!id) return;
+            const confirmed = confirm('هل أنت متأكد من حذف هذا الإعلان نهائياً؟');
+            if (!confirmed) return;
+
+            try {
+                const res = await fetch(`${API_BASE}/ads/${encodeURIComponent(id)}`, {
+                    method: 'DELETE'
+                });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+                closeModal('detailAdModal');
+                await loadAds();
+            } catch (err) {
+                console.error('Error deleting ad:', err);
+                alert('تعذر حذف الإعلان، تحقق من مسار DELETE /api/ads/:id في السيرفر.');
+            }
+        }
+
         function openAdDetail(id) {
             const ad = allAds.find(item => (item._id || item.id) === id);
             if (!ad) return;
 
+            const realId = ad._id || ad.id || id;
             document.getElementById('detailTitle').textContent = ad.title || 'تفاصيل الإعلان';
             const priceNum = Number(ad.price);
             const formattedPrice = Number.isFinite(priceNum) ? priceNum.toLocaleString() : escapeHtml(ad.price || '0');
@@ -900,9 +1062,13 @@
                     ${ad.condition ? `<span class="detail-pill">✨ الحالة: ${escapeHtml(ad.condition)}</span>` : ''}
                 </div>
                 <div class="detail-desc">${escapeHtml(ad.description || 'لا يوجد وصف إضافي لهذا الإعلان.')}</div>
-                <button class="btn-silver-diamond" style="width:100%; justify-content:center; padding:9px;" onclick="quickMessageOwner('${escapeAttr(ad.ownerUsername || 'user')}', '${escapeAttr(ad.title || '')}')">
-                    💬 مراسلة المعلن بخصوص هذا الإعلان
-                </button>
+                <div class="detail-actions">
+                    <button class="btn-gold" style="flex:1; justify-content:center;" onclick="openEditModal('${escapeAttr(realId)}')">✏️ تعديل المنشور</button>
+                    <button class="btn-danger" style="flex:1; justify-content:center;" onclick="handleDeleteAd('${escapeAttr(realId)}')">🗑️ حذف المنشور</button>
+                    <button class="btn-silver-diamond" style="flex-basis:100%; justify-content:center;" onclick="quickMessageOwner('${escapeAttr(ad.ownerUsername || 'user')}', '${escapeAttr(ad.title || '')}')">
+                        💬 مراسلة المعلن
+                    </button>
+                </div>
             `;
 
             openModal('detailAdModal');
@@ -913,38 +1079,6 @@
             document.getElementById('msgRecipient').value = owner || 'user';
             document.getElementById('msgText').value = `مرحباً، أستفسر بخصوص إعلان: ${title}`;
             openMessagesModal();
-        }
-
-        async function handleCreateAd(e) {
-            e.preventDefault();
-            const payload = {
-                title: document.getElementById('adTitle').value.trim(),
-                price: Number(document.getElementById('adPrice').value),
-                currency: document.getElementById('adCurrency').value,
-                category: document.getElementById('adCategory').value,
-                condition: document.getElementById('adCondition').value,
-                city: document.getElementById('adCity').value.trim(),
-                neighbourhood: document.getElementById('adNeighbourhood').value.trim(),
-                image: document.getElementById('adImage').value.trim(),
-                description: document.getElementById('adDescription').value.trim(),
-                ownerUsername: 'user'
-            };
-
-            try {
-                const res = await fetch(`${API_BASE}/ads`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-                document.getElementById('createAdForm').reset();
-                closeModal('createAdModal');
-                await loadAds();
-            } catch (err) {
-                console.error('Error creating ad:', err);
-                alert('تعذر نشر الإعلان، تحقق من اتصال الخادم.');
-            }
         }
 
         async function openMessagesModal() {
@@ -1006,10 +1140,6 @@
             document.getElementById('activeCategoryLabel').textContent = 'جميع الأقسام';
             initCategories();
             applyFilters();
-        }
-
-        function openCreateModal() {
-            openModal('createAdModal');
         }
 
         function openModal(id) {

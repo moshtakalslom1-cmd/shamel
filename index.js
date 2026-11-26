@@ -7,16 +7,10 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI || process.env.MONGODB_URI || '';
 
-// رفع حد حجم JSON لاستقبال الصور والرسائل الصوتية Base64
 app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ extended: true, limit: '25mb' }));
-
-// خدمة ملفات الواجهة الأمامية من مجلد public
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ==========================================
-// الاتصال بقاعدة البيانات (MongoDB)
-// ==========================================
 if (MONGO_URI) {
   mongoose
     .connect(MONGO_URI)
@@ -27,7 +21,7 @@ if (MONGO_URI) {
 }
 
 // ==========================================
-// مخططات البيانات (Schemas & Models)
+// المخططات والموديلات
 // ==========================================
 const userSchema = new mongoose.Schema(
   {
@@ -52,7 +46,7 @@ const adSchema = new mongoose.Schema(
     neighbourhood: { type: String, default: '', trim: true },
     description: { type: String, default: '' },
     image: { type: String, default: '' },
-    ownerUsername: { type: String, default: 'user', trim: true }
+    ownerUsername: { type: String, required: true, trim: true, lowercase: true }
   },
   { timestamps: true }
 );
@@ -61,8 +55,8 @@ const Ad = mongoose.models.Ad || mongoose.model('Ad', adSchema);
 
 const messageSchema = new mongoose.Schema(
   {
-    sender: { type: String, required: true, trim: true },
-    to: { type: String, required: true, trim: true },
+    sender: { type: String, required: true, trim: true, lowercase: true },
+    to: { type: String, required: true, trim: true, lowercase: true },
     text: { type: String, required: true }
   },
   { timestamps: true }
@@ -71,7 +65,7 @@ const messageSchema = new mongoose.Schema(
 const Message = mongoose.models.Message || mongoose.model('Message', messageSchema);
 
 // ==========================================
-// دوال تشفير والتحقق من كلمة المرور
+// التشفير والتحقق
 // ==========================================
 function hashPassword(password, salt = crypto.randomBytes(16).toString('hex')) {
   const hash = crypto.scryptSync(String(password), salt, 64).toString('hex');
@@ -83,8 +77,17 @@ function verifyPassword(password, salt, hash) {
   return crypto.timingSafeEqual(Buffer.from(candidate, 'hex'), Buffer.from(hash, 'hex'));
 }
 
+async function getAuthenticatedUser(req) {
+  const authHeader = String(req.headers.authorization || '');
+  const bearerToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
+  const bodyOrQueryToken = String(req.body?.token || req.query?.token || '').trim();
+  const token = bearerToken || bodyOrQueryToken;
+  if (!token) return null;
+  return User.findOne({ token });
+}
+
 // ==========================================
-// مسارات تسجيل الدخول وإنشاء الحساب (الاسم وكلمة المرور فقط)
+// المصادقة (الاسم وكلمة المرور فقط)
 // ==========================================
 app.post('/api/auth/register', async (req, res) => {
   try {
@@ -103,13 +106,7 @@ app.post('/api/auth/register', async (req, res) => {
     const { salt, hash } = hashPassword(password);
     const token = crypto.randomBytes(24).toString('hex');
 
-    const newUser = new User({
-      username,
-      passwordHash: hash,
-      salt,
-      token
-    });
-
+    const newUser = new User({ username, passwordHash: hash, salt, token });
     await newUser.save();
 
     return res.status(201).json({
@@ -151,7 +148,7 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 // ==========================================
-// مسارات الإعلانات (CRUD)
+// الإعلانات (CRUD + حماية الملكية)
 // ==========================================
 app.get('/api/ads', async (req, res) => {
   try {
@@ -165,6 +162,16 @@ app.get('/api/ads', async (req, res) => {
 
 app.post('/api/ads', async (req, res) => {
   try {
+    const authUser = await getAuthenticatedUser(req);
+    const ownerUsername = (
+      authUser?.username ||
+      String(req.body.ownerUsername ?? '').trim().toLowerCase()
+    );
+
+    if (!ownerUsername) {
+      return res.status(401).json({ message: 'يجب تسجيل الدخول أولاً لنشر إعلان' });
+    }
+
     const title = String(req.body.title ?? '').trim();
     const category = String(req.body.category ?? '').trim();
     if (!title || !category) {
@@ -181,7 +188,7 @@ app.post('/api/ads', async (req, res) => {
       neighbourhood: String(req.body.neighbourhood ?? '').trim(),
       description: String(req.body.description ?? ''),
       image: String(req.body.image ?? ''),
-      ownerUsername: String(req.body.ownerUsername ?? 'user').trim() || 'user'
+      ownerUsername
     });
 
     await ad.save();
@@ -194,27 +201,35 @@ app.post('/api/ads', async (req, res) => {
 
 app.put('/api/ads/:id', async (req, res) => {
   try {
-    const updated = await Ad.findByIdAndUpdate(
-      req.params.id,
-      {
-        title: String(req.body.title ?? '').trim(),
-        price: Number(req.body.price ?? 0),
-        category: String(req.body.category ?? '').trim(),
-        condition: String(req.body.condition ?? 'مستعمل').trim(),
-        currency: String(req.body.currency ?? 'USD').trim(),
-        city: String(req.body.city ?? '').trim(),
-        neighbourhood: String(req.body.neighbourhood ?? '').trim(),
-        description: String(req.body.description ?? ''),
-        image: String(req.body.image ?? ''),
-        ownerUsername: String(req.body.ownerUsername ?? 'user').trim() || 'user'
-      },
-      { new: true, runValidators: true }
-    );
-
-    if (!updated) {
+    const ad = await Ad.findById(req.params.id);
+    if (!ad) {
       return res.status(404).json({ message: 'الإعلان غير موجود' });
     }
-    return res.json(updated);
+
+    const authUser = await getAuthenticatedUser(req);
+    const requester = (
+      authUser?.username ||
+      String(req.body.requesterUsername ?? req.body.ownerUsername ?? '').trim().toLowerCase()
+    );
+
+    if (!requester || requester !== ad.ownerUsername.toLowerCase()) {
+      return res.status(403).json({ message: 'غير مسموح لك بتعديل إعلان شخص آخر' });
+    }
+
+    ad.title = String(req.body.title ?? ad.title).trim();
+    ad.price = Number(req.body.price ?? ad.price);
+    ad.category = String(req.body.category ?? ad.category).trim();
+    ad.condition = String(req.body.condition ?? ad.condition).trim();
+    ad.currency = String(req.body.currency ?? ad.currency).trim();
+    ad.city = String(req.body.city ?? ad.city).trim();
+    ad.neighbourhood = String(req.body.neighbourhood ?? ad.neighbourhood).trim();
+    ad.description = String(req.body.description ?? ad.description);
+    if (typeof req.body.image === 'string') {
+      ad.image = req.body.image;
+    }
+
+    await ad.save();
+    return res.json(ad);
   } catch (err) {
     console.error('PUT /api/ads/:id error:', err);
     return res.status(400).json({ message: 'فشل تحديث الإعلان' });
@@ -223,10 +238,24 @@ app.put('/api/ads/:id', async (req, res) => {
 
 app.delete('/api/ads/:id', async (req, res) => {
   try {
-    const deleted = await Ad.findByIdAndDelete(req.params.id);
-    if (!deleted) {
+    const ad = await Ad.findById(req.params.id);
+    if (!ad) {
       return res.status(404).json({ message: 'الإعلان غير موجود' });
     }
+
+    const authUser = await getAuthenticatedUser(req);
+    const requester = (
+      authUser?.username ||
+      String(req.headers['x-username'] || req.body?.requesterUsername || req.query?.username || '')
+        .trim()
+        .toLowerCase()
+    );
+
+    if (!requester || requester !== ad.ownerUsername.toLowerCase()) {
+      return res.status(403).json({ message: 'غير مسموح لك بحذف إعلان شخص آخر' });
+    }
+
+    await Ad.findByIdAndDelete(req.params.id);
     return res.json({ message: 'تم حذف الإعلان بنجاح' });
   } catch (err) {
     console.error('DELETE /api/ads/:id error:', err);
@@ -235,7 +264,7 @@ app.delete('/api/ads/:id', async (req, res) => {
 });
 
 // ==========================================
-// مسارات الرسائل النصية والصوتية
+// الرسائل النصية والصوتية
 // ==========================================
 app.get('/api/messages', async (req, res) => {
   try {
@@ -249,10 +278,17 @@ app.get('/api/messages', async (req, res) => {
 
 app.post('/api/messages', async (req, res) => {
   try {
-    const sender = String(req.body.sender ?? 'user').trim() || 'user';
-    const to = String(req.body.to ?? '').trim();
+    const authUser = await getAuthenticatedUser(req);
+    const sender = (
+      authUser?.username ||
+      String(req.body.sender ?? '').trim().toLowerCase()
+    );
+    const to = String(req.body.to ?? '').trim().toLowerCase();
     const text = String(req.body.text ?? '');
 
+    if (!sender) {
+      return res.status(401).json({ message: 'يجب تسجيل الدخول أولاً لإرسال رسالة' });
+    }
     if (!to || !text) {
       return res.status(400).json({ message: 'المستلم ومحتوى الرسالة مطلوبان' });
     }
@@ -266,9 +302,6 @@ app.post('/api/messages', async (req, res) => {
   }
 });
 
-// ==========================================
-// تقديم الواجهة لأي مسار غير API
-// ==========================================
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

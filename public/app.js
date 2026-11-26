@@ -1,21 +1,18 @@
-// ==========================================
-// 1. الإعدادات والحالة العامة
-// ==========================================
 const CATEGORIES = [
-  'الكل',
-  'إلكترونيات وكمبيوتر',
-  'موبايلات وتابلت',
-  'سيارات ومركبات',
-  'عقارات ومنازل',
-  'أثاث ومفروشات',
-  'أدوات منزلية',
-  'أزياء وموضة',
-  'خدمات ومهن'
+  { name: 'الكل', icon: '❖' },
+  { name: 'إلكترونيات وكمبيوتر', icon: '◈' },
+  { name: 'موبايلات وتابلت', icon: '✦' },
+  { name: 'سيارات ومركبات', icon: '❖' },
+  { name: 'عقارات ومنازل', icon: '◈' },
+  { name: 'أثاث ومفروشات', icon: '✦' },
+  { name: 'أدوات منزلية', icon: '❖' },
+  { name: 'أزياء وموضة', icon: '◈' },
+  { name: 'خدمات ومهن', icon: '✦' }
 ];
 
 const DEFAULT_AVATAR = 'https://api.dicebear.com/7.x/avataaars/svg?seed=user';
 const DEFAULT_AD_IMG =
-  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="240" viewBox="0 0 400 240"><rect width="400" height="240" fill="%230d111a"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23f5c451" font-family="sans-serif" font-size="18">بدون صورة</text></svg>';
+  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="240" viewBox="0 0 400 240"><rect width="400" height="240" fill="%230b0f18"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23f6c453" font-family="sans-serif" font-size="18">بدون صورة</text></svg>';
 
 const STORAGE_KEYS = {
   profile: 'rakhis_profile_v1',
@@ -35,7 +32,7 @@ const state = {
   blockedUsers: loadJson(STORAGE_KEYS.blocked, []),
   authUser: loadJson(STORAGE_KEYS.auth, null),
   profile: loadJson(STORAGE_KEYS.profile, {
-    name: 'user',
+    name: '',
     city: '',
     bio: '',
     avatar: DEFAULT_AVATAR
@@ -75,14 +72,23 @@ function escapeHtml(str) {
 
 function getActiveUsername() {
   if (state.authUser && state.authUser.username) {
-    return state.authUser.username;
+    return String(state.authUser.username).trim().toLowerCase();
   }
-  return (state.profile && state.profile.name) || 'user';
+  return '';
 }
 
-// ==========================================
-// 2. التنبيهات المخصصة (showToast)
-// ==========================================
+function getAuthHeaders(extra = {}) {
+  const headers = { ...extra };
+  if (state.authUser && state.authUser.token) {
+    headers.Authorization = `Bearer ${state.authUser.token}`;
+  }
+  const activeUser = getActiveUsername();
+  if (activeUser) {
+    headers['x-username'] = activeUser;
+  }
+  return headers;
+}
+
 function showToast(message, type = 'info') {
   const container = document.getElementById('toastContainer');
   if (!container) return;
@@ -101,7 +107,7 @@ function showToast(message, type = 'info') {
 }
 
 // ==========================================
-// 3. إدارة زر الرجوع والنوافذ المنبثقة (history.pushState)
+// النوافذ والرجوع
 // ==========================================
 const MODAL_MAP = {
   details: 'detailsModal',
@@ -181,19 +187,20 @@ function goHome() {
 }
 
 // ==========================================
-// 4. نظام تسجيل الدخول وإنشاء الحساب (الاسم وكلمة المرور فقط)
+// تسجيل الدخول وإنشاء الحساب (الاسم وكلمة المرور فقط)
 // ==========================================
 function renderAuthHeader() {
   const authBtn = document.getElementById('authOpenBtn');
   const logoutBtn = document.getElementById('logoutBtn');
   const statusText = document.getElementById('authStatusText');
+  const activeUser = getActiveUsername();
 
-  if (state.authUser && state.authUser.username) {
-    if (authBtn) authBtn.textContent = `👤 ${state.authUser.username}`;
+  if (activeUser) {
+    if (authBtn) authBtn.textContent = `❖ ${activeUser}`;
     if (logoutBtn) logoutBtn.style.display = 'inline-flex';
-    if (statusText) statusText.textContent = `مسجل باسم: ${state.authUser.username}`;
+    if (statusText) statusText.textContent = `حساب نشط: ${activeUser}`;
   } else {
-    if (authBtn) authBtn.textContent = '🔐 دخول / حساب';
+    if (authBtn) authBtn.textContent = '❖ دخول / حساب';
     if (logoutBtn) logoutBtn.style.display = 'none';
     if (statusText) statusText.textContent = 'إعلانات سريعة • تواصل مباشر';
   }
@@ -201,15 +208,10 @@ function renderAuthHeader() {
 
 function switchAuthTab(tab) {
   const isLogin = tab === 'login';
-  const tabLogin = document.getElementById('tabLogin');
-  const tabRegister = document.getElementById('tabRegister');
-  const loginForm = document.getElementById('loginForm');
-  const registerForm = document.getElementById('registerForm');
-
-  if (tabLogin) tabLogin.classList.toggle('active', isLogin);
-  if (tabRegister) tabRegister.classList.toggle('active', !isLogin);
-  if (loginForm) loginForm.style.display = isLogin ? 'block' : 'none';
-  if (registerForm) registerForm.style.display = isLogin ? 'none' : 'block';
+  document.getElementById('tabLogin')?.classList.toggle('active', isLogin);
+  document.getElementById('tabRegister')?.classList.toggle('active', !isLogin);
+  document.getElementById('loginForm').style.display = isLogin ? 'block' : 'none';
+  document.getElementById('registerForm').style.display = isLogin ? 'none' : 'block';
 }
 
 function openAuthModal(tab = 'login') {
@@ -218,7 +220,7 @@ function openAuthModal(tab = 'login') {
 }
 
 function applyLoggedInUser(userObj) {
-  const username = String(userObj.username || '').trim();
+  const username = String(userObj.username || '').trim().toLowerCase();
   state.authUser = {
     username,
     token: userObj.token || ''
@@ -230,13 +232,14 @@ function applyLoggedInUser(userObj) {
 
   applyProfileHeader();
   renderAuthHeader();
+  renderAds();
   renderChatUsers();
   renderChatMessages();
 }
 
 async function handleLogin(event) {
   event.preventDefault();
-  const username = document.getElementById('loginUsername').value.trim();
+  const username = document.getElementById('loginUsername').value.trim().toLowerCase();
   const password = document.getElementById('loginPassword').value;
 
   if (!username || !password) {
@@ -264,7 +267,7 @@ async function handleLogin(event) {
 
 async function handleRegister(event) {
   event.preventDefault();
-  const username = document.getElementById('regUsername').value.trim();
+  const username = document.getElementById('regUsername').value.trim().toLowerCase();
   const password = document.getElementById('regPassword').value;
 
   if (!username || !password) {
@@ -294,11 +297,13 @@ function logoutUser() {
   state.authUser = null;
   localStorage.removeItem(STORAGE_KEYS.auth);
   renderAuthHeader();
+  applyProfileHeader();
+  renderAds();
   showToast('تم تسجيل الخروج', 'info');
 }
 
 // ==========================================
-// 5. جلب البيانات من السيرفر (Ads & Messages)
+// جلب البيانات
 // ==========================================
 async function fetchAds() {
   try {
@@ -332,7 +337,7 @@ async function fetchMessages() {
 }
 
 // ==========================================
-// 6. عرض الأقسام والفلترة والإعلانات
+// الأقسام والعرض
 // ==========================================
 function renderCategories() {
   const strip = document.getElementById('categoriesStrip');
@@ -340,14 +345,19 @@ function renderCategories() {
   if (!strip) return;
 
   strip.innerHTML = CATEGORIES.map(cat => {
-    const activeClass = state.selectedCategory === cat ? 'active' : '';
-    return `<button type="button" class="cat-chip ${activeClass}" onclick="selectCategory('${escapeHtml(cat)}')">${escapeHtml(cat)}</button>`;
+    const activeClass = state.selectedCategory === cat.name ? 'active' : '';
+    return `
+      <button type="button" class="cat-chip ${activeClass}" onclick="selectCategory('${escapeHtml(cat.name)}')">
+        <span>${escapeHtml(cat.icon)}</span>
+        <span>${escapeHtml(cat.name)}</span>
+      </button>
+    `;
   }).join('');
 
   if (select) {
     const currentVal = select.value;
-    select.innerHTML = CATEGORIES.filter(c => c !== 'الكل')
-      .map(cat => `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`)
+    select.innerHTML = CATEGORIES.filter(c => c.name !== 'الكل')
+      .map(cat => `<option value="${escapeHtml(cat.name)}">${escapeHtml(cat.name)}</option>`)
       .join('');
     if (currentVal) select.value = currentVal;
   }
@@ -365,6 +375,12 @@ function formatPrice(price, currency) {
   return `${num} ${map[currency] || currency || '$'}`;
 }
 
+function isAdOwner(ad) {
+  const me = getActiveUsername();
+  if (!me || !ad || !ad.ownerUsername) return false;
+  return String(ad.ownerUsername).trim().toLowerCase() === me;
+}
+
 function renderAds() {
   const grid = document.getElementById('adsGrid');
   if (!grid) return;
@@ -379,7 +395,7 @@ function renderAds() {
     if (city && !(ad.city || '').includes(city) && !(ad.neighbourhood || '').includes(city)) return false;
     if (cond && ad.condition !== cond) return false;
     if (q) {
-      const hay = `${ad.title || ''} ${ad.description || ''} ${ad.category || ''} ${ad.city || ''}`.toLowerCase();
+      const hay = `${ad.title || ''} ${ad.description || ''} ${ad.category || ''} ${ad.city || ''} ${ad.ownerUsername || ''}`.toLowerCase();
       if (!hay.includes(q)) return false;
     }
     return true;
@@ -397,7 +413,7 @@ function renderAds() {
     grid.innerHTML = `
       <div class="empty-state">
         <div style="font-size: 1rem; font-weight: 800; color: var(--silver); margin-bottom: 6px;">لا توجد إعلانات حالياً</div>
-        <div style="font-size: 0.82rem;">اضغط على "+ إعلان" لإضافة أول إعلان لك.</div>
+        <div style="font-size: 0.82rem;">سجّل دخولك واضغط على "+ إعلان" لنشر إعلانك.</div>
       </div>
     `;
     return;
@@ -407,11 +423,24 @@ function renderAds() {
     .map(ad => {
       const id = ad._id || ad.id;
       const imgSrc = ad.image && ad.image.trim() ? ad.image : DEFAULT_AD_IMG;
+      const owner = String(ad.ownerUsername || 'معلن').trim();
+      const canManage = isAdOwner(ad);
+
+      const footerButtons = canManage
+        ? `
+          <button type="button" class="btn btn-gold" onclick="openAdForm('${escapeHtml(id)}')">تعديل</button>
+          <button type="button" class="btn btn-danger" onclick="deleteAd('${escapeHtml(id)}')">حذف</button>
+        `
+        : `
+          <button type="button" class="btn btn-diamond" onclick="startChatWithOwner('${escapeHtml(owner)}', '${escapeHtml(id)}', '${escapeHtml(ad.title)}')">مراسلة المعلن</button>
+        `;
+
       return `
         <article class="ad-card" onclick="openAdDetails('${escapeHtml(id)}')">
           <div class="ad-img-wrap">
             <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(ad.title)}" loading="lazy" onerror="this.src='${DEFAULT_AD_IMG}'" />
             <span class="ad-badge-cat">${escapeHtml(ad.category || 'عام')}</span>
+            <span class="ad-badge-owner">✦ ${escapeHtml(owner)}</span>
           </div>
           <div class="ad-body">
             <div class="ad-title">${escapeHtml(ad.title)}</div>
@@ -422,8 +451,7 @@ function renderAds() {
             </div>
           </div>
           <div class="ad-footer" onclick="event.stopPropagation()">
-            <button type="button" class="btn btn-gold" onclick="openAdForm('${escapeHtml(id)}')">تعديل</button>
-            <button type="button" class="btn btn-danger" onclick="deleteAd('${escapeHtml(id)}')">حذف</button>
+            ${footerButtons}
           </div>
         </article>
       `;
@@ -432,22 +460,30 @@ function renderAds() {
 }
 
 // ==========================================
-// 7. تفاصيل الإعلان، الإضافة، التعديل، والحذف
+// تفاصيل الإعلان والإضافة والتعديل والحذف
 // ==========================================
 function openAdDetails(id) {
   const ad = state.ads.find(item => (item._id || item.id) === id);
   if (!ad) return;
 
   const imgSrc = ad.image && ad.image.trim() ? ad.image : DEFAULT_AD_IMG;
-  const owner = ad.ownerUsername || 'user';
+  const owner = String(ad.ownerUsername || 'معلن').trim();
+  const canManage = isAdOwner(ad);
+
+  const ownerActions = canManage
+    ? `
+      <button type="button" class="btn btn-gold" onclick="closeActiveModal(); setTimeout(() => openAdForm('${escapeHtml(ad._id || ad.id)}'), 120)">✏️ تعديل</button>
+      <button type="button" class="btn btn-danger" onclick="deleteAd('${escapeHtml(ad._id || ad.id)}', true)">🗑️ حذف</button>
+    `
+    : '';
 
   document.getElementById('detailTitle').textContent = ad.title || 'تفاصيل الإعلان';
   document.getElementById('detailContent').innerHTML = `
-    <div style="border-radius: var(--radius-md); overflow: hidden; max-height: 280px; background: #07090e; margin-bottom: 12px; text-align: center;">
+    <div style="border-radius: var(--radius-md); overflow: hidden; max-height: 280px; background: #06080d; margin-bottom: 12px; text-align: center;">
       <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(ad.title)}" style="max-width: 100%; max-height: 280px; object-fit: contain;" onerror="this.src='${DEFAULT_AD_IMG}'" />
     </div>
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
-      <span style="font-size: 1.2rem; font-weight: 800; color: var(--gold);">${escapeHtml(formatPrice(ad.price, ad.currency))}</span>
+      <span style="font-size: 1.2rem; font-weight: 800; color: var(--gold-bright);">${escapeHtml(formatPrice(ad.price, ad.currency))}</span>
       <span class="cat-chip active">${escapeHtml(ad.category || '')}</span>
     </div>
     <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 10px;">
@@ -458,14 +494,19 @@ function openAdDetails(id) {
     <p style="font-size: 0.9rem; line-height: 1.6; color: var(--silver); white-space: pre-wrap; margin-bottom: 14px;">${escapeHtml(ad.description || 'لا يوجد وصف إضافي.')}</p>
     <div style="display: flex; flex-wrap: wrap; gap: 8px;">
       <button type="button" class="btn btn-diamond" onclick="startChatWithOwner('${escapeHtml(owner)}', '${escapeHtml(ad._id || ad.id)}', '${escapeHtml(ad.title)}')">💬 مراسلة الناشر</button>
-      <button type="button" class="btn btn-gold" onclick="closeActiveModal(); setTimeout(() => openAdForm('${escapeHtml(ad._id || ad.id)}'), 120)">✏️ تعديل</button>
-      <button type="button" class="btn btn-danger" onclick="deleteAd('${escapeHtml(ad._id || ad.id)}', true)">🗑️ حذف</button>
+      ${ownerActions}
     </div>
   `;
   openModal('details');
 }
 
 function openAdForm(id = null) {
+  if (!getActiveUsername()) {
+    showToast('سجّل دخولك أولاً لإضافة أو تعديل إعلان', 'error');
+    openAuthModal('login');
+    return;
+  }
+
   const form = document.getElementById('adForm');
   form.reset();
   state.uploadedAdImage = '';
@@ -476,11 +517,16 @@ function openAdForm(id = null) {
     const ad = state.ads.find(item => (item._id || item.id) === id);
     if (!ad) return;
 
+    if (!isAdOwner(ad)) {
+      showToast('لا يمكنك تعديل إعلان ليس ملكك', 'error');
+      return;
+    }
+
     document.getElementById('adFormTitle').textContent = 'تعديل الإعلان';
     document.getElementById('editAdId').value = id;
     document.getElementById('adTitle').value = ad.title || '';
     document.getElementById('adPrice').value = ad.price ?? 0;
-    document.getElementById('adCategory').value = ad.category || CATEGORIES[1];
+    document.getElementById('adCategory').value = ad.category || CATEGORIES[1].name;
     document.getElementById('adCondition').value = ad.condition || 'مستعمل';
     document.getElementById('adCurrency').value = ad.currency || 'USD';
     document.getElementById('adCity').value = ad.city || state.profile.city || '';
@@ -541,6 +587,13 @@ function handleImageUrl(event) {
 async function submitAdForm(event) {
   event.preventDefault();
 
+  const activeUser = getActiveUsername();
+  if (!activeUser) {
+    showToast('يجب تسجيل الدخول أولاً', 'error');
+    openAuthModal('login');
+    return;
+  }
+
   const editId = document.getElementById('editAdId').value.trim();
   const urlInput = document.getElementById('adImageUrl').value.trim();
   const finalImage = state.uploadedAdImage || urlInput || '';
@@ -551,18 +604,19 @@ async function submitAdForm(event) {
     category: document.getElementById('adCategory').value,
     condition: document.getElementById('adCondition').value,
     currency: document.getElementById('adCurrency').value,
-    city: document.getElementById('adCity').value.trim() || 'دمشق',
+    city: document.getElementById('adCity').value.trim(),
     neighbourhood: document.getElementById('adNeighbourhood').value.trim(),
     description: document.getElementById('adDescription').value.trim(),
     image: finalImage,
-    ownerUsername: getActiveUsername()
+    ownerUsername: activeUser,
+    requesterUsername: activeUser
   };
 
   try {
     const isEdit = Boolean(editId);
     const res = await fetch(isEdit ? `/api/ads/${encodeURIComponent(editId)}` : '/api/ads', {
       method: isEdit ? 'PUT' : 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(payload)
     });
 
@@ -581,9 +635,18 @@ async function submitAdForm(event) {
 }
 
 async function deleteAd(id, fromDetails = false) {
+  const ad = state.ads.find(item => (item._id || item.id) === id);
+  if (!ad || !isAdOwner(ad)) {
+    showToast('لا يمكنك حذف إعلان شخص آخر', 'error');
+    return;
+  }
+
   try {
-    const res = await fetch(`/api/ads/${encodeURIComponent(id)}`, {
-      method: 'DELETE'
+    const activeUser = getActiveUsername();
+    const res = await fetch(`/api/ads/${encodeURIComponent(id)}?username=${encodeURIComponent(activeUser)}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ requesterUsername: activeUser })
     });
     const data = await res.json();
     if (!res.ok) {
@@ -602,14 +665,16 @@ async function deleteAd(id, fromDetails = false) {
 }
 
 // ==========================================
-// 8. الدردشة، التسجيل الصوتي الحقيقي، وقائمة الحظر
+// الدردشة والتسجيل الصوتي وقائمة الحظر
 // ==========================================
 function syncPeersFromMessages() {
   const me = getActiveUsername();
   const set = new Set(state.peers);
   state.messages.forEach(m => {
-    if (m.sender && m.sender !== me) set.add(m.sender);
-    if (m.to && m.to !== me) set.add(m.to);
+    const sender = String(m.sender || '').trim().toLowerCase();
+    const to = String(m.to || '').trim().toLowerCase();
+    if (sender && sender !== me) set.add(sender);
+    if (to && to !== me) set.add(to);
   });
   state.peers = Array.from(set);
   saveJson(STORAGE_KEYS.peers, state.peers);
@@ -619,6 +684,11 @@ function syncPeersFromMessages() {
 }
 
 function openChatModal() {
+  if (!getActiveUsername()) {
+    showToast('سجّل دخولك أولاً لاستخدام الدردشة', 'error');
+    openAuthModal('login');
+    return;
+  }
   fetchMessages();
   renderChatUsers();
   renderChatMessages();
@@ -628,10 +698,16 @@ function openChatModal() {
 }
 
 function startChatWithOwner(owner, adId = '', adTitle = '') {
+  if (!getActiveUsername()) {
+    showToast('سجّل دخولك أولاً لمراسلة المعلن', 'error');
+    openAuthModal('login');
+    return;
+  }
   if (state.activeModal === 'details') {
     closeActiveModal();
   }
-  addOrSelectPeer(owner);
+  const cleanOwner = String(owner || '').trim().toLowerCase();
+  addOrSelectPeer(cleanOwner);
   if (adTitle) {
     const input = document.getElementById('chatTextInput');
     if (input && !input.value) {
@@ -642,7 +718,7 @@ function startChatWithOwner(owner, adId = '', adTitle = '') {
 }
 
 function addOrSelectPeer(name) {
-  const clean = String(name || '').trim();
+  const clean = String(name || '').trim().toLowerCase();
   if (!clean) return;
   if (!state.peers.includes(clean)) {
     state.peers.unshift(clean);
@@ -680,7 +756,7 @@ function renderChatMessages() {
   const box = document.getElementById('chatMessages');
   if (!box) return;
 
-  const peer = state.currentPeer;
+  const peer = String(state.currentPeer || '').trim().toLowerCase();
   if (!peer) {
     box.innerHTML = `<div style="font-size: 0.82rem; color: var(--text-muted); text-align: center; margin: auto;">اختر مستخدماً أو أضف اسماً لبدء الدردشة</div>`;
     return;
@@ -695,9 +771,10 @@ function renderChatMessages() {
   const convo = state.messages
     .filter(
       m =>
-        !state.blockedUsers.includes(m.sender) &&
-        !state.blockedUsers.includes(m.to) &&
-        ((m.sender === me && m.to === peer) || (m.sender === peer && (m.to === me || m.to === 'user')))
+        !state.blockedUsers.includes(String(m.sender || '').toLowerCase()) &&
+        !state.blockedUsers.includes(String(m.to || '').toLowerCase()) &&
+        ((String(m.sender || '').toLowerCase() === me && String(m.to || '').toLowerCase() === peer) ||
+          (String(m.sender || '').toLowerCase() === peer && String(m.to || '').toLowerCase() === me))
     )
     .sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
 
@@ -708,7 +785,7 @@ function renderChatMessages() {
 
   box.innerHTML = convo
     .map(m => {
-      const isMe = m.sender === me;
+      const isMe = String(m.sender || '').toLowerCase() === me;
       const timeStr = m.createdAt
         ? new Date(m.createdAt).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })
         : '';
@@ -740,9 +817,15 @@ function insertQuickPhrase(phrase) {
 
 async function sendChatMessage(event) {
   event.preventDefault();
+  const me = getActiveUsername();
+  if (!me) {
+    showToast('سجّل دخولك أولاً لإرسال رسالة', 'error');
+    return;
+  }
+
   const input = document.getElementById('chatTextInput');
   const text = (input.value || '').trim();
-  const peer = (state.currentPeer || '').trim();
+  const peer = String(state.currentPeer || '').trim().toLowerCase();
 
   if (!peer) {
     showToast('أدخل أو اختر اسم المستلم أولاً', 'error');
@@ -757,12 +840,8 @@ async function sendChatMessage(event) {
   try {
     const res = await fetch('/api/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        sender: getActiveUsername(),
-        to: peer,
-        text
-      })
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ sender: me, to: peer, text })
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.message || 'فشل إرسال الرسالة');
@@ -791,8 +870,14 @@ function getSupportedAudioMimeType() {
 }
 
 async function toggleVoiceRecording() {
+  const me = getActiveUsername();
+  if (!me) {
+    showToast('سجّل دخولك أولاً لإرسال رسالة صوتية', 'error');
+    return;
+  }
+
   const btn = document.getElementById('voiceRecordBtn');
-  const peer = (state.currentPeer || '').trim();
+  const peer = String(state.currentPeer || '').trim().toLowerCase();
 
   if (!peer) {
     showToast('اختر أو أضف مستخدماً أولاً لإرسال رسالة صوتية', 'error');
@@ -843,12 +928,8 @@ async function toggleVoiceRecording() {
           try {
             const res = await fetch('/api/messages', {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                sender: getActiveUsername(),
-                to: peer,
-                text: base64Audio
-              })
+              headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+              body: JSON.stringify({ sender: me, to: peer, text: base64Audio })
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || 'فشل إرسال الرسالة الصوتية');
@@ -893,7 +974,7 @@ function stopVoiceRecordingIfActive() {
 }
 
 function toggleBlockCurrentPeer() {
-  const peer = (state.currentPeer || '').trim();
+  const peer = String(state.currentPeer || '').trim().toLowerCase();
   if (!peer) return;
 
   if (state.blockedUsers.includes(peer)) {
@@ -911,14 +992,15 @@ function toggleBlockCurrentPeer() {
 }
 
 function unblockUser(username) {
-  state.blockedUsers = state.blockedUsers.filter(u => u !== username);
+  const clean = String(username || '').trim().toLowerCase();
+  state.blockedUsers = state.blockedUsers.filter(u => u !== clean);
   saveJson(STORAGE_KEYS.blocked, state.blockedUsers);
-  if (!state.currentPeer) state.currentPeer = username;
+  if (!state.currentPeer) state.currentPeer = clean;
   renderChatUsers();
   renderChatMessages();
   renderBlockedUsers();
   updateBlockButton();
-  showToast(`تم إلغاء حظر ${username}`, 'success');
+  showToast(`تم إلغاء حظر ${clean}`, 'success');
 }
 
 function renderBlockedUsers() {
@@ -945,27 +1027,23 @@ function renderBlockedUsers() {
 function updateBlockButton() {
   const btn = document.getElementById('toggleBlockBtn');
   if (!btn) return;
-  const peer = (state.currentPeer || '').trim();
-  if (peer && state.blockedUsers.includes(peer)) {
-    btn.textContent = '✅ إلغاء الحظر';
-  } else {
-    btn.textContent = '🚫 حظر';
-  }
+  const peer = String(state.currentPeer || '').trim().toLowerCase();
+  btn.textContent = peer && state.blockedUsers.includes(peer) ? '✅ إلغاء الحظر' : '🚫 حظر';
 }
 
 // ==========================================
-// 9. الملف الشخصي
+// الملف الشخصي
 // ==========================================
 function applyProfileHeader() {
   const avatarEl = document.getElementById('headerAvatar');
   const nameEl = document.getElementById('headerUsername');
   if (avatarEl) avatarEl.src = state.profile.avatar || DEFAULT_AVATAR;
-  if (nameEl) nameEl.textContent = getActiveUsername() || 'ملفك';
+  if (nameEl) nameEl.textContent = getActiveUsername() || state.profile.name || 'ملفك';
 }
 
 function openProfileModal() {
   state.uploadedAvatarImage = state.profile.avatar || DEFAULT_AVATAR;
-  document.getElementById('profileName').value = getActiveUsername() || '';
+  document.getElementById('profileName').value = getActiveUsername() || state.profile.name || '';
   document.getElementById('profileCity').value = state.profile.city || '';
   document.getElementById('profileBio').value = state.profile.bio || '';
   document.getElementById('profileAvatarPreview').src = state.uploadedAvatarImage;
@@ -984,20 +1062,14 @@ function saveProfile(event) {
     avatar: state.uploadedAvatarImage || state.profile.avatar || DEFAULT_AVATAR
   };
 
-  if (state.authUser) {
-    state.authUser.username = name;
-    saveJson(STORAGE_KEYS.auth, state.authUser);
-  }
-
   saveJson(STORAGE_KEYS.profile, state.profile);
   applyProfileHeader();
-  renderAuthHeader();
   closeActiveModal();
   showToast('تم حفظ بيانات الملف الشخصي', 'success');
 }
 
 // ==========================================
-// 10. التشغيل الأولي
+// التشغيل الأولي
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
   applyProfileHeader();

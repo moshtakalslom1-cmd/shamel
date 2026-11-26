@@ -3,827 +3,871 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>سوق وصاحبندا — منصة الإعلانات والمتاجر</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <title>رخيص والسوق الشامل — المنصة المتكاملة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-app: #f4f6f8;
-      --bg-surface: #ffffff;
-      --bg-subtle: #eef2f5;
-      --text-main: #182026;
-      --text-muted: #5c6b78;
-      --primary: #0f766e;
-      --primary-dark: #115e59;
-      --primary-soft: #e6f4f1;
-      --accent: #b45309;
-      --border: #dfe5ec;
-      --danger: #dc2626;
-      --success: #15803d;
-      --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.05);
-      --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
-      --radius-sm: 8px;
-      --radius-md: 14px;
-      --radius-lg: 20px;
-      --nav-height: 68px;
-    }
-
-    body.dark-mode {
-      --bg-app: #0f1419;
-      --bg-surface: #182028;
-      --bg-subtle: #222d38;
-      --text-main: #f1f5f9;
+      --bg-dark: #07090e;
+      --bg-card: #0d111a;
+      --bg-elevated: #131824;
+      --border-subtle: rgba(245, 196, 81, 0.22);
+      --gold: #f5c451;
+      --gold-deep: #b8861b;
+      --silver: #cbd5e1;
+      --diamond: #7dd3fc;
+      --text-main: #f8fafc;
       --text-muted: #94a3b8;
-      --primary: #14b8a6;
-      --primary-dark: #0d9488;
-      --primary-soft: rgba(20, 184, 166, 0.14);
-      --accent: #f59e0b;
-      --border: #2b3846;
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
-      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+      --danger: #ef4444;
+      --success: #22c55e;
+      --radius-lg: 14px;
+      --radius-md: 9px;
+      --shadow-lux: 0 10px 28px rgba(0, 0, 0, 0.72);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-    }
-
-    body {
       font-family: 'Cairo', sans-serif;
-      background-color: var(--bg-app);
+    }
+
+    html, body {
+      background: radial-gradient(circle at top right, #131a2c 0%, var(--bg-dark) 72%);
       color: var(--text-main);
-      line-height: 1.6;
-      padding-bottom: calc(var(--nav-height) + 24px);
-      transition: background-color 0.25s ease, color 0.25s ease;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-size: 14px;
     }
 
-    button, input, select, textarea {
-      font-family: inherit;
-      color: inherit;
-    }
-
-    button {
-      cursor: pointer;
-      border: none;
-      background: none;
-    }
-
-    .app-header {
+    header {
       position: sticky;
       top: 0;
-      z-index: 40;
-      background: var(--bg-surface);
-      border-bottom: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
-      padding: 12px 16px;
+      z-index: 50;
+      background: rgba(9, 12, 18, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1.5px solid var(--gold);
+      padding: 8px 14px;
     }
 
     .header-inner {
-      max-width: 1120px;
+      max-width: 1440px;
       margin: 0 auto;
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 10px;
+      cursor: pointer;
     }
 
-    .brand-mark {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: #fff;
+    .brand-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-deep) 60%, var(--diamond));
       display: grid;
       place-items: center;
       font-weight: 800;
-      font-size: 1.15rem;
+      color: #07090e;
+      font-size: 1.1rem;
+      box-shadow: 0 0 16px rgba(245, 196, 81, 0.35);
     }
 
     .brand-title {
+      font-size: 1.05rem;
       font-weight: 800;
-      font-size: 1.1rem;
-      line-height: 1.2;
+      background: linear-gradient(90deg, var(--gold), #fff, var(--diamond));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .brand-sub {
-      font-size: 0.75rem;
-      color: var(--text-muted);
+      font-size: 0.72rem;
+      color: var(--silver);
     }
 
     .header-actions {
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-wrap: wrap;
     }
 
-    .chip-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: var(--bg-subtle);
-      border: 1px solid var(--border);
-      font-size: 0.85rem;
-      font-weight: 600;
-      transition: 0.2s ease;
-    }
-
-    .chip-btn:hover {
-      border-color: var(--primary);
-      background: var(--primary-soft);
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: #fff;
-      padding: 9px 16px;
-      border-radius: var(--radius-sm);
+    .btn {
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      padding: 6px 12px;
+      border-radius: var(--radius-md);
+      font-size: 0.82rem;
       font-weight: 700;
-      font-size: 0.9rem;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: background 0.2s ease;
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-dark);
-    }
-
-    .btn-outline {
-      border: 1px solid var(--border);
-      background: var(--bg-surface);
-      padding: 8px 14px;
-      border-radius: var(--radius-sm);
-      font-weight: 600;
-      font-size: 0.88rem;
+      cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      transition: all 0.2s ease;
     }
 
-    .btn-outline:hover {
-      border-color: var(--primary);
-      color: var(--primary);
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--gold);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold), #e0a82e);
+      color: #07090e;
+      border: none;
+      box-shadow: 0 4px 14px rgba(245, 196, 81, 0.25);
+    }
+
+    .btn-diamond {
+      background: linear-gradient(135deg, rgba(125, 211, 252, 0.15), rgba(203, 213, 225, 0.1));
+      border-color: rgba(125, 211, 252, 0.45);
+      color: var(--diamond);
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.16);
+      border-color: rgba(239, 68, 68, 0.55);
+      color: #fca5a5;
+    }
+
+    .avatar-mini {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid var(--gold);
     }
 
     .container {
-      max-width: 1120px;
-      margin: 18px auto 0;
-      padding: 0 16px;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 12px 14px 32px;
     }
 
-    .search-panel {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
+    .toolbar {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      padding: 16px;
-      box-shadow: var(--shadow-sm);
-      margin-bottom: 18px;
-    }
-
-    .search-grid {
+      padding: 10px;
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr auto;
-      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 8px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow-lux);
     }
 
-    @media (max-width: 820px) {
-      .search-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-      .search-grid .btn-primary {
-        grid-column: span 2;
-      }
-    }
-
-    @media (max-width: 520px) {
-      .search-grid {
-        grid-template-columns: 1fr;
-      }
-      .search-grid .btn-primary {
-        grid-column: span 1;
-      }
-    }
-
-    .input-control, .select-control, .textarea-control {
+    .input, .select, .textarea {
       width: 100%;
-      padding: 10px 12px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
-      background: var(--bg-app);
-      font-size: 0.92rem;
+      background: var(--bg-dark);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 7px 11px;
+      border-radius: var(--radius-md);
+      font-size: 0.84rem;
+      outline: none;
+      transition: border-color 0.2s ease;
     }
 
-    .input-control:focus, .select-control:focus, .textarea-control:focus {
-      outline: none;
-      border-color: var(--primary);
-      background: var(--bg-surface);
+    .input:focus, .select:focus, .textarea:focus {
+      border-color: var(--gold);
     }
 
     .categories-strip {
       display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      padding: 4px 2px 14px;
-      scrollbar-width: thin;
-    }
-
-    .cat-pill {
-      flex: 0 0 auto;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 14px;
-      border-radius: var(--radius-md);
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      font-size: 0.88rem;
-      font-weight: 600;
-      transition: 0.2s ease;
-    }
-
-    .cat-pill.active, .cat-pill:hover {
-      background: var(--primary-soft);
-      border-color: var(--primary);
-      color: var(--primary);
-    }
-
-    .section-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: 10px 0 14px;
-      gap: 10px;
       flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
     }
 
-    .section-title {
-      font-size: 1.15rem;
-      font-weight: 800;
+    .cat-chip {
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: var(--bg-card);
+      border: 1px solid rgba(203, 213, 225, 0.2);
+      color: var(--silver);
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
 
-    .listings-grid {
+    .cat-chip.active {
+      background: linear-gradient(135deg, rgba(245, 196, 81, 0.25), rgba(125, 211, 252, 0.15));
+      border-color: var(--gold);
+      color: var(--gold);
+      box-shadow: 0 0 12px rgba(245, 196, 81, 0.2);
+    }
+
+    .ads-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
     }
 
-    @media (max-width: 960px) {
-      .listings-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    @media (max-width: 1150px) {
+      .ads-grid { grid-template-columns: repeat(3, 1fr); }
     }
 
-    @media (max-width: 620px) {
-      .listings-grid {
-        grid-template-columns: 1fr;
-      }
+    @media (max-width: 820px) {
+      .ads-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 480px) {
+      .ads-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
     }
 
     .ad-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(16, 21, 33, 0.96) 0%, rgba(10, 13, 20, 0.99) 100%);
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
       overflow: hidden;
-      box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      justify-content: space-between;
+      box-shadow: var(--shadow-lux);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+      cursor: pointer;
     }
 
     .ad-card:hover {
       transform: translateY(-2px);
-      box-shadow: var(--shadow-md);
+      border-color: var(--gold);
     }
 
-    .ad-thumb {
-      height: 170px;
-      background: var(--bg-subtle);
+    .ad-img-wrap {
       position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-muted);
-      font-weight: 700;
+      height: 115px;
+      background: #07090e;
       overflow: hidden;
     }
 
-    .ad-thumb img {
+    .ad-img-wrap img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-    }
-
-    .ad-badge {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: rgba(15, 23, 42, 0.78);
-      color: #fff;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 999px;
-    }
-
-    .ad-body {
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      flex: 1;
-    }
-
-    .ad-price {
-      font-size: 1.08rem;
-      font-weight: 800;
-      color: var(--primary);
-    }
-
-    .ad-title {
-      font-size: 0.98rem;
-      font-weight: 700;
-    }
-
-    .ad-meta {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: auto;
-      padding-top: 8px;
-      border-top: 1px solid var(--border);
-    }
-
-    .ad-actions {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 8px;
-      margin-top: 8px;
-    }/* صفحات التنقل والنوافذ */
-    .view-section {
-      display: none;
-    }
-
-    .view-section.active {
       display: block;
     }
 
-    .panel-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 18px;
-      box-shadow: var(--shadow-sm);
-      margin-bottom: 16px;
+    .ad-badge-cat {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(7, 9, 14, 0.85);
+      border: 1px solid rgba(125, 211, 252, 0.45);
+      color: var(--diamond);
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 700;
     }
 
-    .menu-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .menu-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 13px 14px;
-      border-radius: var(--radius-md);
-      background: var(--bg-app);
-      border: 1px solid var(--border);
-      font-weight: 600;
-      width: 100%;
-      text-align: right;
-    }
-
-    .menu-row:hover {
-      border-color: var(--primary);
-      background: var(--primary-soft);
-    }
-
-    /* المحادثات والتسجيل الصوتي */
-    .chat-layout {
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      gap: 16px;
-      min-height: 460px;
-    }
-
-    @media (max-width: 780px) {
-      .chat-layout {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .chat-threads {
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      background: var(--bg-surface);
-      overflow: hidden;
-    }
-
-    .thread-item {
-      padding: 12px 14px;
-      border-bottom: 1px solid var(--border);
-      cursor: pointer;
+    .ad-body {
+      padding: 8px 10px;
       display: flex;
       flex-direction: column;
       gap: 4px;
-    }
-
-    .thread-item.active, .thread-item:hover {
-      background: var(--primary-soft);
-    }
-
-    .chat-box {
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      background: var(--bg-surface);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .chat-messages {
       flex: 1;
-      padding: 14px;
+    }
+
+    .ad-title {
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ad-price {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .ad-meta {
+      font-size: 0.7rem;
+      color: var(--text-muted);
       display: flex;
-      flex-direction: column;
-      gap: 10px;
-      max-height: 360px;
-      overflow-y: auto;
-      background: var(--bg-app);
+      justify-content: space-between;
+      gap: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .msg-bubble {
-      max-width: 78%;
-      padding: 10px 14px;
-      border-radius: 14px;
-      font-size: 0.9rem;
-      word-break: break-word;
-    }
-
-    .msg-me {
-      align-self: flex-start;
-      background: var(--primary);
-      color: #fff;
-    }
-
-    .msg-other {
-      align-self: flex-end;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-    }
-
-    .chat-composer {
+    .ad-footer {
+      padding: 6px 8px;
+      border-top: 1px solid var(--border-subtle);
       display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 12px;
-      border-top: 1px solid var(--border);
-      background: var(--bg-surface);
+      gap: 4px;
     }
 
-    .voice-btn.recording {
-      background: var(--danger);
-      color: #fff;
-      border-color: var(--danger);
+    .ad-footer .btn {
+      flex: 1;
+      justify-content: center;
+      padding: 4px 6px;
+      font-size: 0.72rem;
+      gap: 3px;
     }
 
-    /* نافذة تسجيل الدخول / إنشاء حساب */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 40px 16px;
+      background: var(--bg-card);
+      border: 1px dashed var(--border-subtle);
+      border-radius: var(--radius-lg);
+      color: var(--text-muted);
+    }
+
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.55);
+      z-index: 100;
+      background: rgba(5, 7, 11, 0.85);
+      backdrop-filter: blur(7px);
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 16px;
-      z-index: 80;
+      padding: 14px;
+      overflow-y: auto;
     }
 
     .modal-backdrop.open {
       display: flex;
     }
 
-    .modal-card {
+    .modal-box {
       width: 100%;
-      max-width: 440px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
+      max-width: 780px;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: var(--bg-card);
+      border: 1px solid rgba(245, 196, 81, 0.45);
       border-radius: var(--radius-lg);
-      padding: 20px;
-      box-shadow: var(--shadow-md);
+      padding: 18px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+    }
+
+    .modal-box.auth-box {
+      max-width: 440px;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+      gap: 8px;
+    }
+
+    .modal-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--gold);
     }
 
     .auth-tabs {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 6px;
-      background: var(--bg-subtle);
-      padding: 4px;
-      border-radius: var(--radius-sm);
-      margin-bottom: 16px;
+      gap: 8px;
+      margin-bottom: 14px;
     }
 
     .auth-tab {
       padding: 8px;
-      border-radius: 6px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-dark);
+      color: var(--silver);
       font-weight: 700;
-      font-size: 0.9rem;
+      cursor: pointer;
+      text-align: center;
+      font-size: 0.84rem;
     }
 
     .auth-tab.active {
-      background: var(--bg-surface);
-      color: var(--primary);
-      box-shadow: var(--shadow-sm);
+      border-color: var(--gold);
+      color: var(--gold);
+      background: var(--bg-elevated);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
     }
 
     .form-group {
-      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 10px;
     }
 
     .form-label {
-      display: block;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
+      color: var(--silver);
       font-weight: 700;
-      margin-bottom: 5px;
     }
 
-    .toast-msg {
-      position: fixed;
-      bottom: calc(var(--nav-height) + 16px);
-      left: 50%;
-      transform: translateX(-50%);
-      background: #182026;
-      color: #fff;
-      padding: 10px 18px;
-      border-radius: 999px;
-      font-size: 0.88rem;
-      font-weight: 600;
-      z-index: 100;
-      display: none;
-      box-shadow: var(--shadow-md);
+    .preview-box {
+      margin-top: 6px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px dashed var(--gold);
+      max-height: 180px;
+      background: var(--bg-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
     }
 
-    .toast-msg.show {
-      display: block;
+    .preview-box img {
+      max-width: 100%;
+      max-height: 165px;
+      object-fit: contain;
     }
 
-    /* شريط التنقل السفلي */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: var(--nav-height);
-      background: var(--bg-surface);
-      border-top: 1px solid var(--border);
+    .chat-container {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      z-index: 50;
-      box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.05);
+      grid-template-columns: 200px 1fr;
+      gap: 12px;
+      height: 52vh;
+      min-height: 320px;
     }
 
-    .nav-item {
+    @media (max-width: 650px) {
+      .chat-container {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+      .chat-user-list {
+        max-height: 110px;
+      }
+      .chat-messages {
+        height: 240px;
+      }
+    }
+
+    .chat-user-list {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 8px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .user-item {
+      padding: 7px 10px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.2s;
+      border: 1px solid transparent;
+      font-size: 0.84rem;
+    }
+
+    .user-item:hover {
+      background: var(--bg-elevated);
+    }
+
+    .user-item.active {
+      background: linear-gradient(135deg, rgba(245, 196, 81, 0.2), transparent);
+      border-color: var(--gold);
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .chat-main {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .chat-messages {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 10px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .msg-bubble {
+      max-width: 82%;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 0.84rem;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .msg-me {
+      align-self: flex-start;
+      background: linear-gradient(135deg, var(--gold), #e0a82e);
+      color: #07090e;
+      font-weight: 700;
+    }
+
+    .msg-other {
+      align-self: flex-end;
+      background: var(--bg-elevated);
+      border: 1px solid rgba(125, 211, 252, 0.35);
+      color: var(--text-main);
+    }
+
+    .msg-time {
+      display: block;
+      font-size: 0.65rem;
+      opacity: 0.72;
+      margin-top: 3px;
+      text-align: left;
+    }
+
+    .blocked-list {
+      margin-top: 12px;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 10px;
+    }
+
+    .blocked-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(239, 68, 68, 0.14);
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      color: #fecaca;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+    }
+
+    .toast-container {
+      position: fixed;
+      bottom: 14px;
+      left: 14px;
+      right: 14px;
+      z-index: 200;
+      pointer-events: none;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 3px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--text-muted);
+      gap: 6px;
     }
 
-    .nav-item.active {
-      color: var(--primary);
-      background: var(--primary-soft);
+    .toast {
+      pointer-events: auto;
+      max-width: 440px;
+      width: 100%;
+      background: #111622;
+      border: 1px solid var(--gold);
+      color: var(--text-main);
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 0.84rem;
+      font-weight: 700;
     }
+
+    .toast.error { border-color: var(--danger); color: #fecaca; }
+    .toast.success { border-color: var(--success); color: #bbf7d0; }
   </style>
 </head>
 <body>
-  <header class="app-header">
+
+  <header>
     <div class="header-inner">
-      <div class="brand">
-        <div class="brand-mark">س</div>
+      <div class="brand" onclick="goHome()">
+        <div class="brand-badge">✦</div>
         <div>
-          <div class="brand-title">سوق وصاحبندا</div>
-          <div class="brand-sub" id="activeLocationLabel">الموقع: جميع المدن</div>
+          <div class="brand-title">رخيص والسوق الشامل</div>
+          <div id="authStatusText" class="brand-sub">إعلانات سريعة • تواصل مباشر</div>
         </div>
       </div>
 
       <div class="header-actions">
-        <button class="chip-btn" id="themeToggleBtn" type="button">الوضع المظلم</button>
-        <button class="chip-btn" id="langToggleBtn" type="button">AR / TR</button>
-        <button class="btn-primary" id="openAuthBtn" type="button">تسجيل الدخول</button>
+        <button class="btn btn-gold" onclick="openAdForm()">+ إعلان</button>
+        <button class="btn btn-diamond" onclick="openChatModal()">💬 الدردشات</button>
+        <button id="authOpenBtn" class="btn" onclick="openAuthModal('login')">🔐 دخول / حساب</button>
+        <button id="logoutBtn" class="btn btn-danger" style="display: none;" onclick="logoutUser()">خروج</button>
+        <button class="btn" onclick="openProfileModal()">
+          <img id="headerAvatar" class="avatar-mini" src="https://api.dicebear.com/7.x/avataaars/svg?seed=user" alt="Avatar" />
+          <span id="headerUsername">ملفك</span>
+        </button>
       </div>
     </div>
   </header>
 
   <main class="container">
-    <!-- الرئيسية -->
-    <section class="view-section active" id="view-home">
-      <div class="search-panel">
-        <div class="search-grid">
-          <input class="input-control" id="searchInput" type="text" placeholder="ابحث عن عقار، سيارة، إلكترونيات، أثاث..." />
-          <select class="select-control" id="cityFilter">
-            <option value="">كل المدن</option>
-            <option value="دمشق">دمشق</option>
-            <option value="حلب">حلب</option>
-            <option value="اللاذقية">اللاذقية</option>
-            <option value="حمص">حمص</option>
-            <option value="أنطاليا">أنطاليا</option>
-            <option value="إسطنبول">إسطنبول</option>
-          </select>
-          <select class="select-control" id="sortFilter">
-            <option value="newest">الأحدث أولاً</option>
-            <option value="price-asc">السعر: من الأقل للأعلى</option>
-            <option value="price-desc">السعر: من الأعلى للأقل</option>
-          </select>
-          <button class="btn-primary" id="searchBtn" type="button">بحث</button>
-        </div>
-      </div>
-
-      <div class="categories-strip" id="categoriesStrip"></div>
-
-      <div class="section-head">
-        <h2 class="section-title" id="listingsHeading">الإعلانات المميزة</h2>
-        <button class="btn-outline" id="newAdQuickBtn" type="button">+ أضف إعلانك</button>
-      </div>
-
-      <div class="listings-grid" id="listingsGrid"></div>
+    <section class="toolbar">
+      <input id="searchInput" class="input" type="search" placeholder="بحث سريع..." oninput="renderAds()" />
+      <select id="cityFilter" class="select" onchange="renderAds()">
+        <option value="">كل المدن</option>
+        <option value="دمشق">دمشق</option>
+        <option value="حلب">حلب</option>
+        <option value="حمص">حمص</option>
+        <option value="اللاذقية">اللاذقية</option>
+        <option value="أنطاليا">أنطاليا</option>
+        <option value="إسطنبول">إسطنبول</option>
+      </select>
+      <select id="conditionFilter" class="select" onchange="renderAds()">
+        <option value="">كل الحالات</option>
+        <option value="جديد">جديد</option>
+        <option value="مستعمل">مستعمل</option>
+      </select>
+      <select id="sortSelect" class="select" onchange="renderAds()">
+        <option value="newest">الأحدث أولاً</option>
+        <option value="price-asc">الأقل سعراً</option>
+        <option value="price-desc">الأعلى سعراً</option>
+      </select>
     </section>
 
-    <!-- المحادثات -->
-    <section class="view-section" id="view-messages">
-      <div class="panel-card">
-        <h2 class="section-title">المحادثات والرسائل الصوتية</h2>
-        <p class="brand-sub">تواصل مباشرة مع البائعين أو أرسل رسالة صوتية واضحة</p>
-      </div>
-
-      <div id="authRequiredNotice" class="panel-card" style="display: none;">
-        <p style="margin-bottom: 10px; font-weight: 700;">يرجى تسجيل الدخول للوصول إلى المحادثات وإرسال التسجيلات الصوتية.</p>
-        <button class="btn-primary" id="msgLoginBtn" type="button">تسجيل الدخول الآن</button>
-      </div>
-
-      <div class="chat-layout" id="chatWorkspace">
-        <div class="chat-threads" id="chatThreads"></div>
-        <div class="chat-box">
-          <div class="chat-messages" id="chatMessages"></div>
-          <div class="chat-composer">
-            <input class="input-control" id="chatTextInput" type="text" placeholder="اكتب رسالتك هنا..." />
-            <button class="btn-outline voice-btn" id="voiceRecordBtn" type="button" title="تسجيل صوتي">تسجيل صوت</button>
-            <button class="btn-primary" id="sendMsgBtn" type="button">إرسال</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- إعلاناتي وإضافة إعلان -->
-    <section class="view-section" id="view-my-ads">
-      <div class="panel-card">
-        <h2 class="section-title" style="margin-bottom: 12px;">نشر إعلان جديد</h2>
-        <form id="createAdForm">
-          <div class="search-grid" style="margin-bottom: 10px;">
-            <input class="input-control" id="adTitleInput" type="text" placeholder="عنوان الإعلان" required />
-            <input class="input-control" id="adPriceInput" type="number" placeholder="السعر ($ أو ₺)" required />
-            <select class="select-control" id="adCategoryInput">
-              <option value="عقارات">عقارات</option>
-              <option value="سيارات">سيارات</option>
-              <option value="إلكترونيات">إلكترونيات</option>
-              <option value="أثاث ومنزل">أثاث ومنزل</option>
-              <option value="خدمات">خدمات</option>
-            </select>
-            <select class="select-control" id="adCityInput">
-              <option value="دمشق">دمشق</option>
-              <option value="حلب">حلب</option>
-              <option value="اللاذقية">اللاذقية</option>
-              <option value="أنطاليا">أنطاليا</option>
-              <option value="إسطنبول">إسطنبول</option>
-            </select>
-          </div>
-          <textarea class="textarea-control" id="adDescInput" rows="2" placeholder="تفاصيل مختصرة وحالة المنتج..." style="margin-bottom: 10px;"></textarea>
-          <button class="btn-primary" type="submit">نشر الإعلان</button>
-        </form>
-      </div>
-
-      <div class="section-head">
-        <h2 class="section-title">إعلاناتي</h2>
-      </div>
-      <div class="listings-grid" id="myAdsGrid"></div>
-    </section>
-
-    <!-- حسابي والإعدادات -->
-    <section class="view-section" id="view-account">
-      <div class="panel-card" id="profileSummaryCard">
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
-          <div>
-            <h2 class="section-title" id="profileNameDisplay">زائر غير مسجل</h2>
-            <p class="brand-sub" id="profileStatusDisplay">سجّل دخولك أو أنشئ حساباً لإدارة إعلاناتك ومحادثاتك</p>
-          </div>
-          <button class="btn-primary" id="accountAuthActionBtn" type="button">تسجيل الدخول / إنشاء حساب</button>
-        </div>
-      </div>
-
-      <div class="panel-card">
-        <h3 class="section-title">الإعدادات والخدمات</h3>
-        <div class="menu-list">
-          <button class="menu-row" id="menuThemeRow" type="button">
-            <span>الوضع المظلم / النهاري</span>
-            <span id="themeStateBadge">نهاري</span>
-          </button>
-          <button class="menu-row" id="menuLangRow" type="button">
-            <span>اللغة (العربية / التركية)</span>
-            <span id="langStateBadge">العربية</span>
-          </button>
-          <button class="menu-row" id="menuCityRow" type="button">
-            <span>تحديد المدينة الافتراضية</span>
-            <span id="cityStateBadge">الكل</span>
-          </button>
-          <button class="menu-row" id="menuResetDemoRow" type="button">
-            <span>إعادة ضبط البيانات التجريبية</span>
-            <span>استعادة</span>
-          </button>
-        </div>
-      </div>
-    </section>
+    <section id="categoriesStrip" class="categories-strip"></section>
+    <section id="adsGrid" class="ads-grid"></section>
   </main>
 
-  <!-- نافذة تسجيل الدخول وإنشاء الحساب -->
-  <div class="modal-backdrop" id="authModal">
-    <div class="modal-card">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-        <h3 class="section-title">حساب السوق</h3>
-        <button id="closeAuthModalBtn" type="button" style="font-weight: 800; font-size: 1.1rem;">✕</button>
+  <!-- نافذة تسجيل الدخول وإنشاء الحساب (الاسم وكلمة المرور فقط) -->
+  <div id="authModal" class="modal-backdrop" onclick="handleBackdropClick(event, 'auth')">
+    <div class="modal-box auth-box" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title">🔐 الحساب وتسجيل الدخول</div>
+        <button class="btn" onclick="closeActiveModal()">✕</button>
       </div>
 
       <div class="auth-tabs">
-        <button class="auth-tab active" id="tabLogin" type="button">تسجيل الدخول</button>
-        <button class="auth-tab" id="tabRegister" type="button">إنشاء حساب</button>
+        <button id="tabLogin" type="button" class="auth-tab active" onclick="switchAuthTab('login')">تسجيل الدخول</button>
+        <button id="tabRegister" type="button" class="auth-tab" onclick="switchAuthTab('register')">إنشاء حساب</button>
       </div>
 
-      <form id="loginForm">
+      <form id="loginForm" onsubmit="handleLogin(event)">
         <div class="form-group">
-          <label class="form-label">البريد الإلكتروني أو رقم الهاتف</label>
-          <input class="input-control" id="loginIdentifier" type="text" required placeholder="name@example.com أو 05xxxxxxxx" />
+          <label class="form-label" for="loginUsername">الاسم</label>
+          <input id="loginUsername" class="input" type="text" required placeholder="اكتب اسمك..." />
         </div>
         <div class="form-group">
-          <label class="form-label">كلمة المرور</label>
-          <input class="input-control" id="loginPassword" type="password" required placeholder="••••••••" />
+          <label class="form-label" for="loginPassword">كلمة المرور</label>
+          <input id="loginPassword" class="input" type="password" required placeholder="••••••••" />
         </div>
-        <button class="btn-primary" style="width: 100%;" type="submit">دخول</button>
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px;">
+          <button type="button" class="btn" onclick="closeActiveModal()">إلغاء</button>
+          <button type="submit" class="btn btn-gold">تسجيل الدخول</button>
+        </div>
       </form>
 
-      <form id="registerForm" style="display: none;">
+      <form id="registerForm" style="display: none;" onsubmit="handleRegister(event)">
         <div class="form-group">
-          <label class="form-label">الاسم الكامل</label>
-          <input class="input-control" id="regName" type="text" required placeholder="اكتب اسمك" />
+          <label class="form-label" for="regUsername">الاسم</label>
+          <input id="regUsername" class="input" type="text" required placeholder="اكتب اسمك..." />
         </div>
         <div class="form-group">
-          <label class="form-label">البريد الإلكتروني أو رقم الهاتف</label>
-          <input class="input-control" id="regIdentifier" type="text" required placeholder="name@example.com أو 05xxxxxxxx" />
+          <label class="form-label" for="regPassword">كلمة المرور</label>
+          <input id="regPassword" class="input" type="password" required placeholder="••••••••" />
         </div>
-        <div class="form-group">
-          <label class="form-label">كلمة المرور</label>
-          <input class="input-control" id="regPassword" type="password" required placeholder="6 أحرف على الأقل" />
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px;">
+          <button type="button" class="btn" onclick="closeActiveModal()">إلغاء</button>
+          <button type="submit" class="btn btn-gold">إنشاء حساب</button>
         </div>
-        <button class="btn-primary" style="width: 100%;" type="submit">إنشاء الحساب</button>
       </form>
     </div>
   </div>
 
-  <div class="toast-msg" id="toastMsg"></div>
+  <!-- نافذة تفاصيل الإعلان -->
+  <div id="detailsModal" class="modal-backdrop" onclick="handleBackdropClick(event, 'details')">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div id="detailTitle" class="modal-title">تفاصيل الإعلان</div>
+        <button class="btn" onclick="closeActiveModal()">✕</button>
+      </div>
+      <div id="detailContent"></div>
+    </div>
+  </div>
 
-  <nav class="bottom-nav">
-    <button class="nav-item active" data-view="view-home" type="button">
-      <span>الرئيسية</span>
-    </button>
-    <button class="nav-item" data-view="view-messages" type="button">
-      <span>المحادثات</span>
-    </button>
-    <button class="nav-item" data-view="view-my-ads" type="button">
-      <span>إعلاناتي</span>
-    </button>
-    <button class="nav-item" data-view="view-account" type="button">
-      <span>حسابي</span>
-    </button>
-  </nav>
+  <!-- نافذة إضافة وتعديل الإعلان -->
+  <div id="adFormModal" class="modal-backdrop" onclick="handleBackdropClick(event, 'adForm')">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div id="adFormTitle" class="modal-title">إضافة إعلان جديد</div>
+        <button class="btn" onclick="closeActiveModal()">✕</button>
+      </div>
+      <form id="adForm" onsubmit="submitAdForm(event)">
+        <input type="hidden" id="editAdId" />
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="adTitle">عنوان الإعلان</label>
+            <input id="adTitle" class="input" type="text" required placeholder="مثال: كرت شاشة أو هاتف..." />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="adPrice">السعر</label>
+            <input id="adPrice" class="input" type="number" min="0" step="any" required placeholder="0" />
+          </div>
+        </div>
 
-  <script src="./index.js"></script>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="adCategory">القسم</label>
+            <select id="adCategory" class="select" required></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="adCondition">الحالة</label>
+            <select id="adCondition" class="select">
+              <option value="مستعمل">مستعمل</option>
+              <option value="جديد">جديد</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="adCurrency">العملة</label>
+            <select id="adCurrency" class="select">
+              <option value="USD">USD ($)</option>
+              <option value="TRY">TRY (₺)</option>
+              <option value="SYP">SYP</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="adCity">المدينة</label>
+            <input id="adCity" class="input" type="text" placeholder="مثال: أنطاليا أو دمشق..." />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="adNeighbourhood">الحي / المنطقة</label>
+            <input id="adNeighbourhood" class="input" type="text" placeholder="اختياري..." />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="adDescription">الوصف والتفاصيل</label>
+          <textarea id="adDescription" class="textarea" rows="3" placeholder="اكتب تفاصيل المنتج وحالته..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="adImageFile">صورة من الجهاز أو رابط صورة</label>
+          <input id="adImageFile" class="input" type="file" accept="image/*" onchange="handleImageFile(event, 'ad')" />
+          <input id="adImageUrl" class="input" type="url" placeholder="أو رابط صورة مباشر (https://...)" oninput="handleImageUrl(event)" style="margin-top: 6px;" />
+          <div id="adImagePreviewBox" class="preview-box" style="display: none;">
+            <img id="adImagePreview" src="" alt="معاينة الصورة" />
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px;">
+          <button type="button" class="btn" onclick="closeActiveModal()">إلغاء</button>
+          <button type="submit" class="btn btn-gold">حفظ ونشر</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- نافذة الدردشة والرسائل الصوتية وقائمة الحظر -->
+  <div id="chatModal" class="modal-backdrop" onclick="handleBackdropClick(event, 'chat')">
+    <div class="modal-box" style="max-width: 860px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div id="chatModalTitle" class="modal-title">💬 الدردشة المباشرة</div>
+        <div style="display: flex; gap: 6px;">
+          <button id="toggleBlockBtn" type="button" class="btn btn-danger" onclick="toggleBlockCurrentPeer()">🚫 حظر</button>
+          <button class="btn" onclick="closeActiveModal()">✕</button>
+        </div>
+      </div>
+
+      <div class="chat-container">
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <input
+            class="input"
+            type="text"
+            placeholder="اسم مستخدم + Enter..."
+            onkeydown="if(event.key==='Enter'){event.preventDefault();addOrSelectPeer(this.value);this.value='';}"
+          />
+          <div id="chatUserList" class="chat-user-list"></div>
+        </div>
+
+        <div class="chat-main">
+          <div id="chatMessages" class="chat-messages"></div>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px;">
+            <button type="button" class="btn" style="padding: 3px 9px; font-size: 0.74rem;" onclick="insertQuickPhrase('هل المنتج لا يزال متوفراً؟')">متوفر؟</button>
+            <button type="button" class="btn" style="padding: 3px 9px; font-size: 0.74rem;" onclick="insertQuickPhrase('ما هو السعر النهائي؟')">السعر النهائي؟</button>
+            <button type="button" class="btn" style="padding: 3px 9px; font-size: 0.74rem;" onclick="insertQuickPhrase('ممكن المعاينة والتسليم اليوم؟')">التسليم اليوم؟</button>
+          </div>
+
+          <form onsubmit="sendChatMessage(event)" style="display: flex; gap: 6px; margin-top: 6px;">
+            <button id="voiceRecordBtn" type="button" class="btn btn-diamond" onclick="toggleVoiceRecording()" title="تسجيل صوتي">🎙️</button>
+            <input id="chatTextInput" class="input" type="text" placeholder="اكتب رسالتك..." required />
+            <button type="submit" class="btn btn-gold">إرسال</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="blocked-list">
+        <div class="form-label">قائمة المحظورين</div>
+        <div id="blockedUsersContainer" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة الملف الشخصي -->
+  <div id="profileModal" class="modal-backdrop" onclick="handleBackdropClick(event, 'profile')">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title">👤 الملف الشخصي</div>
+        <button class="btn" onclick="closeActiveModal()">✕</button>
+      </div>
+      <form onsubmit="saveProfile(event)">
+        <div class="form-group">
+          <label class="form-label" for="profileName">الاسم الظاهر</label>
+          <input id="profileName" class="input" type="text" required placeholder="اكتب اسمك..." />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="profileCity">المدينة</label>
+          <input id="profileCity" class="input" type="text" placeholder="مثال: أنطاليا..." />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="profileBio">نبذة تعريفية</label>
+          <textarea id="profileBio" class="textarea" rows="2" placeholder="نبذة قصيرة عنك..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="profileAvatarFile">صورة رمزية من الجهاز</label>
+          <input id="profileAvatarFile" class="input" type="file" accept="image/*" onchange="handleImageFile(event, 'avatar')" />
+          <div class="preview-box" style="max-height: 120px;">
+            <img id="profileAvatarPreview" src="" alt="الصورة الرمزية" />
+          </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px;">
+          <button type="button" class="btn" onclick="closeActiveModal()">إلغاء</button>
+          <button type="submit" class="btn btn-gold">حفظ الملف</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="app.js"></script>
 </body>
 </html>

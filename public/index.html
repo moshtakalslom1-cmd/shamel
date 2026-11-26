@@ -1,1178 +1,1247 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رخيص - السوق الشامل</title>
-    <style>
-        :root {
-            --gold-bright: #FFD700;
-            --gold-grad: linear-gradient(135deg, #AA771C 0%, #FCF6BA 35%, #D4AF37 60%, #FCF6BA 85%, #8A5A00 100%);
-            --silver-grad: linear-gradient(135deg, #7A7F85 0%, #F5F7FA 35%, #AEB4BC 60%, #FFFFFF 80%, #5C6166 100%);
-            --diamond-grad: linear-gradient(135deg, #4FD1C5 0%, #E0FFFF 35%, #87CEFA 65%, #FFFFFF 85%, #38BDF8 100%);
-            --bg-obsidian: #0A0C10;
-            --bg-panel: #12161F;
-            --bg-input: #0F131B;
-            --border-gold: rgba(212, 175, 55, 0.45);
-            --border-diamond: rgba(135, 206, 250, 0.35);
-            --text-main: #F8FAFC;
-            --text-muted: #94A3B8;
-            --diamond-accent: #67E8F9;
-            --danger-color: #F87171;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background:
-                radial-gradient(circle at 15% 10%, rgba(212, 175, 55, 0.08), transparent 35%),
-                radial-gradient(circle at 85% 15%, rgba(103, 232, 249, 0.08), transparent 40%),
-                var(--bg-obsidian);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-        }
-
-        header {
-            background: linear-gradient(180deg, rgba(23, 28, 40, 0.96), rgba(12, 15, 22, 0.96));
-            border-bottom: 1px solid var(--border-gold);
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.65), 0 1px 0 rgba(103, 232, 249, 0.25);
-            position: sticky;
-            top: 0;
-            z-index: 900;
-            backdrop-filter: blur(10px);
-        }
-
-        .header-inner {
-            max-width: 1440px;
-            margin: 0 auto;
-            padding: 10px 16px;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-        }
-
-        .brand-box {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .brand-ornament {
-            font-size: 16px;
-            background: var(--diamond-grad);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .brand-title {
-            font-size: 22px;
-            font-weight: 800;
-            background: var(--gold-grad);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            padding: 0 4px;
-        }
-
-        .brand-title::before,
-        .brand-title::after {
-            content: "✦";
-            font-size: 12px;
-            vertical-align: middle;
-            margin: 0 4px;
-            background: var(--silver-grad);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .btn-gold {
-            background: var(--gold-grad);
-            color: #090B10;
-            border: none;
-            border-radius: 8px;
-            padding: 7px 14px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: 0 3px 12px rgba(212, 175, 55, 0.35);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .btn-gold:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 5px 16px rgba(212, 175, 55, 0.55);
-        }
-
-        .btn-silver-diamond {
-            background: var(--bg-panel);
-            color: var(--text-main);
-            border: 1px solid rgba(203, 213, 225, 0.35);
-            border-radius: 8px;
-            padding: 7px 13px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: border-color 0.2s ease, background 0.2s ease;
-        }
-
-        .btn-silver-diamond:hover {
-            border-color: var(--diamond-accent);
-            background: rgba(103, 232, 249, 0.08);
-        }
-
-        .btn-danger {
-            background: rgba(248, 113, 113, 0.14);
-            color: var(--danger-color);
-            border: 1px solid rgba(248, 113, 113, 0.45);
-            border-radius: 8px;
-            padding: 7px 13px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: background 0.2s ease;
-        }
-
-        .btn-danger:hover {
-            background: rgba(248, 113, 113, 0.25);
-        }
-
-        .main-container {
-            max-width: 1440px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 14px 16px 36px;
-            flex: 1;
-        }
-
-        .toolbar {
-            background: var(--bg-panel);
-            border: 1px solid rgba(148, 163, 184, 0.2);
-            border-radius: 12px;
-            padding: 10px 12px;
-            margin-bottom: 14px;
-            display: grid;
-            grid-template-columns: 2fr repeat(3, 1fr) auto;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .toolbar input,
-        .toolbar select {
-            width: 100%;
-            background: var(--bg-input);
-            color: var(--text-main);
-            border: 1px solid rgba(148, 163, 184, 0.25);
-            border-radius: 8px;
-            padding: 8px 10px;
-            font-size: 13px;
-            outline: none;
-        }
-
-        .toolbar input:focus,
-        .toolbar select:focus {
-            border-color: var(--gold-bright);
-        }
-
-        .btn-reset {
-            background: transparent;
-            color: var(--diamond-accent);
-            border: 1px solid var(--border-diamond);
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin: 8px 0 10px;
-            padding-bottom: 6px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.25);
-        }
-
-        .section-title {
-            font-size: 16px;
-            font-weight: 700;
-            background: var(--silver-grad);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .section-badge {
-            font-size: 12px;
-            color: var(--gold-bright);
-            background: rgba(212, 175, 55, 0.12);
-            border: 1px solid var(--border-gold);
-            padding: 2px 10px;
-            border-radius: 999px;
-        }
-
-        .categories-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
-            gap: 8px;
-            margin-bottom: 18px;
-        }
-
-        .category-tile {
-            background: linear-gradient(155deg, rgba(30, 36, 51, 0.95), rgba(15, 19, 28, 0.95));
-            border: 1px solid rgba(148, 163, 184, 0.22);
-            border-radius: 10px;
-            padding: 8px 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 7px;
-            cursor: pointer;
-            font-size: 12.5px;
-            font-weight: 600;
-            color: var(--text-main);
-            min-height: 44px;
-            transition: transform 0.2s ease, border-color 0.2s ease;
-        }
-
-        .category-tile:hover {
-            transform: translateY(-2px);
-            border-color: var(--gold-bright);
-        }
-
-        .category-tile.active {
-            background: linear-gradient(145deg, rgba(212, 175, 55, 0.22), rgba(103, 232, 249, 0.12));
-            border-color: var(--gold-bright);
-            box-shadow: 0 0 14px rgba(212, 175, 55, 0.3);
-        }
-
-        .ads-grid {
-            display: grid;
-            grid-template-columns: repeat(5, minmax(0, 1fr));
-            gap: 10px;
-        }
-
-        @media (max-width: 1200px) {
-            .ads-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-            .toolbar { grid-template-columns: 1fr 1fr; }
-        }
-
-        @media (max-width: 900px) {
-            .ads-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-        }
-
-        @media (max-width: 640px) {
-            .ads-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-            .toolbar { grid-template-columns: 1fr; }
-            .brand-title { font-size: 19px; }
-        }
-
-        .ad-card {
-            background: linear-gradient(165deg, rgba(26, 32, 46, 0.96), rgba(14, 18, 26, 0.96));
-            border: 1px solid rgba(148, 163, 184, 0.2);
-            border-radius: 10px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
-            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .ad-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--gold-bright);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.55), 0 0 12px rgba(103, 232, 249, 0.16);
-        }
-
-        .ad-thumb {
-            position: relative;
-            width: 100%;
-            height: 112px;
-            background: #090C12;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.18);
-        }
-
-        .ad-thumb img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .ad-no-img {
-            font-size: 11px;
-            color: var(--text-muted);
-            padding: 6px;
-            text-align: center;
-        }
-
-        .ad-condition-tag {
-            position: absolute;
-            top: 6px;
-            right: 6px;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 2px 7px;
-            border-radius: 6px;
-            background: rgba(10, 12, 16, 0.82);
-            color: var(--diamond-accent);
-            border: 1px solid var(--border-diamond);
-        }
-
-        .ad-body {
-            padding: 8px 9px;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            flex: 1;
-            justify-content: space-between;
-        }
-
-        .ad-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text-main);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .ad-price {
-            font-size: 13px;
-            font-weight: 800;
-            background: var(--diamond-grad);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .ad-meta {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 4px;
-            font-size: 10.5px;
-            color: var(--text-muted);
-            border-top: 1px solid rgba(148, 163, 184, 0.12);
-            padding-top: 5px;
-        }
-
-        .ad-meta span {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .empty-state {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 36px 16px;
-            background: var(--bg-panel);
-            border: 1px dashed rgba(212, 175, 55, 0.35);
-            border-radius: 12px;
-            color: var(--text-muted);
-            font-size: 14px;
-        }
-
-        .modal-backdrop {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(3, 5, 9, 0.82);
-            backdrop-filter: blur(4px);
-            z-index: 1200;
-            align-items: center;
-            justify-content: center;
-            padding: 14px;
-        }
-
-        .modal-backdrop.open {
-            display: flex;
-        }
-
-        .modal-box {
-            width: 100%;
-            max-width: 560px;
-            max-height: 90vh;
-            overflow-y: auto;
-            background: var(--bg-panel);
-            border: 1px solid var(--border-gold);
-            border-radius: 14px;
-            padding: 18px;
-            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.75), 0 0 22px rgba(212, 175, 55, 0.18);
-        }
-
-        .modal-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 14px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
-        }
-
-        .modal-title {
-            font-size: 16px;
-            font-weight: 700;
-            background: var(--gold-grad);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .modal-close {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 22px;
-            cursor: pointer;
-            line-height: 1;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            margin-bottom: 10px;
-        }
-
-        .form-group.full {
-            grid-column: 1 / -1;
-        }
-
-        .form-group label {
-            font-size: 12px;
-            color: var(--gold-bright);
-            font-weight: 600;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            background: var(--bg-input);
-            color: var(--text-main);
-            border: 1px solid rgba(148, 163, 184, 0.28);
-            border-radius: 8px;
-            padding: 8px 10px;
-            font-size: 13px;
-            font-family: inherit;
-        }
-
-        .upload-zone {
-            border: 1px dashed var(--border-diamond);
-            background: rgba(15, 19, 27, 0.85);
-            border-radius: 10px;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .upload-preview-wrap {
-            display: none;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            background: rgba(23, 28, 40, 0.9);
-            padding: 8px;
-            border-radius: 8px;
-            border: 1px solid rgba(103, 232, 249, 0.25);
-        }
-
-        .upload-preview-wrap.visible {
-            display: flex;
-        }
-
-        .upload-preview-img {
-            width: 64px;
-            height: 64px;
-            object-fit: cover;
-            border-radius: 6px;
-            border: 1px solid var(--border-gold);
-        }
-
-        .detail-img {
-            width: 100%;
-            max-height: 240px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 12px;
-            border: 1px solid rgba(212, 175, 55, 0.25);
-        }
-
-        .detail-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 10px;
-            font-size: 12.5px;
-            color: var(--text-muted);
-        }
-
-        .detail-pill {
-            background: var(--bg-input);
-            border: 1px solid rgba(148, 163, 184, 0.22);
-            padding: 4px 10px;
-            border-radius: 999px;
-        }
-
-        .detail-desc {
-            background: var(--bg-input);
-            border-radius: 8px;
-            padding: 10px;
-            font-size: 13px;
-            line-height: 1.6;
-            color: var(--text-main);
-            margin-bottom: 12px;
-            white-space: pre-wrap;
-        }
-
-        .detail-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .messages-box {
-            max-height: 240px;
-            overflow-y: auto;
-            background: var(--bg-input);
-            border: 1px solid rgba(148, 163, 184, 0.2);
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .msg-bubble {
-            background: rgba(23, 28, 40, 0.95);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 8px;
-            padding: 8px 10px;
-            font-size: 12.5px;
-        }
-
-        .msg-meta {
-            font-size: 10.5px;
-            color: var(--diamond-accent);
-            margin-bottom: 3px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>رخيص والسوق الشامل — نظام متكامل</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #07090e;
+      --bg-card: #0d111a;
+      --bg-elevated: #131824;
+      --border-subtle: rgba(245, 196, 81, 0.18);
+      --gold: #f5c451;
+      --gold-deep: #b8861b;
+      --silver: #cbd5e1;
+      --diamond: #7dd3fc;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --danger: #ef4444;
+      --success: #22c55e;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --shadow-lux: 0 10px 30px rgba(0, 0, 0, 0.7);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+
+    html, body {
+      background: radial-gradient(circle at top right, #131a2c 0%, var(--bg-dark) 60%);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    header {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(9, 12, 18, 0.95);
+      backdrop-filter: blur(15px);
+      border-bottom: 2px solid var(--gold);
+      padding: 14px 20px;
+    }
+
+    .header-inner {
+      max-width: 1400px; margin: 0 auto; display: flex;
+      flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 15px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+
+    .brand-badge {
+      width: 46px; height: 46px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-deep) 60%, var(--diamond));
+      display: grid; place-items: center; font-weight: 800; color: #07090e; font-size: 1.25rem;
+      box-shadow: 0 0 20px rgba(245, 196, 81, 0.4);
+    }
+
+    .brand-title {
+      font-size: 1.25rem; font-weight: 800;
+      background: linear-gradient(90deg, var(--gold), #fff, var(--diamond));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    .brand-sub { font-size: 0.8rem; color: var(--silver); }
+
+    .header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+    .btn {
+      border: 1px solid var(--border-subtle); background: var(--bg-elevated);
+      color: var(--text-main); padding: 10px 16px; border-radius: var(--radius-md);
+      font-size: 0.9rem; font-weight: 700; cursor: pointer; display: inline-flex;
+      align-items: center; gap: 8px; transition: all 0.2s ease;
+    }
+
+    .btn:hover { transform: translateY(-2px); border-color: var(--gold); }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold), #e0a82e);
+      color: #07090e; border: none; box-shadow: 0 6px 20px rgba(245, 196, 81, 0.3);
+    }
+
+    .btn-diamond {
+      background: linear-gradient(135deg, rgba(125, 211, 252, 0.15), rgba(203, 213, 225, 0.1));
+      border-color: rgba(125, 211, 252, 0.4); color: var(--diamond);
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.5); color: #fca5a5;
+    }
+
+    .avatar-mini {
+      width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 1.8px solid var(--gold);
+    }
+
+    .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+
+    .toolbar {
+      background: var(--bg-card); border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg); padding: 18px; display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px;
+      box-shadow: var(--shadow-lux);
+    }
+
+    .input, .select, .textarea {
+      width: 100%; background: var(--bg-dark); border: 1px solid var(--border-subtle);
+      color: var(--text-main); padding: 12px 16px; border-radius: var(--radius-md);
+      font-size: 0.95rem; outline: none; transition: border-color 0.2s ease;
+    }
+
+    .input:focus, .select:focus, .textarea:focus { border-color: var(--gold); }
+
+    .categories-strip {
+      display: flex; gap: 10px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 24px;
+    }
+
+    .cat-chip {
+      flex: 0 0 auto; padding: 10px 18px; border-radius: 999px; background: var(--bg-card);
+      border: 1px solid rgba(203, 213, 225, 0.2); color: var(--silver);
+      font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease;
+    }
+
+    .cat-chip.active {
+      background: linear-gradient(135deg, rgba(245, 196, 81, 0.25), rgba(125, 211, 252, 0.15));
+      border-color: var(--gold); color: var(--gold); box-shadow: 0 0 18px rgba(245, 196, 81, 0.25);
+    }
+
+    .ads-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+
+    .ad-card {
+      background: linear-gradient(180deg, rgba(19, 24, 36, 0.98) 0%, rgba(11, 14, 22, 1) 100%);
+      border: 1px solid rgba(245, 196, 81, 0.25); border-radius: var(--radius-lg);
+      overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
+      box-shadow: var(--shadow-lux); transition: transform 0.25s ease, border-color 0.25s ease; cursor: pointer;
+    }
+
+    .ad-card:hover { transform: translateY(-4px); border-color: var(--gold); }
+
+    .ad-img-wrap { position: relative; height: 185px; background: #07090e; overflow: hidden; }
+
+    .ad-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .ad-badge-cat {
+      position: absolute; top: 12px; right: 12px; background: rgba(7, 9, 14, 0.85);
+      border: 1px solid rgba(125, 211, 252, 0.5); color: var(--diamond); padding: 4px 12px;
+      border-radius: 999px; font-size: 0.8rem; font-weight: 700;
+    }
+
+    .ad-body { padding: 16px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+
+    .ad-title { font-size: 1.1rem; font-weight: 800; color: var(--text-main); line-height: 1.4; }
+
+    .ad-price { font-size: 1.15rem; font-weight: 800; color: var(--gold); }
+
+    .ad-meta { font-size: 0.85rem; color: var(--text-muted); display: flex; justify-content: space-between; gap: 8px; }
+
+    .ad-footer { padding: 12px 16px; border-top: 1px solid var(--border-subtle); display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .modal-backdrop {
+      position: fixed; inset: 0; z-index: 100; background: rgba(5, 7, 11, 0.85); backdrop-filter: blur(8px);
+      display: none; align-items: center; justify-content: center; padding: 20px; overflow-y: auto;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal-box {
+      width: 100%; max-width: 700px; max-height: 92vh; overflow-y: auto; background: var(--bg-card);
+      border: 1px solid rgba(245, 196, 81, 0.4); border-radius: var(--radius-lg); padding: 24px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+    }
+
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 2px solid var(--border-subtle); padding-bottom: 14px; margin-bottom: 20px;
+    }
+
+    .modal-title { font-size: 1.25rem; font-weight: 800; color: var(--gold); }
+
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+
+    .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+
+    .form-label { font-size: 0.9rem; color: var(--silver); font-weight: 700; }
+
+    .preview-box {
+      margin-top: 10px; border-radius: var(--radius-md); overflow: hidden;
+      border: 2px dashed rgba(245, 196, 81, 0.5); max-height: 240px; background: var(--bg-dark);
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .preview-box img { max-width: 100%; max-height: 240px; object-fit: contain; }
+
+    .chat-container { display: grid; grid-template-columns: 260px 1fr; gap: 16px; height: 65vh; }
+
+    .chat-user-list {
+      background: var(--bg-dark); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);
+      padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;
+    }
+
+    .user-item {
+      padding: 12px; border-radius: var(--radius-md); cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.2s; border: 1px solid transparent;
+    }
+
+    .user-item:hover { background: var(--bg-elevated); }
+
+    .user-item.active { background: linear-gradient(135deg, rgba(245, 196, 81, 0.2), transparent); border-color: var(--gold); }
+
+    .chat-main { display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
+
+    .chat-messages {
+      background: var(--bg-dark); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);
+      padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; flex: 1;
+    }
+
+    .msg-bubble {
+      max-width: 78%; padding: 12px 16px; border-radius: 18px; font-size: 0.95rem; line-height: 1.5; word-break: break-word;
+      position: relative;
+    }
+
+    .msg-me { align-self: flex-start; background: linear-gradient(135deg, var(--gold-deep), var(--gold)); color: #07090e; font-weight: 600; }
+
+    .msg-other { align-self: flex-end; background: var(--bg-elevated); border: 1px solid rgba(125, 211, 252, 0.4); color: var(--text-main); }
+
+    .msg-time { display: block; font-size: 0.75rem; opacity: 0.8; margin-top: 6px; text-align: left; }
+
+    .audio-player { display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 20px; margin-top: 6px; border: 1px solid var(--gold); }
+
+    .blocked-list { margin-top: 15px; border-top: 1px solid var(--border-subtle); padding-top: 15px; }
+
+    .toast-container {
+      position: fixed; bottom: 24px; left: 24px; right: 24px; z-index: 200; pointer-events: none;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+
+    .toast {
+      pointer-events: auto; max-width: 500px; width: 100%; background: #111622; border: 2px solid var(--gold);
+      color: var(--text-main); padding: 16px 20px; border-radius: var(--radius-md); box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+      display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 0.95rem; font-weight: 700;
+      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .toast.error { border-color: var(--danger); color: #fee2e2; }
+    .toast.success { border-color: var(--success); color: #dcfce7; }
+
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
 </head>
-<body>
-
-    <header>
-        <div class="header-inner">
-            <div class="brand-box">
-                <span class="brand-ornament">💎</span>
-                <h1 class="brand-title">رخيص - السوق الشامل</h1>
-                <span class="brand-ornament">💎</span>
-            </div>
-
-            <div class="header-actions">
-                <button class="btn-silver-diamond" onclick="openMessagesModal()">💬 المراسلات</button>
-                <button class="btn-gold" onclick="openCreateModal()">＋ إضافة إعلان</button>
-            </div>
+<body><!-- الهيدر -->
+  <header>
+    <div class="header-inner">
+      <div class="brand" onclick="goHome()">
+        <div class="brand-badge">✦</div>
+        <div>
+          <div class="brand-title">رخيص والسوق الشامل</div>
+          <div class="brand-sub">إعلانات • دردشة صوتية ونصية • حظر وإدارة</div>
         </div>
-    </header>
+      </div>
 
-    <main class="main-container">
-        <section class="toolbar" aria-label="أدوات البحث والفلترة">
-            <input type="search" id="searchInput" placeholder="ابحث عن سيارة، هاتف، عقار، لابتوب..." oninput="applyFilters()">
-
-            <select id="cityFilter" onchange="applyFilters()">
-                <option value="">كل المحافظات والمدن</option>
-                <option value="دمشق">دمشق</option>
-                <option value="ريف دمشق">ريف دمشق</option>
-                <option value="حلب">حلب</option>
-                <option value="حمص">حمص</option>
-                <option value="حماة">حماة</option>
-                <option value="اللاذقية">اللاذقية</option>
-                <option value="طرطوس">طرطوس</option>
-                <option value="إدلب">إدلب</option>
-                <option value="درعا">درعا</option>
-                <option value="السويداء">السويداء</option>
-                <option value="دير الزور">دير الزور</option>
-                <option value="الرقة">الرقة</option>
-                <option value="الحسكة">الحسكة</option>
-            </select>
-
-            <select id="conditionFilter" onchange="applyFilters()">
-                <option value="">كل الحالات</option>
-                <option value="جديد">جديد</option>
-                <option value="مستعمل">مستعمل</option>
-            </select>
-
-            <select id="sortFilter" onchange="applyFilters()">
-                <option value="newest">الأحدث أولاً</option>
-                <option value="price-asc">السعر: من الأقل للأعلى</option>
-                <option value="price-desc">السعر: من الأعلى للأقل</option>
-            </select>
-
-            <button class="btn-reset" onclick="resetFilters()">إعادة ضبط</button>
-        </section>
-
-        <div class="section-header">
-            <h2 class="section-title">✦ الأقسام الرئيسية</h2>
-            <span class="section-badge" id="activeCategoryLabel">جميع الأقسام</span>
-        </div>
-        <section class="categories-grid" id="categoriesGrid"></section>
-
-        <div class="section-header">
-            <h2 class="section-title">✦ أحدث الإعلانات</h2>
-            <span class="section-badge" id="adsCountBadge">0 إعلان</span>
-        </div>
-        <section class="ads-grid" id="adsGrid"></section>
-    </main>
-
-    <!-- Create / Edit Ad Modal -->
-    <div class="modal-backdrop" id="adFormModal">
-        <div class="modal-box">
-            <div class="modal-head">
-                <h3 class="modal-title" id="adFormModalTitle">نشر إعلان جديد</h3>
-                <button class="modal-close" onclick="closeModal('adFormModal')">&times;</button>
-            </div>
-            <form id="adForm" onsubmit="handleSaveAd(event)">
-                <input type="hidden" id="editingAdId" value="">
-                <input type="hidden" id="adImageData" value="">
-
-                <div class="form-grid">
-                    <div class="form-group full">
-                        <label for="adTitle">عنوان الإعلان</label>
-                        <input type="text" id="adTitle" required placeholder="مثال: آيفون 15 برو ماكس أو سيارة...">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="adPrice">السعر</label>
-                        <input type="number" id="adPrice" required min="0" step="any" placeholder="مثال: 2500">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="adCurrency">العملة</label>
-                        <select id="adCurrency">
-                            <option value="USD">USD ($)</option>
-                            <option value="SYP">ل.س</option>
-                            <option value="TRY">TRY (₺)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="adCategory">القسم الرئيسي</label>
-                        <select id="adCategory" required></select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="adCondition">الحالة</label>
-                        <select id="adCondition">
-                            <option value="مستعمل">مستعمل</option>
-                            <option value="جديد">جديد</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="adCity">المحافظة / المدينة</label>
-                        <input type="text" id="adCity" value="دمشق" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="adNeighbourhood">الحي / المنطقة</label>
-                        <input type="text" id="adNeighbourhood" placeholder="مثال: المزة، الشعلان...">
-                    </div>
-
-                    <div class="form-group full">
-                        <label>صورة الإعلان (رفع فوري من الجهاز أو رابط)</label>
-                        <div class="upload-zone">
-                            <input type="file" id="adFileInput" accept="image/*" onchange="handleFileSelect(event)">
-                            <input type="url" id="adImageUrl" placeholder="أو الصق رابط صورة مباشر https://..." oninput="handleUrlInput(event)">
-                            <div class="upload-preview-wrap" id="imagePreviewWrap">
-                                <div style="display:flex; align-items:center; gap:10px;">
-                                    <img id="imagePreviewThumb" class="upload-preview-img" src="" alt="معاينة الصورة">
-                                    <span style="font-size:12px; color:var(--diamond-accent);">تم تجهيز الصورة فوراً</span>
-                                </div>
-                                <button type="button" class="btn-danger" onclick="clearSelectedImage()">إزالة الصورة</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group full">
-                        <label for="adDescription">التفاصيل والوصف</label>
-                        <textarea id="adDescription" rows="3" placeholder="اكتب مواصفات الإعلان وطريقة التواصل..."></textarea>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-gold" id="adSubmitBtn" style="width:100%; justify-content:center; padding:10px;">
-                    نشر الإعلان الآن
-                </button>
-            </form>
-        </div>
+      <div class="header-actions">
+        <button class="btn btn-gold" onclick="openAdForm()">+ أضف إعلاناً</button>
+        <button class="btn btn-diamond" onclick="openChatModal()">💬 الدردشات</button>
+        <button class="btn" onclick="openProfileModal()">
+          <img id="headerAvatar" class="avatar-mini" src="" alt="" style="display:none;" />
+          <span id="headerUsername">الملف التعريفي</span>
+        </button>
+      </div>
     </div>
+  </header>
 
-    <!-- Ad Details Modal -->
-    <div class="modal-backdrop" id="detailAdModal">
-        <div class="modal-box">
-            <div class="modal-head">
-                <h3 class="modal-title" id="detailTitle">تفاصيل الإعلان</h3>
-                <button class="modal-close" onclick="closeModal('detailAdModal')">&times;</button>
-            </div>
-            <div id="detailContent"></div>
-        </div>
+  <!-- المحتوى الرئيسي -->
+  <main class="container">
+    <section class="toolbar">
+      <input id="searchInput" class="input" type="search" placeholder="ابحث عن سيارة، عقار، إلكترونيات..." oninput="renderAds()" />
+      <select id="cityFilter" class="select" onchange="renderAds()">
+        <option value="">كل المدن والمناطق</option>
+        <option value="دمشق">دمشق</option>
+        <option value="حلب">حلب</option>
+        <option value="حمص">حمص</option>
+        <option value="اللاذقية">اللاذقية</option>
+        <option value="طرطوس">طرطوس</option>
+        <option value="إدلب">إدلب</option>
+        <option value="أنطاليا">أنطاليا</option>
+        <option value="إسطنبول">إسطنبول</option>
+      </select>
+      <select id="conditionFilter" class="select" onchange="renderAds()">
+        <option value="">كل الحالات</option>
+        <option value="جديد">جديد</option>
+        <option value="مستعمل">مستعمل</option>
+      </select>
+      <select id="sortSelect" class="select" onchange="renderAds()">
+        <option value="newest">الأحدث أولاً</option>
+        <option value="price-asc">السعر: من الأقل للأعلى</option>
+        <option value="price-desc">السعر: من الأعلى للأقل</option>
+      </select>
+    </section>
+
+    <section id="categoriesStrip" class="categories-strip"></section>
+    <section id="adsGrid" class="ads-grid"></section>
+  </main>
+
+  <!-- 1) نافذة تفاصيل الإعلان -->
+  <div id="detailsModal" class="modal-backdrop" onclick="handleBackdropClick(event, 'details')">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div id="detailTitle" class="modal-title">تفاصيل الإعلان</div>
+        <button class="btn" onclick="closeActiveModal()">✕</button>
+      </div>
+      <div id="detailContent"></div>
     </div>
+  </div>
 
-    <!-- Messages Modal -->
-    <div class="modal-backdrop" id="messagesModal">
-        <div class="modal-box">
-            <div class="modal-head">
-                <h3 class="modal-title">صندوق المراسلات</h3>
-                <button class="modal-close" onclick="closeModal('messagesModal')">&times;</button>
-            </div>
-            <div class="messages-box" id="messagesList"></div>
-            <form onsubmit="handleSendMessage(event)">
-                <div class="form-group">
-                    <label for="msgRecipient">اسم المستلم / صاحب الإعلان</label>
-                    <input type="text" id="msgRecipient" required placeholder="مثال: user أو اسم المعلن">
-                </div>
-                <div class="form-group">
-                    <label for="msgText">نص الرسالة</label>
-                    <textarea id="msgText" rows="2" required placeholder="اكتب رسالتك هنا..."></textarea>
-                </div>
-                <button type="submit" class="btn-gold" style="width:100%; justify-content:center; padding:9px;">
-                    إرسال الرسالة
-                </button>
-            </form>
+  <!-- 2) نافذة إضافة / تعديل الإعلان -->
+  <div id="adFormModal" class="modal-backdrop" onclick="handleBackdropClick(event, 'adForm')">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div id="adFormTitle" class="modal-title">إضافة إعلان جديد</div>
+        <button class="btn" onclick="closeActiveModal()">✕</button>
+      </div>
+      <form id="adForm" onsubmit="submitAdForm(event)">
+        <input type="hidden" id="editAdId" />
+        <div class="form-group">
+          <label class="form-label">عنوان الإعلان *</label>
+          <input id="adTitle" class="input" type="text" required placeholder="مثال: لابتوب احترافي بحالة ممتازة" />
         </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">السعر *</label>
+            <input id="adPrice" class="input" type="number" min="0" step="any" required placeholder="0" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">العملة</label>
+            <select id="adCurrency" class="select">
+              <option value="USD">دولار (USD)</option>
+              <option value="SYP">ليرة سورية (SYP)</option>
+              <option value="TRY">ليرة تركية (TRY)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">القسم الرئيسي *</label>
+            <select id="adCategory" class="select" required></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">الحالة</label>
+            <select id="adCondition" class="select">
+              <option value="مستعمل">مستعمل</option>
+              <option value="جديد">جديد</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">المحافظة / المدينة</label>
+            <input id="adCity" class="input" type="text" placeholder="مثال: حلب أو أنطاليا" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">الحي / المنطقة</label>
+            <input id="adNeighbourhood" class="input" type="text" placeholder="مثال: المزة، الفرقان..." />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">صورة الإعلان (من الجهاز أو رابط)</label>
+          <input id="adImageFile" class="input" type="file" accept="image/*" onchange="handleImageFile(event, 'ad')" />
+          <input id="adImageUrl" class="input" type="text" style="margin-top:8px;" placeholder="أو الصق رابط صورة مباشر https://..." oninput="handleImageUrl(event)" />
+          <div id="adImagePreviewBox" class="preview-box" style="display:none;">
+            <img id="adImagePreview" src="" alt="معاينة الصورة" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">التفاصيل والوصف</label>
+          <textarea id="adDescription" class="textarea" rows="3" placeholder="اكتب مواصفات الإعلان وطريقة التواصل..."></textarea>
+        </div>
+
+        <div style="display:flex; gap:8px; justify-content:flex-end;">
+          <button type="button" class="btn" onclick="closeActiveModal()">إلغاء</button>
+          <button type="submit" class="btn btn-gold">حفظ الإعلان</button>
+        </div>
+      </form>
     </div>
+  </div>
 
-    <script>
-        const API_BASE = '/api';
+  <!-- 3) نافذة الدردشة المنفصلة (نص + صوت + حظر) -->
+  <div id="chatModal" class="modal-backdrop" onclick="handleBackdropClick(event, 'chat')">
+    <div class="modal-box" style="max-width:860px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div id="chatModalTitle" class="modal-title">💬 الدردشة المنفصلة</div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <button id="toggleBlockBtn" type="button" class="btn btn-danger" onclick="toggleBlockCurrentPeer()">🚫 حظر المستخدم</button>
+          <button class="btn" onclick="closeActiveModal()">✕</button>
+        </div>
+      </div>
 
-        const CATEGORIES = [
-            { name: 'سيارات ومركبات', icon: '🚗' },
-            { name: 'هواتف وأجهزة ذكية', icon: '📱' },
-            { name: 'عقارات', icon: '🏠' },
-            { name: 'إلكترونيات وكمبيوتر', icon: '💻' },
-            { name: 'أثاث ومفروشات', icon: '🛋️' },
-            { name: 'حيوانات أليفة وطيور', icon: '🐾' },
-            { name: 'أزياء وموضة', icon: '👔' },
-            { name: 'خدمات وأعمال', icon: '🛠️' }
+      <div class="chat-container">
+        <!-- قائمة المحادثات والمحظورين -->
+        <div style="display:flex; flex-direction:column; gap:10px; height:100%;">
+          <input id="chatNewPeerInput" class="input" type="text" placeholder="مراسلة اسم جديد..." onkeydown="if(event.key==='Enter'){event.preventDefault();addOrSelectPeer(this.value);this.value='';}" />
+          <div id="chatUserList" class="chat-user-list"></div>
+          <div class="blocked-list">
+            <div class="form-label" style="margin-bottom:8px; color:#fca5a5;">🚫 قائمة المحظورين</div>
+            <div id="blockedUsersList" style="display:flex; flex-direction:column; gap:6px; max-height:110px; overflow-y:auto;"></div>
+          </div>
+        </div>
+
+        <!-- منطقة الرسائل والإرسال الصوتي -->
+        <div class="chat-main">
+          <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px;">
+            <button type="button" class="btn btn-diamond" onclick="sendQuickPhrase('هل هذا العنصر متاح؟')">
+              ✓ هل هذا العنصر متاح؟
+            </button>
+            <button type="button" class="btn" onclick="sendQuickPhrase('كم السعر النهائي لو سمحت؟')">
+              💰 كم السعر النهائي؟
+            </button>
+          </div>
+
+          <div id="chatMessages" class="chat-messages"></div>
+
+          <form onsubmit="sendChatMessage(event)" style="display:flex; gap:8px; align-items:center; margin-top:10px;">
+            <button id="voiceRecordBtn" type="button" class="btn btn-diamond" onclick="toggleVoiceRecording()" title="تسجيل رسالة صوتية">
+              🎙️ صوت
+            </button>
+            <input id="chatTextInput" class="input" type="text" placeholder="اكتب رسالتك هنا..." />
+            <button type="submit" class="btn btn-gold">إرسال</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4) نافذة الملف التعريفي -->
+  <div id="profileModal" class="modal-backdrop" onclick="handleBackdropClick(event, 'profile')">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title">👤 الملف التعريفي</div>
+        <button class="btn" onclick="closeActiveModal()">✕</button>
+      </div>
+      <form onsubmit="saveProfile(event)">
+        <div class="form-group">
+          <label class="form-label">صورة الملف الشخصي</label>
+          <input id="profileImageFile" class="input" type="file" accept="image/*" onchange="handleImageFile(event, 'profile')" />
+          <div id="profilePreviewBox" class="preview-box" style="display:none;">
+            <img id="profileImagePreview" src="" alt="صورة الحساب" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">الاسم الظاهر</label>
+          <input id="profileName" class="input" type="text" required placeholder="اسمك" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">المدينة</label>
+          <input id="profileCity" class="input" type="text" placeholder="مدينتك" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">نبذة تعريفية</label>
+          <textarea id="profileBio" class="textarea" rows="2" placeholder="نبذة مختصرة عنك..."></textarea>
+        </div>
+
+        <div style="display:flex; gap:8px; justify-content:flex-end;">
+          <button type="button" class="btn" onclick="closeActiveModal()">إغلاق</button>
+          <button type="submit" class="btn btn-gold">حفظ الملف التعريفي</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- حاوية التنبيهات المخصصة داخل التطبيق -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script>
+    const CATEGORIES = [
+      'الكل',
+      'سيارات ومركبات',
+      'عقارات',
+      'إلكترونيات وموبايلات',
+      'أثاث ومنزل',
+      'وظائف وخدمات',
+      'أزياء ومستلزمات',
+      'أخرى'
+    ];
+
+    const STORAGE_KEYS = {
+      ADS: 'lux_market_ads_v2',
+      MESSAGES: 'lux_market_messages_v2',
+      PROFILE: 'lux_market_profile_v2',
+      BLOCKED: 'lux_market_blocked_v2'
+    };
+
+    const DEFAULT_ADS = [
+      {
+        _id: 'demo-1',
+        title: 'سيارة عائلية نظيفة جاهزة للسفر',
+        price: 8500,
+        currency: 'USD',
+        category: 'سيارات ومركبات',
+        condition: 'مستعمل',
+        city: 'حلب',
+        neighbourhood: 'الفرقان',
+        description: 'محرك ممتاز، مكيف شغال، صيانة دورية كاملة بدون أي أعطال.',
+        image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=800&q=70',
+        ownerUsername: 'أبو_عمر'
+      },
+      {
+        _id: 'demo-2',
+        title: 'شقة مشمسة إطلالة جميلة جاهزة للسكن',
+        price: 42000,
+        currency: 'USD',
+        category: 'عقارات',
+        condition: 'جديد',
+        city: 'دمشق',
+        neighbourhood: 'المزة',
+        description: 'إكساء حديث، غرفتين وصالون، قريبة من الخدمات والمواصلات.',
+        image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=70',
+        ownerUsername: 'طارق_العقارية'
+      },
+      {
+        _id: 'demo-3',
+        title: 'حاسوب مكتبي قوي للألعاب والمونتاج',
+        price: 1250,
+        currency: 'USD',
+        category: 'إلكترونيات وموبايلات',
+        condition: 'مستعمل',
+        city: 'أنطاليا',
+        neighbourhood: 'كورتيلي',
+        description: 'أداء عالٍ ومستقر للعمل والمونتاج والبث المباشر، بحالة ممتازة.',
+        image: 'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&w=800&q=70',
+        ownerUsername: 'مشتاق'
+      }
+    ];
+
+    let state = {
+      ads: [],
+      messages: [],
+      blockedUsers: [],
+      profile: {
+        name: 'مشتاق',
+        city: 'أنطاليا',
+        bio: 'مستخدم نشط في السوق الشامل',
+        avatar: ''
+      },
+      selectedCategory: 'الكل',
+      activeModal: null,
+      activeChatPeer: 'أبو_عمر',
+      currentAdImage: '',
+      currentProfileImage: '',
+      mediaRecorder: null,
+      audioChunks: [],
+      isRecording: false
+    };
+
+    /* ================= التنبيهات المخصصة داخل التطبيق ================= */
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `
+        <span>${escapeHtml(message)}</span>
+        <button style="background:none;border:none;color:inherit;font-weight:800;cursor:pointer;" onclick="this.parentElement.remove()">✕</button>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        if (toast.parentElement) toast.remove();
+      }, 3600);
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? '').replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[m]));
+    }
+
+    /* ================= إدارة تاريخ المتصفح لزر الرجوع ================= */
+    function openModalWithHistory(modalName) {
+      if (state.activeModal === modalName) return;
+      state.activeModal = modalName;
+      syncModalVisibility();
+      try {
+        history.pushState({ modal: modalName }, '', `#${modalName}`);
+      } catch (_) {}
+    }
+
+    function closeActiveModal(fromPopState = false) {
+      if (!state.activeModal) return;
+      if (state.isRecording && state.mediaRecorder) {
+        try { state.mediaRecorder.stop(); } catch (_) {}
+        state.isRecording = false;
+      }
+      state.activeModal = null;
+      syncModalVisibility();
+      if (!fromPopState && history.state && history.state.modal) {
+        try { history.back(); } catch (_) {}
+      } else {
+        try {
+          history.replaceState(null, '', window.location.pathname + window.location.search);
+        } catch (_) {}
+      }
+    }
+
+    function goHome() {
+      if (state.activeModal) closeActiveModal();
+      state.selectedCategory = 'الكل';
+      document.getElementById('searchInput').value = '';
+      document.getElementById('cityFilter').value = '';
+      document.getElementById('conditionFilter').value = '';
+      document.getElementById('sortSelect').value = 'newest';
+      renderCategories();
+      renderAds();
+    }
+
+    function handleBackdropClick(event, modalName) {
+      if (event.target.classList.contains('modal-backdrop') && state.activeModal === modalName) {
+        closeActiveModal();
+      }
+    }
+
+    function syncModalVisibility() {
+      document.getElementById('detailsModal').classList.toggle('open', state.activeModal === 'details');
+      document.getElementById('adFormModal').classList.toggle('open', state.activeModal === 'adForm');
+      document.getElementById('chatModal').classList.toggle('open', state.activeModal === 'chat');
+      document.getElementById('profileModal').classList.toggle('open', state.activeModal === 'profile');
+    }
+
+    window.addEventListener('popstate', () => {
+      if (state.activeModal) closeActiveModal(true);
+    });
+
+    /* ================= تحميل وحفظ البيانات ================= */
+    async function initApp() {
+      const savedProfile = localStorage.getItem(STORAGE_KEYS.PROFILE);
+      if (savedProfile) {
+        try { state.profile = { ...state.profile, ...JSON.parse(savedProfile) }; } catch (_) {}
+      }
+      renderProfileHeader();
+
+      const savedBlocked = localStorage.getItem(STORAGE_KEYS.BLOCKED);
+      if (savedBlocked) {
+        try { state.blockedUsers = JSON.parse(savedBlocked); } catch (_) {}
+      }
+
+      const savedMessages = localStorage.getItem(STORAGE_KEYS.MESSAGES);
+      if (savedMessages) {
+        try { state.messages = JSON.parse(savedMessages); } catch (_) {}
+      }
+      if (!state.messages.length) {
+        state.messages = [
+          {
+            id: 'm-1',
+            from: 'أبو_عمر',
+            to: state.profile.name,
+            type: 'text',
+            text: 'أهلاً بك، السيارة موجودة ومتاحة للمعاينة.',
+            time: '10:15'
+          }
         ];
+        persistMessages();
+      }
 
-        let allAds = [];
-        let selectedCategory = '';
+      renderCategories();
+      populateCategorySelect();
+      await loadAds();
+    }
 
-        function initCategories() {
-            const grid = document.getElementById('categoriesGrid');
-            const select = document.getElementById('adCategory');
-
-            grid.innerHTML = CATEGORIES.map(cat => `
-                <div class="category-tile ${selectedCategory === cat.name ? 'active' : ''}" onclick="toggleCategory('${escapeAttr(cat.name)}')">
-                    <span>${cat.icon}</span>
-                    <span>${escapeHtml(cat.name)}</span>
-                </div>
-            `).join('');
-
-            select.innerHTML = CATEGORIES.map(cat => `
-                <option value="${escapeAttr(cat.name)}">${escapeHtml(cat.name)}</option>
-            `).join('');
+    async function loadAds() {
+      try {
+        const res = await fetch('/api/ads');
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            state.ads = data;
+            localStorage.setItem(STORAGE_KEYS.ADS, JSON.stringify(state.ads));
+            renderAds();
+            return;
+          }
         }
+      } catch (_) {}
 
-        function toggleCategory(categoryName) {
-            selectedCategory = (selectedCategory === categoryName) ? '' : categoryName;
-            document.getElementById('activeCategoryLabel').textContent = selectedCategory || 'جميع الأقسام';
-            initCategories();
-            applyFilters();
+      const localAds = localStorage.getItem(STORAGE_KEYS.ADS);
+      if (localAds) {
+        try { state.ads = JSON.parse(localAds); } catch (_) { state.ads = [...DEFAULT_ADS]; }
+      } else {
+        state.ads = [...DEFAULT_ADS];
+        localStorage.setItem(STORAGE_KEYS.ADS, JSON.stringify(state.ads));
+      }
+      renderAds();
+    }
+
+    function persistAds() { localStorage.setItem(STORAGE_KEYS.ADS, JSON.stringify(state.ads)); }
+    function persistMessages() { localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(state.messages)); }
+    function persistBlocked() { localStorage.setItem(STORAGE_KEYS.BLOCKED, JSON.stringify(state.blockedUsers)); }
+
+    /* ================= التصنيفات وعرض الإعلانات ================= */
+    function renderCategories() {
+      const strip = document.getElementById('categoriesStrip');
+      strip.innerHTML = CATEGORIES.map(cat => `
+        <button class="cat-chip ${state.selectedCategory === cat ? 'active' : ''}" onclick="selectCategory('${escapeHtml(cat)}')">
+          ${escapeHtml(cat)}
+        </button>
+      `).join('');
+    }
+
+    function populateCategorySelect() {
+      const sel = document.getElementById('adCategory');
+      sel.innerHTML = CATEGORIES.filter(c => c !== 'الكل')
+        .map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`)
+        .join('');
+    }
+
+    function selectCategory(cat) {
+      state.selectedCategory = cat;
+      renderCategories();
+      renderAds();
+    }
+
+    function renderAds() {
+      const grid = document.getElementById('adsGrid');
+      const q = document.getElementById('searchInput').value.trim().toLowerCase();
+      const city = document.getElementById('cityFilter').value.trim();
+      const condition = document.getElementById('conditionFilter').value.trim();
+      const sort = document.getElementById('sortSelect').value;
+
+      let filtered = state.ads.filter(ad => {
+        if (state.selectedCategory !== 'الكل' && ad.category !== state.selectedCategory) return false;
+        if (condition && ad.condition !== condition) return false;
+        if (city && !String(ad.city || '').includes(city) && !String(ad.neighbourhood || '').includes(city)) return false;
+        if (q) {
+          const hay = `${ad.title || ''} ${ad.description || ''} ${ad.city || ''} ${ad.category || ''}`.toLowerCase();
+          if (!hay.includes(q)) return false;
         }
+        return true;
+      });
 
-        async function loadAds() {
-            const grid = document.getElementById('adsGrid');
-            try {
-                const res = await fetch(`${API_BASE}/ads`);
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                const data = await res.json();
-                allAds = Array.isArray(data) ? data : (Array.isArray(data.ads) ? data.ads : []);
-                applyFilters();
-            } catch (err) {
-                console.error('Error loading ads:', err);
-                grid.innerHTML = `<div class="empty-state">تعذر جلب الإعلانات من الخادم حالياً.</div>`;
-                document.getElementById('adsCountBadge').textContent = '0 إعلان';
-            }
+      if (sort === 'price-asc') filtered.sort((a, b) => Number(a.price || 0) - Number(b.price || 0));
+      else if (sort === 'price-desc') filtered.sort((a, b) => Number(b.price || 0) - Number(a.price || 0));
+
+      if (!filtered.length) {
+        grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted);">لا توجد إعلانات مطابقة للبحث حالياً.</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(ad => {
+        const id = ad._id || ad.id;
+        const imgSrc = ad.image || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=60';
+        const priceFmt = `${Number(ad.price || 0).toLocaleString()} ${escapeHtml(ad.currency || 'USD')}`;
+        const loc = [ad.city, ad.neighbourhood].filter(Boolean).join(' - ') || 'غير محدد';
+        return `
+          <article class="ad-card" onclick="openAdDetails('${escapeHtml(id)}')">
+            <div class="ad-img-wrap">
+              <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(ad.title)}" loading="lazy" />
+              <span class="ad-badge-cat">${escapeHtml(ad.category || 'عام')}</span>
+            </div>
+            <div class="ad-body">
+              <div class="ad-title">${escapeHtml(ad.title)}</div>
+              <div class="ad-price">${priceFmt}</div>
+              <div class="ad-meta">
+                <span>📍 ${escapeHtml(loc)}</span>
+                <span>${escapeHtml(ad.condition || 'مستعمل')}</span>
+              </div>
+            </div>
+            <div class="ad-footer" onclick="event.stopPropagation()">
+              <button class="btn btn-diamond" style="flex:1;justify-content:center;" onclick="openChatWithPeer('${escapeHtml(ad.ownerUsername || 'صاحب_الإعلان')}', 'مرحباً، بخصوص إعلان: ${escapeHtml(ad.title)}')">
+                💬 مراسلة
+              </button>
+              <button class="btn" onclick="openAdForm('${escapeHtml(id)}')">تعديل</button>
+              <button class="btn btn-danger" onclick="deleteAd('${escapeHtml(id)}')">حذف</button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    /* ================= تفاصيل الإعلان ================= */
+    function openAdDetails(id) {
+      const ad = state.ads.find(item => String(item._id || item.id) === String(id));
+      if (!ad) {
+        showToast('الإعلان غير موجود', 'error');
+        return;
+      }
+      const imgSrc = ad.image || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=70';
+      const loc = [ad.city, ad.neighbourhood].filter(Boolean).join(' - ') || 'غير محدد';
+      document.getElementById('detailTitle').textContent = ad.title;
+      document.getElementById('detailContent').innerHTML = `
+        <div class="preview-box" style="max-height:280px;margin-bottom:14px;">
+          <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(ad.title)}" style="max-height:280px;" />
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+          <div class="ad-price" style="font-size:1.25rem;">${Number(ad.price || 0).toLocaleString()} ${escapeHtml(ad.currency || 'USD')}</div>
+          <span class="cat-chip active" style="cursor:default;">${escapeHtml(ad.category)} • ${escapeHtml(ad.condition || 'مستعمل')}</span>
+        </div>
+        <p style="color:var(--silver);font-size:0.9rem;margin-bottom:8px;">📍 الموقع: ${escapeHtml(loc)} | 👤 المعلن: ${escapeHtml(ad.ownerUsername || 'مستخدم')}</p>
+        <p style="line-height:1.65;color:var(--text-main);margin-bottom:16px;">${escapeHtml(ad.description || 'لا يوجد وصف إضافي.')}</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-gold" style="flex:1;justify-content:center;" onclick="openChatWithPeer('${escapeHtml(ad.ownerUsername || 'صاحب_الإعلان')}', 'مرحباً، هل هذا العنصر متاح؟ (${escapeHtml(ad.title)})')">
+            💬 مراسلة صاحب الإعلان
+          </button>
+          <button class="btn" onclick="openAdForm('${escapeHtml(id)}')">✏️ تعديل</button>
+          <button class="btn btn-danger" onclick="deleteAd('${escapeHtml(id)}')">🗑️ حذف</button>
+        </div>
+      `;
+      openModalWithHistory('details');
+    }
+
+    /* ================= إضافة / تعديل / حذف الإعلان ================= */
+    function openAdForm(editId = null) {
+      const form = document.getElementById('adForm');
+      form.reset();
+      state.currentAdImage = '';
+      document.getElementById('adImagePreviewBox').style.display = 'none';
+
+      if (editId) {
+        const ad = state.ads.find(item => String(item._id || item.id) === String(editId));
+        if (!ad) {
+          showToast('تعذر العثور على الإعلان للتعديل', 'error');
+          return;
         }
+        document.getElementById('adFormTitle').textContent = 'تعديل الإعلان';
+        document.getElementById('editAdId').value = ad._id || ad.id;
+        document.getElementById('adTitle').value = ad.title || '';
+        document.getElementById('adPrice').value = ad.price ?? 0;
+        document.getElementById('adCurrency').value = ad.currency || 'USD';
+        document.getElementById('adCategory').value = ad.category || CATEGORIES[1];
+        document.getElementById('adCondition').value = ad.condition || 'مستعمل';
+        document.getElementById('adCity').value = ad.city || '';
+        document.getElementById('adNeighbourhood').value = ad.neighbourhood || '';
+        document.getElementById('adDescription').value = ad.description || '';
+        if (ad.image) {
+          state.currentAdImage = ad.image;
+          if (!ad.image.startsWith('data:')) document.getElementById('adImageUrl').value = ad.image;
+          showPreview('ad', ad.image);
+        }
+      } else {
+        document.getElementById('adFormTitle').textContent = 'إضافة إعلان جديد';
+        document.getElementById('editAdId').value = '';
+        document.getElementById('adCity').value = state.profile.city || '';
+      }
 
-        function applyFilters() {
-            const query = (document.getElementById('searchInput').value || '').trim().toLowerCase();
-            const city = (document.getElementById('cityFilter').value || '').trim();
-            const condition = (document.getElementById('conditionFilter').value || '').trim();
-            const sort = document.getElementById('sortFilter').value;
+      openModalWithHistory('adForm');
+    }
 
-            let filtered = allAds.filter(ad => {
-                const title = (ad.title || '').toLowerCase();
-                const desc = (ad.description || '').toLowerCase();
-                const cat = ad.category || '';
-                const adCity = ad.city || '';
-                const adNeigh = ad.neighbourhood || '';
-                const adCond = ad.condition || '';
+    function handleImageFile(event, target) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      if (file.size > 8 * 1024 * 1024) {
+        showToast('حجم الصورة كبير جداً، يرجى اختيار صورة أقل من 8 ميجابايت', 'error');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = e => {
+        const dataUrl = e.target.result;
+        if (target === 'ad') {
+          state.currentAdImage = dataUrl;
+          document.getElementById('adImageUrl').value = '';
+          showPreview('ad', dataUrl);
+        } else {
+          state.currentProfileImage = dataUrl;
+          showPreview('profile', dataUrl);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
 
-                const matchQuery = !query || title.includes(query) || desc.includes(query) || cat.toLowerCase().includes(query) || adCity.toLowerCase().includes(query);
-                const matchCat = !selectedCategory || cat === selectedCategory;
-                const matchCity = !city || adCity.includes(city) || adNeigh.includes(city);
-                const matchCond = !condition || adCond === condition;
+    function handleImageUrl(event) {
+      const url = event.target.value.trim();
+      state.currentAdImage = url;
+      if (url) showPreview('ad', url);
+      else document.getElementById('adImagePreviewBox').style.display = 'none';
+    }
 
-                return matchQuery && matchCat && matchCity && matchCond;
+    function showPreview(target, src) {
+      if (target === 'ad') {
+        document.getElementById('adImagePreview').src = src;
+        document.getElementById('adImagePreviewBox').style.display = 'flex';
+      } else {
+        document.getElementById('profileImagePreview').src = src;
+        document.getElementById('profilePreviewBox').style.display = 'flex';
+      }
+    }
+
+    async function submitAdForm(event) {
+      event.preventDefault();
+      const editId = document.getElementById('editAdId').value.trim();
+      const payload = {
+        title: document.getElementById('adTitle').value.trim(),
+        price: Number(document.getElementById('adPrice').value || 0),
+        currency: document.getElementById('adCurrency').value,
+        category: document.getElementById('adCategory').value,
+        condition: document.getElementById('adCondition').value,
+        city: document.getElementById('adCity').value.trim(),
+        neighbourhood: document.getElementById('adNeighbourhood').value.trim(),
+        description: document.getElementById('adDescription').value.trim(),
+        image: state.currentAdImage || document.getElementById('adImageUrl').value.trim(),
+        ownerUsername: state.profile.name || 'مستخدم'
+      };
+
+      if (!payload.title) {
+        showToast('يرجى إدخال عنوان الإعلان', 'error');
+        return;
+      }
+
+      try {
+        if (editId) {
+          let saved = { ...payload, _id: editId };
+          try {
+            const res = await fetch(`/api/ads/${encodeURIComponent(editId)}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
             });
+            if (res.ok) saved = await res.json();
+          } catch (_) {}
 
-            if (sort === 'price-asc') {
-                filtered.sort((a, b) => Number(a.price || 0) - Number(b.price || 0));
-            } else if (sort === 'price-desc') {
-                filtered.sort((a, b) => Number(b.price || 0) - Number(a.price || 0));
-            } else {
-                filtered.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-            }
+          state.ads = state.ads.map(item =>
+            String(item._id || item.id) === String(editId) ? { ...item, ...saved } : item
+          );
+          persistAds();
+          renderAds();
+          closeActiveModal();
+          showToast('تم حفظ التعديلات بنجاح', 'success');
+        } else {
+          let created = { ...payload, _id: `ad-${Date.now()}` };
+          try {
+            const res = await fetch('/api/ads', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+            if (res.ok) created = await res.json();
+          } catch (_) {}
 
-            renderAds(filtered);
+          state.ads.unshift(created);
+          persistAds();
+          renderAds();
+          closeActiveModal();
+          showToast('تم نشر الإعلان بنجاح', 'success');
         }
+      } catch (_) {
+        showToast('حدث خطأ أثناء حفظ الإعلان', 'error');
+      }
+    }
 
-        function renderAds(ads) {
-            const grid = document.getElementById('adsGrid');
-            const badge = document.getElementById('adsCountBadge');
-            badge.textContent = `${ads.length} إعلان`;
+    async function deleteAd(id) {
+      try { await fetch(`/api/ads/${encodeURIComponent(id)}`, { method: 'DELETE' }); } catch (_) {}
+      state.ads = state.ads.filter(item => String(item._id || item.id) !== String(id));
+      persistAds();
+      renderAds();
+      if (state.activeModal === 'details') closeActiveModal();
+      showToast('تم حذف الإعلان', 'success');
+    }
 
-            if (!ads.length) {
-                grid.innerHTML = `<div class="empty-state">لا توجد إعلانات مطابقة للبحث أو الفلترة الحالية.</div>`;
-                return;
-            }
+    /* ================= الدردشة المنفصلة + الصوت + الحظر ================= */
+    function isUserBlocked(username) {
+      return state.blockedUsers.includes(username);
+    }
 
-            grid.innerHTML = ads.map((ad, idx) => {
-                const id = ad._id || ad.id || String(idx);
-                const priceNum = Number(ad.price);
-                const formattedPrice = Number.isFinite(priceNum) ? priceNum.toLocaleString() : escapeHtml(ad.price || '0');
-                const currencyLabel = ad.currency === 'SYP' ? 'ل.س' : (ad.currency === 'TRY' ? '₺' : '$');
-                const locationText = [ad.city, ad.neighbourhood].filter(Boolean).join(' - ') || 'غير محدد';
+    function getPeersList() {
+      const set = new Set(['أبو_عمر', 'طارق_العقارية']);
+      state.ads.forEach(a => {
+        if (a.ownerUsername && a.ownerUsername !== state.profile.name) set.add(a.ownerUsername);
+      });
+      state.messages.forEach(m => {
+        if (m.from && m.from !== state.profile.name) set.add(m.from);
+        if (m.to && m.to !== state.profile.name) set.add(m.to);
+      });
+      return Array.from(set).filter(u => !isUserBlocked(u));
+    }
 
-                return `
-                    <article class="ad-card" onclick="openAdDetail('${escapeAttr(id)}')">
-                        <div class="ad-thumb">
-                            ${ad.image
-                                ? `<img src="${escapeAttr(ad.image)}" alt="${escapeAttr(ad.title || 'إعلان')}" loading="lazy" onerror="this.parentElement.innerHTML='<span class=\\'ad-no-img\\'>تعذر تحميل الصورة</span>'">`
-                                : `<span class="ad-no-img">بدون صورة</span>`
-                            }
-                            ${ad.condition ? `<span class="ad-condition-tag">${escapeHtml(ad.condition)}</span>` : ''}
-                        </div>
-                        <div class="ad-body">
-                            <div>
-                                <div class="ad-title" title="${escapeAttr(ad.title || '')}">${escapeHtml(ad.title || 'بدون عنوان')}</div>
-                                <div class="ad-price">${formattedPrice} ${currencyLabel}</div>
-                            </div>
-                            <div class="ad-meta">
-                                <span>📍 ${escapeHtml(locationText)}</span>
-                                <span>${escapeHtml(ad.category || '')}</span>
-                            </div>
-                        </div>
-                    </article>
-                `;
-            }).join('');
+    function openChatModal() {
+      const peers = getPeersList();
+      if ((!state.activeChatPeer || isUserBlocked(state.activeChatPeer)) && peers.length) {
+        state.activeChatPeer = peers[0];
+      }
+      renderChatSidebar();
+      renderChatMessages();
+      openModalWithHistory('chat');
+    }
+
+    function openChatWithPeer(peerName, initialDraft = '') {
+      const cleanPeer = (peerName || 'صاحب_الإعلان').trim();
+      if (isUserBlocked(cleanPeer)) {
+        showToast(`المستخدم (${cleanPeer}) محظور حالياً. يمكنك فك الحظر من قائمة المحظورين.`, 'error');
+        return;
+      }
+      state.activeChatPeer = cleanPeer;
+      renderChatSidebar();
+      renderChatMessages();
+      if (initialDraft) document.getElementById('chatTextInput').value = initialDraft;
+      openModalWithHistory('chat');
+    }
+
+    function addOrSelectPeer(val) {
+      const clean = (val || '').trim();
+      if (!clean) return;
+      if (isUserBlocked(clean)) {
+        showToast(`(${clean}) موجود في قائمة المحظورين`, 'error');
+        return;
+      }
+      state.activeChatPeer = clean;
+      renderChatSidebar();
+      renderChatMessages();
+    }
+
+    function renderChatSidebar() {
+      const peers = getPeersList();
+      const listEl = document.getElementById('chatUserList');
+      listEl.innerHTML = peers.length
+        ? peers.map(p => `
+            <div class="user-item ${p === state.activeChatPeer ? 'active' : ''}" onclick="selectChatPeer('${escapeHtml(p)}')">
+              <span>👤 ${escapeHtml(p)}</span>
+            </div>
+          `).join('')
+        : `<div style="color:var(--text-muted);font-size:0.85rem;padding:8px;">لا توجد محادثات نشطة</div>`;
+
+      const blockedEl = document.getElementById('blockedUsersList');
+      blockedEl.innerHTML = state.blockedUsers.length
+        ? state.blockedUsers.map(b => `
+            <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg-elevated);padding:6px 10px;border-radius:10px;font-size:0.82rem;">
+              <span>${escapeHtml(b)}</span>
+              <button type="button" class="btn" style="padding:4px 8px;font-size:0.75rem;" onclick="unblockUser('${escapeHtml(b)}')">فك الحظر</button>
+            </div>
+          `).join('')
+        : `<div style="color:var(--text-muted);font-size:0.8rem;">لا يوجد مستخدمون محظورون</div>`;
+
+      const titleEl = document.getElementById('chatModalTitle');
+      const blockBtn = document.getElementById('toggleBlockBtn');
+      if (state.activeChatPeer) {
+        titleEl.textContent = `💬 دردشة مع ${state.activeChatPeer}`;
+        blockBtn.style.display = 'inline-flex';
+        blockBtn.textContent = isUserBlocked(state.activeChatPeer) ? '✓ فك الحظر' : '🚫 حظر المستخدم';
+      } else {
+        titleEl.textContent = '💬 الدردشة المنفصلة';
+        blockBtn.style.display = 'none';
+      }
+    }
+
+    function selectChatPeer(peer) {
+      state.activeChatPeer = peer;
+      renderChatSidebar();
+      renderChatMessages();
+    }
+
+    function toggleBlockCurrentPeer() {
+      const peer = state.activeChatPeer;
+      if (!peer) return;
+      if (isUserBlocked(peer)) {
+        unblockUser(peer);
+      } else {
+        state.blockedUsers.push(peer);
+        persistBlocked();
+        showToast(`تم حظر ${peer} وإضافته لقائمة المحظورين`, 'success');
+        const nextPeers = getPeersList();
+        state.activeChatPeer = nextPeers[0] || '';
+        renderChatSidebar();
+        renderChatMessages();
+      }
+    }
+
+    function unblockUser(username) {
+      state.blockedUsers = state.blockedUsers.filter(u => u !== username);
+      persistBlocked();
+      state.activeChatPeer = username;
+      renderChatSidebar();
+      renderChatMessages();
+      showToast(`تم فك الحظر عن ${username}`, 'success');
+    }
+
+    function renderChatMessages() {
+      const box = document.getElementById('chatMessages');
+      const peer = state.activeChatPeer;
+      if (!peer) {
+        box.innerHTML = `<div style="text-align:center;color:var(--text-muted);margin:auto;">اختر مستخدماً لبدء الدردشة</div>`;
+        return;
+      }
+      if (isUserBlocked(peer)) {
+        box.innerHTML = `<div style="text-align:center;color:#fca5a5;margin:auto;">هذا المستخدم محظور حالياً</div>`;
+        return;
+      }
+
+      const me = state.profile.name || 'أنا';
+      const thread = state.messages.filter(
+        m => !isUserBlocked(m.from) && !isUserBlocked(m.to) &&
+             ((m.from === me && m.to === peer) || (m.from === peer && m.to === me))
+      );
+
+      if (!thread.length) {
+        box.innerHTML = `<div style="text-align:center;color:var(--text-muted);margin:auto;">ابدأ المحادثة مع ${escapeHtml(peer)} نصاً أو صوتاً</div>`;
+        return;
+      }
+
+      box.innerHTML = thread.map(m => {
+        const isMine = m.from === me;
+        const bodyHtml = m.type === 'audio' && m.audioData
+          ? `<div class="audio-player"><audio controls src="${m.audioData}" style="max-width:220px;height:32px;"></audio></div>`
+          : `<div>${escapeHtml(m.text)}</div>`;
+        return `
+          <div class="msg-bubble ${isMine ? 'msg-me' : 'msg-other'}">
+            ${bodyHtml}
+            <span class="msg-time">${escapeHtml(m.time || '')}</span>
+          </div>
+        `;
+      }).join('');
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function sendChatMessage(event) {
+      event.preventDefault();
+      const input = document.getElementById('chatTextInput');
+      const text = input.value.trim();
+      if (!text) {
+        showToast('اكتب رسالة أو استخدم التسجيل الصوتي', 'error');
+        return;
+      }
+      appendMessage({ type: 'text', text });
+      input.value = '';
+    }
+
+    function sendQuickPhrase(phrase) {
+      appendMessage({ type: 'text', text: phrase });
+    }
+
+    async function toggleVoiceRecording() {
+      const btn = document.getElementById('voiceRecordBtn');
+      if (!state.activeChatPeer || isUserBlocked(state.activeChatPeer)) {
+        showToast('اختر مستخدماً غير محظور أولاً', 'error');
+        return;
+      }
+
+      if (!state.isRecording) {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          showToast('الميكروفون غير مدعوم في هذا المتصفح', 'error');
+          return;
         }
-
-        function setImagePreview(src) {
-            const wrap = document.getElementById('imagePreviewWrap');
-            const thumb = document.getElementById('imagePreviewThumb');
-            document.getElementById('adImageData').value = src || '';
-            if (src) {
-                thumb.src = src;
-                wrap.classList.add('visible');
-            } else {
-                thumb.src = '';
-                wrap.classList.remove('visible');
-            }
-        }
-
-        function handleFileSelect(event) {
-            const file = event.target.files && event.target.files[0];
-            if (!file) return;
-
-            if (file.size > 4 * 1024 * 1024) {
-                alert('حجم الصورة كبير جداً، اختر صورة أقل من 4MB.');
-                event.target.value = '';
-                return;
-            }
-
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          state.audioChunks = [];
+          state.mediaRecorder = new MediaRecorder(stream);
+          state.mediaRecorder.ondataavailable = e => {
+            if (e.data && e.data.size > 0) state.audioChunks.push(e.data);
+          };
+          state.mediaRecorder.onstop = () => {
+            stream.getTracks().forEach(t => t.stop());
+            const blob = new Blob(state.audioChunks, { type: 'audio/webm' });
             const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('adImageUrl').value = '';
-                setImagePreview(e.target.result);
+            reader.onload = ev => {
+              appendMessage({ type: 'audio', text: 'رسالة صوتية', audioData: ev.target.result });
+              showToast('تم إرسال الرسالة الصوتية', 'success');
             };
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(blob);
+          };
+          state.mediaRecorder.start();
+          state.isRecording = true;
+          btn.textContent = '⏹️ إيقاف';
+          btn.classList.add('btn-danger');
+          showToast('جاري التسجيل الصوتي... اضغط إيقاف للإرسال');
+        } catch (_) {
+          showToast('تعذر الوصول إلى الميكروفون، تأكد من منح الإذن', 'error');
         }
+      } else {
+        try { state.mediaRecorder.stop(); } catch (_) {}
+        state.isRecording = false;
+        btn.textContent = '🎙️ صوت';
+        btn.classList.remove('btn-danger');
+      }
+    }
 
-        function handleUrlInput(event) {
-            const url = event.target.value.trim();
-            if (url) {
-                document.getElementById('adFileInput').value = '';
-                setImagePreview(url);
-            } else if (!document.getElementById('adFileInput').files.length) {
-                setImagePreview('');
-            }
-        }
+    function appendMessage({ type = 'text', text = '', audioData = '' }) {
+      const me = state.profile.name || 'أنا';
+      const peer = state.activeChatPeer;
+      if (!peer || isUserBlocked(peer)) return;
 
-        function clearSelectedImage() {
-            document.getElementById('adFileInput').value = '';
-            document.getElementById('adImageUrl').value = '';
-            setImagePreview('');
-        }
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
-        function openCreateModal() {
-            document.getElementById('adForm').reset();
-            document.getElementById('editingAdId').value = '';
-            document.getElementById('adFormModalTitle').textContent = 'نشر إعلان جديد';
-            document.getElementById('adSubmitBtn').textContent = 'نشر الإعلان الآن';
-            setImagePreview('');
-            openModal('adFormModal');
-        }
+      const msg = {
+        id: `msg-${Date.now()}`,
+        from: me,
+        to: peer,
+        type,
+        text,
+        audioData,
+        time: timeStr
+      };
 
-        function openEditModal(id) {
-            const ad = allAds.find(item => (item._id || item.id) === id);
-            if (!ad) return;
+      state.messages.push(msg);
+      persistMessages();
+      renderChatSidebar();
+      renderChatMessages();
 
-            closeModal('detailAdModal');
-            document.getElementById('editingAdId').value = id;
-            document.getElementById('adFormModalTitle').textContent = 'تعديل الإعلان';
-            document.getElementById('adSubmitBtn').textContent = 'حفظ التعديلات';
+      fetch('/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sender: me, to: peer, text: type === 'audio' ? '[رسالة صوتية]' : text })
+      }).catch(() => {});
+    }
 
-            document.getElementById('adTitle').value = ad.title || '';
-            document.getElementById('adPrice').value = ad.price ?? '';
-            document.getElementById('adCurrency').value = ad.currency || 'USD';
-            document.getElementById('adCategory').value = ad.category || CATEGORIES[0].name;
-            document.getElementById('adCondition').value = ad.condition || 'مستعمل';
-            document.getElementById('adCity').value = ad.city || 'دمشق';
-            document.getElementById('adNeighbourhood').value = ad.neighbourhood || '';
-            document.getElementById('adDescription').value = ad.description || '';
+    /* ================= الملف التعريفي ================= */
+    function openProfileModal() {
+      document.getElementById('profileName').value = state.profile.name || '';
+      document.getElementById('profileCity').value = state.profile.city || '';
+      document.getElementById('profileBio').value = state.profile.bio || '';
+      state.currentProfileImage = state.profile.avatar || '';
+      if (state.currentProfileImage) showPreview('profile', state.currentProfileImage);
+      else document.getElementById('profilePreviewBox').style.display = 'none';
+      openModalWithHistory('profile');
+    }
 
-            document.getElementById('adFileInput').value = '';
-            const existingImg = ad.image || '';
-            document.getElementById('adImageUrl').value = existingImg.startsWith('data:') ? '' : existingImg;
-            setImagePreview(existingImg);
+    function saveProfile(event) {
+      event.preventDefault();
+      const name = document.getElementById('profileName').value.trim();
+      if (!name) {
+        showToast('يرجى إدخال الاسم الظاهر', 'error');
+        return;
+      }
+      state.profile = {
+        name,
+        city: document.getElementById('profileCity').value.trim(),
+        bio: document.getElementById('profileBio').value.trim(),
+        avatar: state.currentProfileImage || state.profile.avatar || ''
+      };
+      localStorage.setItem(STORAGE_KEYS.PROFILE, JSON.stringify(state.profile));
+      renderProfileHeader();
+      closeActiveModal();
+      showToast('تم تحديث الملف التعريفي بنجاح', 'success');
+    }
 
-            openModal('adFormModal');
-        }
+    function renderProfileHeader() {
+      document.getElementById('headerUsername').textContent = state.profile.name || 'الملف التعريفي';
+      const img = document.getElementById('headerAvatar');
+      if (state.profile.avatar) {
+        img.src = state.profile.avatar;
+        img.style.display = 'inline-block';
+      } else {
+        img.style.display = 'none';
+      }
+    }
 
-        async function handleSaveAd(e) {
-            e.preventDefault();
-            const editingId = document.getElementById('editingAdId').value.trim();
-            const finalImage = document.getElementById('adImageData').value.trim() || document.getElementById('adImageUrl').value.trim();
-
-            const payload = {
-                title: document.getElementById('adTitle').value.trim(),
-                price: Number(document.getElementById('adPrice').value),
-                currency: document.getElementById('adCurrency').value,
-                category: document.getElementById('adCategory').value,
-                condition: document.getElementById('adCondition').value,
-                city: document.getElementById('adCity').value.trim(),
-                neighbourhood: document.getElementById('adNeighbourhood').value.trim(),
-                image: finalImage,
-                description: document.getElementById('adDescription').value.trim(),
-                ownerUsername: 'user'
-            };
-
-            const url = editingId ? `${API_BASE}/ads/${encodeURIComponent(editingId)}` : `${API_BASE}/ads`;
-            const method = editingId ? 'PUT' : 'POST';
-
-            try {
-                const res = await fetch(url, {
-                    method,
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-                closeModal('adFormModal');
-                await loadAds();
-            } catch (err) {
-                console.error('Error saving ad:', err);
-                alert(editingId ? 'تعذر حفظ التعديل، تحقق من مسار PUT /api/ads/:id في السيرفر.' : 'تعذر نشر الإعلان، تحقق من اتصال الخادم.');
-            }
-        }
-
-        async function handleDeleteAd(id) {
-            if (!id) return;
-            const confirmed = confirm('هل أنت متأكد من حذف هذا الإعلان نهائياً؟');
-            if (!confirmed) return;
-
-            try {
-                const res = await fetch(`${API_BASE}/ads/${encodeURIComponent(id)}`, {
-                    method: 'DELETE'
-                });
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-                closeModal('detailAdModal');
-                await loadAds();
-            } catch (err) {
-                console.error('Error deleting ad:', err);
-                alert('تعذر حذف الإعلان، تحقق من مسار DELETE /api/ads/:id في السيرفر.');
-            }
-        }
-
-        function openAdDetail(id) {
-            const ad = allAds.find(item => (item._id || item.id) === id);
-            if (!ad) return;
-
-            const realId = ad._id || ad.id || id;
-            document.getElementById('detailTitle').textContent = ad.title || 'تفاصيل الإعلان';
-            const priceNum = Number(ad.price);
-            const formattedPrice = Number.isFinite(priceNum) ? priceNum.toLocaleString() : escapeHtml(ad.price || '0');
-            const currencyLabel = ad.currency === 'SYP' ? 'ل.س' : (ad.currency === 'TRY' ? '₺' : '$');
-
-            document.getElementById('detailContent').innerHTML = `
-                ${ad.image ? `<img class="detail-img" src="${escapeAttr(ad.image)}" alt="${escapeAttr(ad.title || '')}">` : ''}
-                <div class="detail-row">
-                    <span class="detail-pill">💎 السعر: <strong>${formattedPrice} ${currencyLabel}</strong></span>
-                    <span class="detail-pill">📂 القسم: ${escapeHtml(ad.category || 'عام')}</span>
-                    <span class="detail-pill">📍 الموقع: ${escapeHtml([ad.city, ad.neighbourhood].filter(Boolean).join(' - ') || 'غير محدد')}</span>
-                    ${ad.condition ? `<span class="detail-pill">✨ الحالة: ${escapeHtml(ad.condition)}</span>` : ''}
-                </div>
-                <div class="detail-desc">${escapeHtml(ad.description || 'لا يوجد وصف إضافي لهذا الإعلان.')}</div>
-                <div class="detail-actions">
-                    <button class="btn-gold" style="flex:1; justify-content:center;" onclick="openEditModal('${escapeAttr(realId)}')">✏️ تعديل المنشور</button>
-                    <button class="btn-danger" style="flex:1; justify-content:center;" onclick="handleDeleteAd('${escapeAttr(realId)}')">🗑️ حذف المنشور</button>
-                    <button class="btn-silver-diamond" style="flex-basis:100%; justify-content:center;" onclick="quickMessageOwner('${escapeAttr(ad.ownerUsername || 'user')}', '${escapeAttr(ad.title || '')}')">
-                        💬 مراسلة المعلن
-                    </button>
-                </div>
-            `;
-
-            openModal('detailAdModal');
-        }
-
-        function quickMessageOwner(owner, title) {
-            closeModal('detailAdModal');
-            document.getElementById('msgRecipient').value = owner || 'user';
-            document.getElementById('msgText').value = `مرحباً، أستفسر بخصوص إعلان: ${title}`;
-            openMessagesModal();
-        }
-
-        async function openMessagesModal() {
-            openModal('messagesModal');
-            const list = document.getElementById('messagesList');
-            list.innerHTML = `<div style="color:var(--text-muted); font-size:12px;">جاري تحميل الرسائل...</div>`;
-
-            try {
-                const res = await fetch(`${API_BASE}/messages`);
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                const data = await res.json();
-                const msgs = Array.isArray(data) ? data : (Array.isArray(data.messages) ? data.messages : []);
-
-                if (!msgs.length) {
-                    list.innerHTML = `<div style="color:var(--text-muted); font-size:12px;">لا توجد رسائل بعد.</div>`;
-                    return;
-                }
-
-                list.innerHTML = msgs.map(m => `
-                    <div class="msg-bubble">
-                        <div class="msg-meta">إلى: ${escapeHtml(m.to || m.recipient || 'مستخدم')}</div>
-                        <div>${escapeHtml(m.text || m.message || '')}</div>
-                    </div>
-                `).join('');
-            } catch (err) {
-                console.error('Error loading messages:', err);
-                list.innerHTML = `<div style="color:var(--text-muted); font-size:12px;">تعذر تحميل الرسائل من الخادم.</div>`;
-            }
-        }
-
-        async function handleSendMessage(e) {
-            e.preventDefault();
-            const to = document.getElementById('msgRecipient').value.trim();
-            const text = document.getElementById('msgText').value.trim();
-            if (!to || !text) return;
-
-            try {
-                const res = await fetch(`${API_BASE}/messages`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ to, text, sender: 'user' })
-                });
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-                document.getElementById('msgText').value = '';
-                await openMessagesModal();
-            } catch (err) {
-                console.error('Error sending message:', err);
-                alert('تعذر إرسال الرسالة.');
-            }
-        }
-
-        function resetFilters() {
-            selectedCategory = '';
-            document.getElementById('searchInput').value = '';
-            document.getElementById('cityFilter').value = '';
-            document.getElementById('conditionFilter').value = '';
-            document.getElementById('sortFilter').value = 'newest';
-            document.getElementById('activeCategoryLabel').textContent = 'جميع الأقسام';
-            initCategories();
-            applyFilters();
-        }
-
-        function openModal(id) {
-            document.getElementById(id).classList.add('open');
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('open');
-        }
-
-        document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
-            backdrop.addEventListener('click', event => {
-                if (event.target === backdrop) {
-                    backdrop.classList.remove('open');
-                }
-            });
-        });
-
-        function escapeHtml(str) {
-            return String(str ?? '')
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
-        }
-
-        function escapeAttr(str) {
-            return escapeHtml(str);
-        }
-
-        initCategories();
-        loadAds();
-    </script>
+    initApp();
+  </script>
 </body>
 </html>
